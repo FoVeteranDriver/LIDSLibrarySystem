@@ -13,7 +13,7 @@ local.properties
 .idea/
 target/
 lidsLibrary.iml
-jdbc.properties
+*.properties
 .project
 # Compiled class file
 *.class
