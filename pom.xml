@@ -103,13 +103,14 @@
       <artifactId>fastjson</artifactId>
       <version>1.1.41</version>
     </dependency>
+    <!-- @ResponseBody 转成json数据时要用到 -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.2.3</version>
+    </dependency>
 
     <!-- logback start -->
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -172,6 +173,14 @@
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-core-asl</artifactId>
       <version>1.9.13</version>
+    </dependency>
+
+    <!-- xml解析包 -->
+    <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
     </dependency>
 
     <dependency>
