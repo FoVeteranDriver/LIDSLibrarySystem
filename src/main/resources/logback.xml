@@ -9,8 +9,10 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
+
     <!-- 打印MyBatis SQL语句-->
-    <logger name="com.dlwlrma.dao" level="DEBUG"/>
+    <logger name="com.lids.dao" level="DEBUG"/>
+
     <root level="debug">
         <appender-ref ref="STDOUT" />
     </root>

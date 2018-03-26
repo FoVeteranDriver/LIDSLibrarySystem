@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.UserDao">
+
+    <resultMap id="userMap" type="com.lids.po.User">
+        
+    </resultMap>
+
+    <insert id="signUp" statementType="CALLABLE">
+        {call sign_up(
+        #{libraryCardNumber, mode=IN},
+        #{openId, mode=IN},
+        #{name, mode=IN},
+        #{userTypeName, mode=IN}
+        )}
+    </insert>
+    
+    <select id="selectUserByOpenId" resultType="com.lids.po.User" statementType="CALLABLE">
+        {call select_user_with_open_id(
+        #{0,mode=IN}
+        )
+        }
+    </select>
+
+</mapper>
