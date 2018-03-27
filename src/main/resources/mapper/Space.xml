@@ -1,0 +1,14 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.SpaceDao">
+
+    <select id="selectSpacesByArea" resultType="com.lids.po.Space">
+        SELECT * from space WHERE area_name = #{0}
+    </select>
+
+    <select id="getAllAreas" resultType="com.lids.po.Area">
+        SELECT * FROM area
+    </select>
+
+</mapper>
