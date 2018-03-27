@@ -1,0 +1,17 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.BookingDao">
+
+    <insert id="addNewBooking" statementType="CALLABLE">
+        {call add_new_booking(
+        #{userId, mode=IN},
+        #{spaceId, mode=IN},
+        #{date, mode=IN},
+        #{beginTime, mode=IN},
+        #{endTime,mode=IN},
+        #{application,mode=IN}
+        )}
+    </insert>
+
+</mapper>
