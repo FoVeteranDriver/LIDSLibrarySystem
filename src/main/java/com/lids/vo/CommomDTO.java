@@ -8,7 +8,7 @@ public class CommomDTO {
 
     private int code;
     private String msg;
-    private Object object;
+    private Object result;
 
     public CommomDTO(){
     }
@@ -26,14 +26,14 @@ public class CommomDTO {
         return msg;
     }
 
-    public Object getObject() {
-        return object;
+    public Object getResult() {
+        return result;
     }
 
-    public void setInfo(ResultEnum resultEnum,Object object){
+    public void setInfo(ResultEnum resultEnum,Object result){
         code = resultEnum.getCode();
         msg = resultEnum.getMsg();
-        this.object = object;
+        this.result = result;
     }
 
     public void setInfo(ResultEnum resultEnum){
