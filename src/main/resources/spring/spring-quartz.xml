@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!-- 获取accesstoken的任务 -->
+    <bean id="AccessTokenJob" class="com.lids.quartz.AccessTokenJob"></bean>
+    <bean id="AccessTokenJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="AccessTokenJob" />
+        <!-- 指定任务执行的方法 -->
+        <property name="targetMethod" value="execute" />
+    </bean>
+    <!-- 获取accesstoken的触发器 -->
+    <bean id="AccessTokenJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="AccessTokenJobDetail" />
+        <!-- 每10秒运行一次 -->
+        <property name="cronExpression" value="0/20 * * * * ?" />
+    </bean>
+
+    <bean id="ScheduleJob" class="com.lids.quartz.ScheduleJob"></bean>
+    <bean id="SchedulerJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="ScheduleJob"/>
+        <property name="targetMethod" value="execute"/>
+    </bean>
+    <bean id="SchedulerJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="SchedulerJobDetail"/>
+        <property name="cronExpression" value="0/20 * * * * ?"/>
+    </bean>
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="AccessTokenJobTrigger" />
+                <ref bean="SchedulerJobTrigger" />
+            </list>
+        </property>
+    </bean>
+
+</beans>

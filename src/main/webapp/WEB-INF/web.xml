@@ -17,6 +17,7 @@
     <param-value>
       classpath:spring/spring-dao.xml
       classpath:spring/spring-service.xml
+      classpath:spring/spring-quartz.xml
     </param-value>
   </context-param>
 
