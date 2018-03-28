@@ -3,7 +3,7 @@
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
-        <div class="sidebar-menu-con" :style="{width: shrink?'0.6rem':'2.1rem',minWidth:'19px', overflow: shrink ? 'visible' : 'auto'}">
+        <div class="sidebar-menu-con" :style="{width: shrink?'0.51rem':'2.1rem',minWidth:'19px', overflow: shrink ? 'visible' : 'auto'}">
             <shrinkable-menu 
                 :shrink="shrink"
                 :menu-list="menuList">
@@ -12,11 +12,11 @@
                         <img  src="../../images/logo.png" key="max-logo" :style="{ height: '0.55rem', paddingLeft: '0.1rem'}"/>
                         <hgroup class="hgroup"><h2>图书馆</h2><h2>信息共享空间</h2></hgroup>
                     </div>
-                    <img v-show="shrink" src="../../images/logo-min.jpg" key="min-logo" :style="{ height: '44px'}" />
+                    <img v-show="shrink" src="../../images/logo.png" key="logo" :style="{ height: '0.35rem',width:'0.35rem',marginTop:'0.08rem'}" />
                 </div>
             </shrinkable-menu>
         </div>
-        <div class="main-header-con" :style="{paddingLeft: shrink?'0.6rem':'2.1rem'}">
+        <div class="main-header-con" :style="{paddingLeft: shrink?'0.51rem':'2.1rem'}">
             <div class="main-header">
                 <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
@@ -36,7 +36,7 @@
                             </Dropdown>
                             <div class="user-right">
                                 <img src="../../images/user-avater.png" class="user-avater"/>
-                                <span>Hi</span><span class="main-user-name">卓文卓文卓文卓文卓</span>
+                                <span>Hi,</span><span class="main-user-name">刘润华说要请吃饭</span>
                             </div>
                          
                         </div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div class="single-page-con" :style="{left: shrink?'0.6rem':'2.1rem'}">
+        <div class="single-page-con" :style="{left: shrink?'0.51rem':'2.1rem'}">
             <div class="single-page">
                 <router-view></router-view>
             </div>
