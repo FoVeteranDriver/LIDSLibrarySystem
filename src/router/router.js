@@ -51,7 +51,7 @@ export const otherRouter = {
 export const appRouter = [
     {
         path: '/home',
-        icon: 'ios-analytics-outline',
+        icon: './src/images/home.png',
         title: '主页',
         name: 'home',
         component: Main,
@@ -61,7 +61,7 @@ export const appRouter = [
     },
     {
         path: '/systemService',
-        icon: 'ios-navigate-outline',
+        icon: './src/images/sys-service.png',
         name: 'systemService',
         title: '系统服务',
         component: Main,
@@ -91,7 +91,7 @@ export const appRouter = [
     },
     {
         path: '/book',
-        icon: 'ios-clock-outline',
+        icon: './src/images/book.png',
         name: 'book',
         title: '预约服务',
         component: Main,
@@ -114,7 +114,7 @@ export const appRouter = [
     },
     {
         path: '/user',
-        icon: 'ios-person-outline',
+        icon: './src/images/user-center.png',
         title: '个人中心',
         name: 'user',
         component: Main,

@@ -6,13 +6,13 @@
     <Menu ref="sideMenu" :active-name="$route.name" :open-names="openNames" :theme="menuTheme" width="auto" id="sideMenu" @on-select="changeMenu">
         <template v-for="item in menuList">
             <MenuItem v-if="item.children.length<=1" :name="item.children[0].name" :key="item.path" class="menuItem">
-                <Icon :type="item.icon" :size="40" :key="item.path"></Icon>
+                <img v-bind:src='item.icon' class="nav-icon"/>
                 <span class="layout-text" :key="item.path">{{ itemTitle(item) }}</span>
             </MenuItem>
 
             <Submenu v-if="item.children.length > 1" :name="item.name" :key="item.path" class="menuItem">
                 <template slot="title">     
-                        <Icon :type="item.icon" :size="40"></Icon>
+                        <img v-bind:src='item.icon' class="nav-icon"/>
                         <span class="layout-text">{{ itemTitle(item) }}</span>
                 </template>
                 <template v-for="child in item.children">

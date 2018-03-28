@@ -3,7 +3,7 @@
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
-        <div class="sidebar-menu-con" :style="{width: shrink?'0.6rem':'2.1rem', overflow: shrink ? 'visible' : 'auto'}">
+        <div class="sidebar-menu-con" :style="{width: shrink?'0.6rem':'2.1rem',minWidth:'19px', overflow: shrink ? 'visible' : 'auto'}">
             <shrinkable-menu 
                 :shrink="shrink"
                 :menu-list="menuList">
@@ -28,15 +28,15 @@
                         <div class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" class="user-right" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">      
-                                    <Icon type="power" size="26" color="#f56c6c"></Icon>
+                                    <img src="../../images/power.png" class="power"/>
                                 </a>
                                 <DropdownMenu slot="list">
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                             <div class="user-right">
-                                <Avatar icon="person" style="background: #f56c6c;" class="user-avater"></Avatar>
-                                <span>Hi</span><span class="main-user-name">卓文</span>
+                                <img src="../../images/user-avater.png" class="user-avater"/>
+                                <span>Hi</span><span class="main-user-name">卓文卓文卓文卓文卓</span>
                             </div>
                          
                         </div>
@@ -54,7 +54,7 @@
 <script>
 import Cookies from 'js-cookie';
 import shrinkableMenu from './main-components/shrinkable-menu/shrinkable-menu.vue';
-
+import utils from '../../libs/util.js';
 export default {
     components: {
         shrinkableMenu
@@ -72,7 +72,25 @@ export default {
     },
     methods: {
         init () {
+            var self=this;
             this.userName = Cookies.get('user');
+            // window.onresize=function(){
+            //     this.throttle(this.shrinkTrigger,null);
+            // }
+        },
+        shrinkTrigger(){
+            var outerWidth=window.outerWidth;
+            if(outerWidth<960){
+                 this.shrink=true;
+            }
+        },
+        throttle(fn,context){
+             if(typeof fn.tId!=='undefined'){
+                clearTimeout(fn.tId);
+           }
+            fn.tId=setTimeout(function(){
+                fn.call(context);
+            },100);
         },
         toggleClick () {
             this.shrink = !this.shrink;

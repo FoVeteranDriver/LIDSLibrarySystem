@@ -9,6 +9,24 @@
     <link rel="icon" href="./td_icon.ico" type="image/x-icon" />
     <script>
         document.documentElement.style.fontSize = document.documentElement.clientWidth/12.8 + 'px';
+        function throttle(fn,context){
+            clearTimeout(fn.tId);
+            fn.tId=setTimeout(function(){
+                fn.call(context);
+            },100);
+        }
+        function adjustFontSize(){
+            var outerWidth=window.outerWidth<1128?1128:window.outerWidth;
+            outerWidth=outerWidth>1920?1920:outerWidth;
+            document.documentElement.style.fontSize =  outerWidth/ 12.8 + 'px';
+        }
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串 
+        var isIE = !!window.ActiveXObject || "ActiveXObject" in window; //判断是否IE浏览器
+        if(!isIE){
+            window.onresize = function() {
+                throttle(adjustFontSize);
+           }
+        } 
     </script>
 </head>
 <body>
@@ -17,5 +35,4 @@
     <script type="text/javascript" src="/dist/vender-exten.js"></script>
     <script type="text/javascript" src="/dist/main.js"></script>
 </body>
-
 </html>

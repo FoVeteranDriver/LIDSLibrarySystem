@@ -10,12 +10,16 @@
         background:transparent;
         border-right: none;
         color: #fff;
-        font-weight: 600;
+        font-weight: 500;
         font-size:0.26rem; 
         font-family: 'Heiti SC Bold', 'Heiti SC Medium', 'Heiti SC';      
         margin-top: 0.2rem;
         padding-left:0.1rem;
-        .ivu-icon{
+        line-height: 0.7;
+        .nav-icon{
+            width: 0.24rem;
+            max-width: 0.45rem ;
+            height: auto;
             position: relative;
             bottom: 0.06rem;
         }
@@ -24,16 +28,16 @@
             padding: 0.14rem 0.1rem;
             background-color: #7a7a7e;
             border-radius: 10px 0 0 10px;
-            height:0.5rem;
+            height:0.4rem;
             color:#fff;
             &-icon{
                 position:absolute;
-                top:0.2rem;
+                top:0.12rem;
                 left:1.65rem;
             }
         }
         .layout-text{
-            padding-left: 0.05rem;
+            padding-left: 0.1rem;
         }  
     }
     .ivu-menu-item-active{
@@ -49,7 +53,7 @@
             .layout-text{
                 position: absolute;
                 top:0.14rem;
-                left: 0.44rem;
+                left: 0.36rem;
                 padding-left: 0.12rem;
             }
         }
@@ -62,17 +66,21 @@
         width:91%;
         background-color: #7a7a7e;
         border-radius: 10px 0 0 10px;
-        height:0.5rem;
+        height:0.4rem;
+        padding:0.1rem;
+        line-height: 1.07;
+        .nav-icon{
+            bottom: 0.01rem;
+        }
     }
     .menuItem:first-child{
         font-size: 0.264rem;
         margin-top: 0.4rem;
-        height: 0.50rem;
-        padding:0.1rem;
+        height:0.5rem;
         line-height: 1.2;
-    }
-    .menuItem:last-child{
-        padding-left: 0.12rem;
+        .nav-icon{
+            bottom: -0.03rem;
+        }
     }
     li:nth-child(n+1){
         font-size:0.2rem;
