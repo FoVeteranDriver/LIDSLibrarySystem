@@ -20,7 +20,6 @@
             outerWidth=outerWidth>1920?1920:outerWidth;
             document.documentElement.style.fontSize =  outerWidth/ 12.8 + 'px';
         }
-        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串 
         var isIE = !!window.ActiveXObject || "ActiveXObject" in window; //判断是否IE浏览器
         if(!isIE){
             window.onresize = function() {
