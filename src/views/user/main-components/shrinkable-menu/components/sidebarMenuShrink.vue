@@ -4,7 +4,7 @@
             <div style="text-align: center;" :key="index">
                 <Dropdown transfer v-if="item.children.length !== 1" placement="right-start" :key="index" @on-click="changeMenu">
                     <Button style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
-                        <Icon :size="20" :color="iconColor" :type="item.icon"></Icon>
+                        <img v-bind:src='item.icon' class="nav-icon" style="width:30px;"/>
                     </Button>
                     <DropdownMenu style="width: 200px;" slot="list">
                         <template v-for="(child, i) in item.children">
@@ -14,10 +14,10 @@
                 </Dropdown>
                 <Dropdown transfer v-else placement="right-start" :key="index" @on-click="changeMenu">
                     <Button @click="changeMenu(item.children[0].name)" style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
-                        <Icon :size="20" :color="iconColor" :type="item.icon"></Icon>
+                        <img v-bind:src='item.icon' class="nav-icon" style="width:30px;"/>
                     </Button>
                     <DropdownMenu style="width: 200px;" slot="list">
-                        <DropdownItem :name="item.children[0].name" :key="'d' + index"><Icon :type="item.icon"></Icon><span style="padding-left:10px;">{{ itemTitle(item.children[0]) }}</span></DropdownItem>
+                        <DropdownItem :name="item.children[0].name" :key="'d' + index"><Icon :type="item.children[0].icon"></Icon><span style="padding-left:10px;">{{ itemTitle(item.children[0]) }}</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>

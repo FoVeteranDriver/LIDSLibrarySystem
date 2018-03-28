@@ -56,7 +56,7 @@ export const appRouter = [
         name: 'home',
         component: Main,
         children: [
-            { path: 'index', title: 'Home', name: 'home', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
+            { path: 'index', title: '主页', icon: 'ios-home-outline',name: 'home', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
         ]
     },
     {
@@ -119,7 +119,7 @@ export const appRouter = [
         name: 'user',
         component: Main,
         children: [
-            { path: 'user', title: 'page', name: 'user_index', component: resolve => { require(['@/views/user/user-center/user.vue'], resolve); } }
+            { path: 'user', title: '个人中心',icon:'ios-person-outline', name: 'user_index', component: resolve => { require(['@/views/user/user-center/user.vue'], resolve); } }
         ]
     }
 ];
