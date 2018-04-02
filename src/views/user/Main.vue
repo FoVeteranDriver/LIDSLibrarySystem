@@ -54,7 +54,6 @@
 <script>
 import Cookies from 'js-cookie';
 import shrinkableMenu from './main-components/shrinkable-menu/shrinkable-menu.vue';
-import utils from '../../libs/util.js';
 export default {
     components: {
         shrinkableMenu
@@ -83,14 +82,6 @@ export default {
             if(outerWidth<960){
                  this.shrink=true;
             }
-        },
-        throttle(fn,context){
-             if(typeof fn.tId!=='undefined'){
-                clearTimeout(fn.tId);
-           }
-            fn.tId=setTimeout(function(){
-                fn.call(context);
-            },100);
         },
         toggleClick () {
             this.shrink = !this.shrink;

@@ -1,0 +1,98 @@
+.main-tab{
+    width: 100%;
+    min-width: 400px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    .ivu-tabs-bar{
+        order: 2;
+        flex-basis:2.6rem;
+        min-width: 300px;
+        width: 2.6rem;
+        background: url(../../../../images/user/common/tab.png) no-repeat transparent;
+        background-position: 0 0;
+        background-size: 2.50rem 2.29rem;
+        position: relative; 
+        height: 6rem;
+        /*去除下划线*/
+        .ivu-tabs-ink-bar{
+            width: 0;
+            height: 0;
+        }
+        /*去除左右箭头*/
+        .ivu-tabs-nav-prev i,.ivu-tabs-nav-next  i{
+            visibility: hidden;
+        }
+        .ivu-tabs-nav-scroll{
+            position: relative;
+            z-index: 99;
+            overflow:visible;
+            width: 3rem;
+            height: 6rem;
+            .ivu-tabs-nav{
+                float: none;
+                width: 3rem;
+                height: 6rem;
+                .ivu-tabs-tab{
+                    position: absolute;
+                    text-align: center;
+                    display: inline-block;
+                    line-height: 1.2;
+                    width: 0.44rem;
+                    min-width: 40px;
+                    height: 0.44rem;
+                    min-height: 40px;
+                    border-radius: 50%;
+                    background-color:#ffeaea; 
+                    color: #666666; 
+                    white-space: pre-wrap;
+                    font-size: 0.12rem;
+                    overflow: hidden;
+                }
+                .ivu-tabs-tab-active{
+                    background-color: #f78888;
+                    color: #fff;
+                }
+                .ivu-tabs-tab:nth-child(2){
+                    top: 0.05rem;
+                    left: 0.52rem;
+                }
+                .ivu-tabs-tab:nth-child(3){
+                    top: 0.54rem;
+                    left: 0.14rem;
+                }
+                .ivu-tabs-tab:nth-child(4){
+                    top: 1.1rem;
+                    left: 0.14rem;
+                }
+                .ivu-tabs-tab:nth-child(5){
+                    top: 1.6rem;
+                    left: 0.34rem;
+                }
+            }
+            
+        }   
+        
+    }
+    .display-area{
+        position: absolute;
+        top: 0rem;
+        right: 0rem;
+        width: 2.6rem;
+        min-width: 300px;
+        height: 6rem;
+        display: inline-block;
+        img{
+            position: absolute;
+            top: 0.24rem;
+            left: 0.6rem;
+            width: 1.72rem;
+            min-width: 70px;
+            height: 1.72rem;
+            min-height: 70px;
+        }
+    }
+
+}

@@ -267,12 +267,4 @@ util.checkUpdate = function (vm) {
         }
     });
 };
-util.throttle=function(fn,context){
-    if(fn.tId){
-        clearTimeout(fn.tId);
-    }
-    fn.tId=setTimeout(function(){
-        fn.call(context);
-    },100);
-}
 export default util;
