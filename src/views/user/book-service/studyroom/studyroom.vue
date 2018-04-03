@@ -22,7 +22,7 @@ export default {
     data(){
         return{
             tabList:[{label:'预约状态',state:'aContent'},{label:'预约须知',state:'bContent'},{label:'相册展示',state:'cContent'},{label:'硬件配置',state:'dContent'}],
-            imgUrl:'./src/images/user/common/example.png'
+            imgUrl:'./src/images/user/common/tab/example.png'
         }
     }
 };

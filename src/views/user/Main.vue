@@ -73,9 +73,6 @@ export default {
         init () {
             var self=this;
             this.userName = Cookies.get('user');
-            // window.onresize=function(){
-            //     this.throttle(this.shrinkTrigger,null);
-            // }
         },
         shrinkTrigger(){
             var outerWidth=window.outerWidth;
