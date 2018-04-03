@@ -99,6 +99,7 @@
             <value>
                 <!--/book/**=authc,roles[teacher]-->
                 /book/**=authc
+                /user/userInfo=authc
             </value>
         </property>
     </bean>
