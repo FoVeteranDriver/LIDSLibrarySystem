@@ -8,4 +8,6 @@ public interface UserService {
 
     User selectUserByOpenId(String openId);
 
+    User selectUserByLibraryCardNumber(String libraryCardNumber);
+
 }

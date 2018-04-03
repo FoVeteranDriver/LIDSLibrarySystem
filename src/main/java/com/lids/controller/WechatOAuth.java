@@ -5,11 +5,8 @@ import com.lids.po.User;
 import com.lids.service.UserService;
 import com.lids.util.HttpClientUtil;
 import com.lids.util.ProjectProperties;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -67,7 +64,10 @@ public class WechatOAuth {
                 redirectUrl += "signUp.html";
             }else{
                 logger.debug("用户"+openid+"登陆");
-                session.setAttribute("signInOpenid",openid);
+//                session.setAttribute("signInOpenid",openid);
+                //利用shiro进行登录
+                UsernamePasswordToken token = new UsernamePasswordToken(user.getLibraryCardNumber(),user.getPassword());
+                SecurityUtils.getSubject().login(token);
                 redirectUrl += "index.html";
             }
             response.sendRedirect(redirectUrl);

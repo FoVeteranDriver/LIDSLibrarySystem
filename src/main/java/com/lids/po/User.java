@@ -1,15 +1,26 @@
 package com.lids.po;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private Integer id;
     private String libraryCardNumber;
+    private String password;
     private String openId;
     private String name;
     private String userTypeName;
     private String creditScore;
     private String banDuration;
     private String lastLoginTime;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Integer getId() {
         return id;

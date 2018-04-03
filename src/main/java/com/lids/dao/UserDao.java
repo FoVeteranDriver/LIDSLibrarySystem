@@ -8,4 +8,6 @@ public interface UserDao {
 
     User selectUserByOpenId(String openid);
 
+    User selectUserByLibraryCardNumber(String libraryCardNumber);
+
 }

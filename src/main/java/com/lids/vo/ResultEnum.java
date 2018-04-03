@@ -7,7 +7,14 @@ package com.lids.vo;
 public enum ResultEnum {
 
     SUCCESS(0,"成功"),
-    FAILED(1,"失败");
+    FAILED(1,"失败"),
+    UNKNOWN_ACCOUNT_ERROR(1,"账号不存在"),
+    INCORRECT_CREDENTIALS_ERROR(2,"密码错误"),
+    OTHER_LOGIN_ERRROR(4,"请联系管理员"),
+    INCORRECT_STATE_ERROR(3,"账号已被锁定"),
+    NO_LOGIN(5,"尚未登录"),
+    NO_PERMISSION(6,"没有权限"),
+    PARAMS_ERROR(400,"参数有误");
 
     private int code;
     private String msg;

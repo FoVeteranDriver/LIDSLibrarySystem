@@ -28,4 +28,7 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
+    public User selectUserByLibraryCardNumber(String libraryCardNumber) {
+        return userDao.selectUserByLibraryCardNumber(libraryCardNumber);
+    }
 }

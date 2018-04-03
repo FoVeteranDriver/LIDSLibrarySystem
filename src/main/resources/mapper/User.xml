@@ -23,4 +23,8 @@
         }
     </select>
 
+    <select id="selectUserByLibraryCardNumber" resultType="com.lids.po.User">
+        SELECT * FROM user WHERE library_card_number = #{0}
+    </select>
+
 </mapper>
