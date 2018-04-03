@@ -29,47 +29,83 @@
             position: relative;
             z-index: 99;
             overflow:visible;
-            width: 3rem;
+            width: 4rem;
             height: 6rem;
             .ivu-tabs-nav{
-                float: none;
-                width: 3rem;
+                width: 4rem;
                 height: 6rem;
                 .ivu-tabs-tab{
-                    position: absolute;
-                    text-align: center;
+                    position: relative;
+                    float: left;
                     display: inline-block;
-                    line-height: 1.2;
                     width: 0.44rem;
-                    min-width: 40px;
+                    
                     height: 0.44rem;
-                    min-height: 40px;
-                    border-radius: 50%;
-                    background-color:#ffeaea; 
-                    color: #666666; 
-                    white-space: pre-wrap;
-                    font-size: 0.12rem;
-                    overflow: hidden;
+                    
+                    font-size: 0rem;
+                    margin: 0;
+                    padding: 0;
+                    border: none;
                 }
                 .ivu-tabs-tab-active{
-                    background-color: #f78888;
-                    color: #fff;
+                    background-color: transparent;
+                    color: transparent;
                 }
                 .ivu-tabs-tab:nth-child(2){
-                    top: 0.05rem;
-                    left: 0.52rem;
+                    top: 0.4%;
+                    left: 13%;
+                    background: url(../../../../images/user/common/tab/bookState.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
                 }
                 .ivu-tabs-tab:nth-child(3){
-                    top: 0.54rem;
-                    left: 0.14rem;
+                    top: 9%;
+                    left: -7.2%;
+                    background: url(../../../../images/user/common/tab/bookNote.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
                 }
                 .ivu-tabs-tab:nth-child(4){
-                    top: 1.1rem;
-                    left: 0.14rem;
+                    top: 18%;
+                    left: -19%;
+                    background: url(../../../../images/user/common/tab/picShow.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
                 }
                 .ivu-tabs-tab:nth-child(5){
-                    top: 1.6rem;
-                    left: 0.34rem;
+                    top: 25.4%;
+                    left: -25%;
+                    background: url(../../../../images/user/common/tab/deploy.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
+                }
+                .ivu-tabs-tab-active:nth-child(2){
+                    background: url(../../../../images/user/common/tab/bookState-active.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
+                }
+                .ivu-tabs-tab-active:nth-child(3){
+                    background: url(../../../../images/user/common/tab/bookNote-active.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
+                }
+                .ivu-tabs-tab-active:nth-child(4){
+                    background: url(../../../../images/user/common/tab/picShow-active.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
+                }
+                .ivu-tabs-tab-active:nth-child(5){
+                    background: url(../../../../images/user/common/tab/deploy-active.png) no-repeat transparent;
+                    background-size: contain;
+                    background-position: top left;
+                    background-color:transparent; 
                 }
             }
             

@@ -5,16 +5,16 @@
 <template>
     <div class="login">
         <template>
-            <Modal v-model="show" @on-ok="logIn" @on-cancel="cancel">
+            <Modal v-model="show">
                 <div slot="header" style="font-size:0.18rem;height:0.18rem;">
-                    <Tabs type="" v-model="tabName">
+                    <Tabs v-model="tabName">
                         <TabPane label="账号登录" name="accountTab">
-                            <Input v-model="username" placeholder="读书证号" autocomplete="new-password">
+                            <Input v-model="username" type="text" placeholder="读书证号" >
                             <span slot="prepend">
                                 <img src="../../../images/user/login/account.png"></span>
                             </Input>
                             </br>
-                            <Input v-model="password" type="password" placeholder="密码" autocomplete="new-password">
+                            <Input v-model="password" type="text" placeholder="密码" onfocus="this.type='password'">
                             <span slot="prepend">
                                 <img src="../../../images/user/login/password.png">
                             </span>
@@ -58,7 +58,7 @@ export default {
       }
   },
   methods: {
-    logIn:function() {
+    login:function() {
 
     },
     changeQRcode:function(){

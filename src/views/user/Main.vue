@@ -9,10 +9,10 @@
                 :menu-list="menuList">
                 <div slot="top" class="logo-con">
                     <div v-show="!shrink" class="max-con" >
-                        <img  src="../../images/logo.png" key="max-logo" :style="{ height: '0.55rem', paddingLeft: '0.1rem'}"/>
+                        <img  src="../../images/user/main-component/logo.png" key="max-logo" :style="{ height: '0.55rem', paddingLeft: '0.1rem'}"/>
                         <hgroup class="hgroup"><h2>图书馆</h2><h2>信息共享空间</h2></hgroup>
                     </div>
-                    <img v-show="shrink" src="../../images/logo.png" key="logo" :style="{ height: '0.35rem',width:'0.35rem',marginTop:'0.08rem'}" />
+                    <img v-show="shrink" src="../../images/user/main-component/logo.png" key="logo" :style="{ height: '0.35rem',width:'0.35rem',marginTop:'0.08rem'}" />
                 </div>
             </shrinkable-menu>
         </div>
@@ -20,7 +20,7 @@
             <div class="main-header">
                 <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
-                        <img src="../../images/navicon.png" class="navicon-con-btn"/>
+                        <img src="../../images/user/main-component/navicon.png" class="navicon-con-btn"/>
                     </Button>
                 </div>
                 <div class="header-avator-con">
@@ -28,14 +28,14 @@
                         <div class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" class="user-right" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">      
-                                    <img src="../../images/power.png" class="power"/>
+                                    <img src="../../images/user/main-component/power.png" class="power"/>
                                 </a>
                                 <DropdownMenu slot="list">
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                             <div class="user-right">
-                                <img src="../../images/user-avater.png" class="user-avater"/>
+                                <img src="../../images/user/main-component/user-avater.png" class="user-avater"/>
                                 <span>Hi,</span><span class="main-user-name">刘润华说要请吃饭</span>
                             </div>
                          
