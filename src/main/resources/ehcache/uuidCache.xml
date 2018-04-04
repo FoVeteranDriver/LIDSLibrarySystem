@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="uuidCache" updateCheck="false">
+
+    <cache name="uuidCache"
+           maxElementsInMemory="0"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="300"
+           timeToIdleSeconds="300">
+    </cache>
+
+</ehcache>

@@ -7,6 +7,7 @@ import com.lids.util.HttpClientUtil;
 import com.lids.util.ProjectProperties;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
+import net.sf.ehcache.Element;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -117,7 +118,7 @@ public class UserController {
     @ResponseBody
     public String doLogin(@RequestParam String uuid,HttpServletRequest request) throws Exception{
         String code = request.getParameter("code");
-        if (!QRCodeController.cache.containsKey(uuid)){
+        if (QRCodeController.uuidCache.get(uuid)==null){
             return "二维码失效";
         }
         if(code==null){
@@ -133,7 +134,8 @@ public class UserController {
         JSONObject jsonObject = JSONObject.parseObject(sendResponse);
         String openid = jsonObject.getString("openid");
 
-        QRCodeController.cache.put(uuid,openid);
+//        QRCodeController.cache.put(uuid,openid);
+        QRCodeController.uuidCache.put(new Element(uuid,openid));
 
         return "扫码成功";
     }
@@ -162,7 +164,10 @@ public class UserController {
     @RequestMapping(value = "/checkScan")
     @ResponseBody
     public CommomDTO checkScan(@RequestParam String uuid){
-        String result = QRCodeController.cache.get(uuid);
+//        String result = QRCodeController.cache.get(uuid);
+        Element element = QRCodeController.uuidCache.get(uuid);
+        String result = (String)element.getValue();
+
         if (result == null || result.equals("")) {
             return new CommomDTO(ResultEnum.QRCODE_FAILURE);
         }
@@ -180,7 +185,8 @@ public class UserController {
                 UsernamePasswordToken token = new UsernamePasswordToken(user.getLibraryCardNumber(),user.getPassword());
                 SecurityUtils.getSubject().login(token);
             }
-            QRCodeController.cache.remove(uuid);
+//            QRCodeController.cache.remove(uuid);
+            QRCodeController.uuidCache.remove(uuid);
 
             User getUser = userService.selectUserByLibraryCardNumber(user.getLibraryCardNumber());
             Map<String,String> map = new HashMap<String, String>();
@@ -188,7 +194,7 @@ public class UserController {
             CommomDTO commomDTO = new CommomDTO();
             commomDTO.setInfo(ResultEnum.SUCCESS,map);
 
-            return new CommomDTO(ResultEnum.SUCCESS);
+            return commomDTO;
         }
     }
 

@@ -4,6 +4,10 @@ import com.lids.util.ProjectProperties;
 import com.lids.util.QrGenUtil;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+import org.apache.shiro.cache.ehcache.EhCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,8 +27,15 @@ public class QRCodeController {
 
     private static Logger logger = LoggerFactory.getLogger(QRCodeController.class);
 
+    public static Cache uuidCache;
     public static Map<String,String> cache = new HashMap<String, String>();
     public static final String one = "未扫码";
+
+    static {
+        InputStream in = EhCache.class.getClassLoader().getResourceAsStream("/ehcache/uuidCache.xml");
+        CacheManager cacheManager = CacheManager.create(in);
+        uuidCache =cacheManager.getCache("uuidCache");
+    }
 
     /**
      * 展示扫码登陆的二维码
@@ -41,7 +52,9 @@ public class QRCodeController {
         //生成UUID随机数
         UUID randomUUID = UUID.randomUUID();
 
-        cache.put(randomUUID.toString(), one);
+//        cache.put(randomUUID.toString(), one);
+        Element element = new Element(randomUUID.toString(), one);
+        uuidCache.put(element);
 
         //二维码图片扫描后的链接
 //        String url = "http://iyou.s1.natapp.cc/lidsLibrary/user/loginByQRCode?uuid="+randomUUID;
