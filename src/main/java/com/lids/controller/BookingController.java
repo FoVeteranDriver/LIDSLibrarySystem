@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -78,6 +79,19 @@ public class BookingController {
             return new CommomDTO(ResultEnum.SUCCESS);
         }
         return new CommomDTO(ResultEnum.FAILED);
+    }
+
+    /**
+     * 返回今日的预约信息
+     * @return
+     */
+    @RequestMapping(value = "/book/todayBookRecords")
+    @ResponseBody
+    public CommomDTO getBookRecords(){
+        List<Map<String,String>> result = bookingService.getTodayRecords();
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
+        return commomDTO;
     }
 
 }

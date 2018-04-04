@@ -4,6 +4,7 @@ import com.lids.dao.BookingDao;
 import com.lids.po.BookingRecord;
 import com.lids.po.User;
 import com.lids.service.BookingService;
+import com.lids.util.TimeUtil;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service("BookingService")
@@ -50,5 +52,9 @@ public class BookingServiceImpl implements BookingService{
             }
         }
         return true;
+    }
+
+    public List<Map<String, String>> getTodayRecords() {
+        return bookingDao.getTodayRecords(TimeUtil.getTodayDate());
     }
 }

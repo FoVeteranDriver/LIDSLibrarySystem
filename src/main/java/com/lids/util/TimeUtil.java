@@ -42,13 +42,7 @@ public class TimeUtil {
     public static boolean compareDate(String tranDate) throws ParseException{
         Date time = parseDate(tranDate);
 
-        //获取当天的零点时间
-        Calendar currentDate = Calendar.getInstance();
-        currentDate.set(Calendar.HOUR_OF_DAY, 0);
-        currentDate.set(Calendar.MINUTE, 0);
-        currentDate.set(Calendar.SECOND, 0);
-        currentDate.set(Calendar.MILLISECOND, 0);
-        Date nowTime = currentDate.getTime();
+        Date nowTime = getTodayDate();
 
         if (time.getTime() - nowTime.getTime() >= 0){
             return true;
@@ -74,9 +68,17 @@ public class TimeUtil {
         }
     }
 
-    public static void main(String[] args) throws Exception{
-        System.out.print(TimeUtil.parseDate("2018-03-28"));
-//        System.out.print(TimeUtil.parseTime("14:21:40.0"));
+    /**
+     * 获取当天的零点时间
+     * @return
+     */
+    public static Date getTodayDate(){
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.set(Calendar.HOUR_OF_DAY, 0);
+        currentDate.set(Calendar.MINUTE, 0);
+        currentDate.set(Calendar.SECOND, 0);
+        currentDate.set(Calendar.MILLISECOND, 0);
+        return currentDate.getTime();
     }
 
 }

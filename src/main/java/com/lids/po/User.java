@@ -1,5 +1,7 @@
 package com.lids.po;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 public class User implements Serializable {

@@ -6,6 +6,7 @@ import net.glxn.qrgen.javase.QRCode;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+//生成二维码的工具
 public class QrGenUtil {
 
     public static ByteArrayOutputStream createQrGen(String url) throws IOException {

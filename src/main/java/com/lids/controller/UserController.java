@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author yaoyou
@@ -83,20 +85,29 @@ public class UserController {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getLibraryCardNumber(),user.getPassword());
         try{
             SecurityUtils.getSubject().login(token);
-            return new CommomDTO(ResultEnum.SUCCESS);
+            User getUser = userService.selectUserByLibraryCardNumber(user.getLibraryCardNumber());
+            Map<String,String> map = new HashMap<String, String>();
+            map.put("name",getUser.getName());
+            CommomDTO commomDTO = new CommomDTO();
+            commomDTO.setInfo(ResultEnum.SUCCESS,map);
+            return commomDTO;
         }catch(UnknownAccountException e){
+            e.printStackTrace();
             return new CommomDTO(ResultEnum.UNKNOWN_ACCOUNT_ERROR);
         }catch(IncorrectCredentialsException e){
+            e.printStackTrace();
             return new CommomDTO(ResultEnum.INCORRECT_CREDENTIALS_ERROR);
         }catch(LockedAccountException e){
+            e.printStackTrace();
             return new CommomDTO(ResultEnum.INCORRECT_STATE_ERROR);
         }catch (Exception e) {
+            e.printStackTrace();
             return new CommomDTO(ResultEnum.OTHER_LOGIN_ERRROR);
         }
     }
 
     /**
-     * 利用二维码登陆
+     * 利用二维码登陆,提供给微信扫码后跳转
      * @param uuid
      * @param request
      * @return
@@ -150,27 +161,34 @@ public class UserController {
      */
     @RequestMapping(value = "/checkScan")
     @ResponseBody
-    public String checkScan(@RequestParam String uuid){
+    public CommomDTO checkScan(@RequestParam String uuid){
         String result = QRCodeController.cache.get(uuid);
         if (result == null || result.equals("")) {
-            return "请重新扫描";
+            return new CommomDTO(ResultEnum.QRCODE_FAILURE);
         }
         if (result.equals(QRCodeController.one)){
-            return QRCodeController.one;
+            return new CommomDTO(ResultEnum.NOT_SCAN);
         }else{
             String openId = result;
 
             User user = userService.selectUserByOpenId(openId);
 
             if (user == null){
-                return "用户与借书证尚未绑定";
+                return new CommomDTO(ResultEnum.NO_BINDING);
             }else{
                 logger.debug("用户"+openId+"登陆");
                 UsernamePasswordToken token = new UsernamePasswordToken(user.getLibraryCardNumber(),user.getPassword());
                 SecurityUtils.getSubject().login(token);
             }
             QRCodeController.cache.remove(uuid);
-            return "登陆成功";
+
+            User getUser = userService.selectUserByLibraryCardNumber(user.getLibraryCardNumber());
+            Map<String,String> map = new HashMap<String, String>();
+            map.put("name",getUser.getName());
+            CommomDTO commomDTO = new CommomDTO();
+            commomDTO.setInfo(ResultEnum.SUCCESS,map);
+
+            return new CommomDTO(ResultEnum.SUCCESS);
         }
     }
 

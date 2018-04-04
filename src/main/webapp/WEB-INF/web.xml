@@ -35,10 +35,6 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
-  <filter-mapping>
-    <filter-name>SpringEncodingFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
 
   <!-- shiro 安全过滤器 -->
   <filter>
@@ -49,6 +45,24 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
+
+  <!--- 设置跨域 -->
+  <filter>
+    <filter-name>cors</filter-name>
+    <filter-class>com.lids.filter.CorsFilter</filter-class>
+  </filter>
+
+  <!-- 跨域过滤器映射 -->
+  <filter-mapping>
+    <filter-name>cors</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- Spring字符集过滤器 映射 -->
+  <filter-mapping>
+    <filter-name>SpringEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- shiro 安全过滤器 映射 -->
   <filter-mapping>
     <filter-name>shiroFilter</filter-name>
     <url-pattern>/*</url-pattern>

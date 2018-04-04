@@ -14,6 +14,9 @@ public enum ResultEnum {
     INCORRECT_STATE_ERROR(3,"账号已被锁定"),
     NO_LOGIN(5,"尚未登录"),
     NO_PERMISSION(6,"没有权限"),
+    QRCODE_FAILURE(100,"二维码失效，请刷新二维码重新扫描"),
+    NO_BINDING(101,"用户与借书证尚未绑定"),
+    NOT_SCAN(102,"尚未进行扫码"),
     PARAMS_ERROR(400,"参数有误");
 
     private int code;

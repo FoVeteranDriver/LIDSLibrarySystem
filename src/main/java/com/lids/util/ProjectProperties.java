@@ -16,6 +16,8 @@ public class ProjectProperties implements ServletContextListener{
     public static String secret;
     public static String token;
     public static String myDomain;
+    public static String url;
+    public static String QRCODEURL;
 
     public void contextInitialized(ServletContextEvent contextEvent){
         InputStream inputStream = this.getClass().getResourceAsStream("/project.properties");
@@ -29,6 +31,8 @@ public class ProjectProperties implements ServletContextListener{
         secret = properties.getProperty("secret");
         token = properties.getProperty("token");
         myDomain=properties.getProperty("myDomain");
+        url = properties.getProperty("URL");
+        QRCODEURL = properties.getProperty("QRCODEURL");
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
