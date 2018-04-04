@@ -4,7 +4,7 @@ import {router} from './router/index';
 import store from './store';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
-
+import $ from 'jquery';
 Vue.use(iView);
 
 new Vue({

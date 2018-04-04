@@ -83,6 +83,10 @@ module.exports = {
             threadPool: happyThreadPool,
             cache: true,
             verbose: true
+        }),
+        new webpack.ProvidePlugin({
+            jQuery:'jquery',
+            $:"jquery"
         })
     ],
     resolve: {
