@@ -5,9 +5,9 @@ import store from './store';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
 import axios from 'axios';
-Vue.prototype.$ajax = axios;
-
 import $ from 'jquery';
+
+Vue.prototype.$ajax = axios;
 Vue.use(iView);
 
 new Vue({
