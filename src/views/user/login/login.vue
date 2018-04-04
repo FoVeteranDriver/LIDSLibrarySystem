@@ -9,7 +9,7 @@
                 <div slot="header" style="font-size:0.18rem;height:0.18rem;">
                     <Tabs v-model="tabName">
                         <TabPane label="账号登录" name="accountTab">
-                            <Input v-model="username" type="text" placeholder="读书证号" >
+                            <Input v-model="account" type="text" placeholder="读书证号" >
                             <span slot="prepend">
                                 <img src="../../../images/user/login/account.png"></span>
                             </Input>
@@ -29,7 +29,7 @@
                     </Tabs>
                 </div>
                 <div slot="footer">
-                    <a @click="login" href="javascript:void(0)" class="login-btn"  v-show="!QRcode"><img src="/src/images/user/login/login.png"></a>
+                    <a @click="login" class="login-btn"  v-show="!QRcode"><img src="/src/images/user/login/login.png"></a>
                 </div>
 
             </Modal>
@@ -44,7 +44,7 @@ export default {
     return {
       show: true,
       tabName:"accountTab",
-      username:"",
+      account:"",
       password:""
     };
   },
@@ -58,8 +58,18 @@ export default {
       }
   },
   methods: {
-    login:function() {
-
+    login:function(event) {
+        event.preventDefault();
+        console.log(this.account + ' ' + this.password);
+        this.$ajax.post('http://iyou.s1.natapp.cc/lidsLibrary/user/login',{
+                libraryCardNumber:this.account,
+                password:this.password
+            }
+        ).then(function (response) {
+            console.log(response.data);
+          }).catch(function(err){
+              console.log(err);
+          })
     },
     changeQRcode:function(){
         this.QRcode = !this.QRcode
