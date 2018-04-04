@@ -10,7 +10,6 @@
             <template v-for="(item, index) in tabList">
                 <TabPane :label="item.label" class="tab-title">
                     <slot :name="item.state" class="tab-content"></slot>
-                    hhh
                 </TabPane>
             </template>
         </Tabs>        

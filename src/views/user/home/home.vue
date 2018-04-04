@@ -66,35 +66,40 @@
                         <h1>今日预约</h1>
                         <h3>Today's Reservation</h3>
                     </div>
-                    <div class="content">
-                         <template v-for="(item, index) in bookList">
-                             <div v-if="index%2==0" class="even book-item">
-                                <div v-if="typeof item.note!=='undefined'">{{item.note}}</div>
-                                <div class="seatNote">
-                                    <span>{{item.seatNUm}}</span>
-                                    <span>{{item.state}}</span>
+                    <div class="content" ref="carousel">
+                        <div class="original" ref="original">
+                            <template v-for="(item, index) in bookList">
+                                <div v-if="index%2==0" class="even book-item">
+                                    <div v-if="typeof item.note!=='undefined'"  class="remark">{{item.note}}</div>
+                                    <div class="seatNote">
+                                        <span class="seatNum">{{item.seatNUm}}</span>
+                                        <span class="bState state" v-if="item.state==0">预约成功</span>
+                                        <span class="vState state" v-else>已生效</span>
+                                    </div>
+                                    <div class="noteTime">
+                                        <Icon type="ios-clock-outline"></Icon>
+                                        <span>{{item.startTime}}</span>
+                                        <span>{{item.date}}</span>
+                                        <span>{{item.endTime}}</span>
+                                    </div>
                                 </div>
-                                <div class="noteTime">
-                                    <img/>
-                                    <span>{{item.startTime}}</span>
-                                    <span>{{item.date}}</span>
-                                    <span>{{item.endTime}}</span>
+                                <div v-else class="odd book-item">
+                                    <div v-if="typeof item.note!=='undefined'" class="remark">{{item.note}}</div>
+                                    <div class="seatNote">
+                                        <span class="seatNum">{{item.seatNUm}}</span>
+                                         <span class="bState state" v-if="item.state==0">预约成功</span>
+                                         <span class="vState state" v-else>已生效</span>
+                                    </div>
+                                    <div class="noteTime">
+                                        <Icon type="ios-clock-outline"></Icon>
+                                        <span>{{item.startTime}}</span>
+                                        <span>{{item.date}}</span>
+                                        <span>{{item.endTime}}</span>
+                                    </div>
                                 </div>
-                             </div>
-                             <div v-else class="odd">
-                                <div v-if="typeof item.note!=='undefined'">{{item.note}}</div>
-                                <div class="seatNote">
-                                    <span>{{item.seatNUm}}</span>
-                                    <span>{{item.state}}</span>
-                                </div>
-                                <div class="noteTime book-item">
-                                    <img/>
-                                    <span>{{item.startTime}}</span>
-                                    <span>{{item.date}}</span>
-                                    <span>{{item.endTime}}</span>
-                                </div>
-                             </div>
-                         </template>
+                            </template>
+                         </div>
+                         <div class="copy" ref="copy"></div>
                     </div>
                 </div>
             </Col>
@@ -111,29 +116,21 @@ export default {
               {
                   "note":'自习',
                   "seatNUm":'F8-004',
-                  "state":'预约成功',
+                  "state":0,
                   "startTime":'6:42',
                   "endTime":'14:50',
                   "date":'-04-26'
               },
               {
                   "seatNUm":'F8-004',
-                  "state":'预约成功',
+                  "state":1,
                   "startTime":'6:42',
                   "endTime":'14:50',
                   "date":'-04-26'
               },
               {
                   "seatNUm":'F8-004',
-                  "state":'预约成功',
-                  "startTime":'6:42',
-                  "endTime":'14:50',
-                  "date":'-04-26'
-              },
-              {
-                  "note":'自习',
-                  "seatNUm":'F8-004',
-                  "state":'预约成功',
+                  "state":0,
                   "startTime":'6:42',
                   "endTime":'14:50',
                   "date":'-04-26'
@@ -141,20 +138,49 @@ export default {
               {
                   "note":'自习',
                   "seatNUm":'F8-004',
-                  "state":'预约成功',
+                  "state":1,
+                  "startTime":'6:42',
+                  "endTime":'14:50',
+                  "date":'-04-26'
+              },
+              {
+                  "note":'自习',
+                  "seatNUm":'F8-004',
+                  "state":1,
                   "startTime":'6:42',
                   "endTime":'14:50',
                   "date":'-04-26'
               },
                {
                   "seatNUm":'F8-004',
-                  "state":'预约成功',
+                  "state":1,
                   "startTime":'6:42',
                   "endTime":'14:50',
                   "date":'-04-26'
               },
           ]
         };
+    },
+    mounted(){
+        var original=this.$refs.original;
+        var copy=this.$refs.copy;
+        var carousel=this.$refs.carousel;
+        var speed=100;
+        copy.innerHTML=original.innerHTML;
+        var marquee=function(){
+            if(copy.offsetTop-carousel.scrollTop<=0){
+                carousel.scrollTop-=copy.offsetHeight;
+            }else{
+                carousel.scrollTop+=2;
+            }
+            marId=setTimeout(marquee,speed);
+        }
+        var marId=setTimeout(marquee,speed);
+        carousel.onmouseout=function(){marId=setTimeout(marquee,speed);}
+        carousel.onmouseover=function(){clearTimeout(marId);}
+    },
+    methods:{
+        
     }
 };
 </script>

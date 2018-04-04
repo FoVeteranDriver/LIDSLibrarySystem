@@ -195,15 +195,40 @@
         }
         .bookList{
             margin-top: 0.36rem;
-            .book-item{
-                
+            .content{
+                height: 2.4rem;
+                overflow: hidden;
+                .book-item{
+                    padding: 0.05rem 0.1rem;
+                    .remark{
+                        font-weight: 700;
+                    }
+                    .seatNote{
+                        .state{
+                            padding-left: 0.1rem;
+                            font-weight: 600;
+                        }
+                        .bState{
+                            color: #517507;
+                        }
+                        .vState{
+                            color: #08aaf2;
+                        }
+                    }
+                    .noteTime{
+                        span{
+                            padding-left: 0.1rem;
+                        }
+                    }
+                }
+                .even{
+                    background-color: #ffc6c6;
+                }
+                .odd{
+                    background-color: #ffecec;
+                }
             }
-            .even{
-                background-color: #ffc6c6;
-            }
-            .odd{
-                background-color: #ffecec;
-            }
+     
         }
     }
 }
