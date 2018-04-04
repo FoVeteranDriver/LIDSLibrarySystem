@@ -7,6 +7,7 @@ import 'iview/dist/styles/iview.css';
 import axios from 'axios';
 Vue.prototype.$ajax = axios;
 
+import $ from 'jquery';
 Vue.use(iView);
 
 new Vue({
