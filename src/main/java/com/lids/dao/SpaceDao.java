@@ -3,6 +3,7 @@ package com.lids.dao;
 import com.lids.po.Area;
 import com.lids.po.Space;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface SpaceDao {
@@ -11,4 +12,9 @@ public interface SpaceDao {
 
     List<Area> getAllAreas();
 
+    List<Space> getSpacesStatus();
+
+    List<HashMap<String,String>> getRoomsSlot();
+
+    HashMap<String,String> getSeatSlot(int spaceId);
 }

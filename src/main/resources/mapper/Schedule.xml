@@ -9,4 +9,20 @@
         )}
     </insert>
 
+    <select id="getRoomSchedulers" resultType="com.lids.po.Scheduler">
+        select space_id,date,begin_time,end_time,name
+        from schedule inner join space on
+        schedule.space_id = space.id
+        where space.space_type_name = "标准研习间"
+        order by date
+    </select>
+
+    <select id="getSeatSchedulers" resultType="com.lids.po.Scheduler">
+        select space_id,date,begin_time,end_time,name
+        from schedule inner join space on
+        schedule.space_id = space.id
+        where schedule.space_id = #{0}
+        order by date
+    </select>
+
 </mapper>

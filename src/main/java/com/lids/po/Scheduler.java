@@ -1,11 +1,17 @@
 package com.lids.po;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
+@JsonIgnoreProperties(value={"id"})
 public class Scheduler {
 
     private int id;
-    private int space_id;
+    private int spaceId;
+
+    private String name;
+
     private Date date;
     private Date beginTime;
     private Date endTime;
@@ -18,12 +24,12 @@ public class Scheduler {
         this.id = id;
     }
 
-    public int getSpace_id() {
-        return space_id;
+    public int getSpaceId() {
+        return spaceId;
     }
 
-    public void setSpace_id(int space_id) {
-        this.space_id = space_id;
+    public void setSpaceId(int spaceId) {
+        this.spaceId = spaceId;
     }
 
     public Date getDate() {
@@ -48,5 +54,13 @@ public class Scheduler {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
