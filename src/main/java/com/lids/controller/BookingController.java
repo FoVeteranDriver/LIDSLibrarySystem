@@ -69,11 +69,11 @@ public class BookingController {
         //获取传输的伙伴名单
         String partnersString = params.get("partners");
         boolean result = false;
-        if (partnersString.equals("") || partnersString!=null){
+        if ( partnersString ==null || partnersString.equals("")){
+            result = bookingService.addNewBooking(bookingRecord);
+        }else{
             String[] partnersId = partnersString.split(":");
             result = bookingService.addNewBooking(bookingRecord,partnersId);
-        }else{
-            result = bookingService.addNewBooking(bookingRecord);
         }
         if (result){
             return new CommomDTO(ResultEnum.SUCCESS);
