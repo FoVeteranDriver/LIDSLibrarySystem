@@ -1,19 +1,21 @@
 package com.lids.controller;
 
 import com.lids.po.BookingRecord;
+import com.lids.po.User;
 import com.lids.service.BookingService;
+import com.lids.service.SpaceService;
+import com.lids.service.UserService;
 import com.lids.util.TimeUtil;
+import com.lids.util.WechatUtil;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,10 @@ public class BookingController {
 
     @Resource
     private BookingService bookingService;
+    @Resource
+    private UserService userService;
+    @Resource
+    private SpaceService spaceService;
 
     /**
      * 预定座位
@@ -92,6 +98,50 @@ public class BookingController {
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,result);
         return commomDTO;
+    }
+
+    /**
+     * 扫描二维码签到的微信回调接口
+     * 二维码生成说明：https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx463f559a1afd2cd4
+     *                 &redirect_uri=http%3a%2f%2fiyou.s1.natapp.cc%2flidsLibrary%2fcheckIn
+     *                 &response_type=code
+     *                 &scope=snsapi_base
+     *                 &state=xxx#wechat_redirect
+     *                 (state为spaceId)
+     * @param request
+     * @return
+     */
+    @RequestMapping("/checkIn")
+    @ResponseBody
+    public CommomDTO checkIn(HttpServletRequest request){
+        String code = request.getParameter("code");
+        String spaceId = request.getParameter("state");
+        if(code==null){
+            return new CommomDTO(ResultEnum.FAILED);
+        }
+
+        //检查用户是否存在
+        String openId = WechatUtil.getOpenId(code);
+        User user = userService.selectUserByOpenId(openId);
+        if (user == null){
+            return new CommomDTO(ResultEnum.NO_BINDING);
+        }
+
+        //检查座位是否被占用
+        boolean isOccupied = spaceService.isOccupied(Integer.valueOf(spaceId));
+        if (isOccupied){
+            return new CommomDTO(ResultEnum.HAS_OCCUPIED);
+        }
+
+        //获取当前的预约
+        BookingRecord bookingRecord = bookingService.getNowBooking(Integer.valueOf(spaceId));
+        if (bookingRecord == null){
+            return new CommomDTO(ResultEnum.NO_BOOKING);
+        }else if (bookingRecord.getUserId() == user.getId()){
+            return new CommomDTO(ResultEnum.CHECKIN_SUCCESS);
+        }else {
+            return new CommomDTO(ResultEnum.NO_YOU);
+        }
     }
 
 }

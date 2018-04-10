@@ -17,4 +17,6 @@ public interface SpaceDao {
     List<HashMap<String,String>> getRoomsSlot();
 
     HashMap<String,String> getSeatSlot(int spaceId);
+
+    Space getSeatById(int spaceId);
 }

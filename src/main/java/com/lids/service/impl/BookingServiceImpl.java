@@ -57,4 +57,8 @@ public class BookingServiceImpl implements BookingService{
     public List<Map<String, String>> getTodayRecords() {
         return bookingDao.getTodayRecords(TimeUtil.getTodayDate());
     }
+
+    public BookingRecord getNowBooking(int spaceId) {
+        return bookingDao.getBookingNow(spaceId);
+    }
 }

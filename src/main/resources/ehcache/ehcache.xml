@@ -6,7 +6,7 @@
     <cache name="authorizationCache"
            maxEntriesLocalHeap="2000"
            eternal="false"
-           timeToIdleSeconds="3600"
+           timeToIdleSeconds="60"
            timeToLiveSeconds="0"
            overflowToDisk="false"
            statistics="true">
@@ -15,7 +15,7 @@
     <cache name="authenticationCache"
            maxEntriesLocalHeap="2000"
            eternal="false"
-           timeToIdleSeconds="3600"
+           timeToIdleSeconds="60"
            timeToLiveSeconds="0"
            overflowToDisk="false"
            statistics="true">

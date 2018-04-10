@@ -36,4 +36,10 @@
         ORDER BY space_id,schedule_slot.begin_time
     </select>
 
+    <!-- 获取指定座位的状态 -->
+    <select id="getSeatById" resultType="com.lids.po.Space">
+        SELECT  * FROM space
+        WHERE id = #{0}
+    </select>
+
 </mapper>

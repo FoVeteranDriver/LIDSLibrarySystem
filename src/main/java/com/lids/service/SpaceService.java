@@ -23,4 +23,6 @@ public interface SpaceService {
 
     HashMap getSeatBooking(int spaceId);
 
+    boolean isOccupied(int spaceId);
+
 }

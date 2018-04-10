@@ -5,6 +5,7 @@ import com.lids.po.User;
 import com.lids.service.UserService;
 import com.lids.util.HttpClientUtil;
 import com.lids.util.ProjectProperties;
+import com.lids.util.WechatUtil;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
 import net.sf.ehcache.Element;
@@ -124,15 +125,16 @@ public class UserController {
         if(code==null){
             return "code为空";
         }
-        String getOpenIdUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-        getOpenIdUrl=getOpenIdUrl.replace("APPID", ProjectProperties.appid);
-        getOpenIdUrl=getOpenIdUrl.replace("SECRET",ProjectProperties.secret);
-        String requestUrl = getOpenIdUrl.replace("CODE",code);
-
-        String sendResponse = HttpClientUtil.doGet(requestUrl,null);
-
-        JSONObject jsonObject = JSONObject.parseObject(sendResponse);
-        String openid = jsonObject.getString("openid");
+//        String getOpenIdUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+//        getOpenIdUrl=getOpenIdUrl.replace("APPID", ProjectProperties.appid);
+//        getOpenIdUrl=getOpenIdUrl.replace("SECRET",ProjectProperties.secret);
+//        String requestUrl = getOpenIdUrl.replace("CODE",code);
+//
+//        String sendResponse = HttpClientUtil.doGet(requestUrl,null);
+//
+//        JSONObject jsonObject = JSONObject.parseObject(sendResponse);
+//        String openid = jsonObject.getString("openid");
+        String openid = WechatUtil.getOpenId(code);
 
 //        QRCodeController.cache.put(uuid,openid);
         QRCodeController.uuidCache.put(new Element(uuid,openid));

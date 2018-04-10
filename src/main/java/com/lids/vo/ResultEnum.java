@@ -17,6 +17,10 @@ public enum ResultEnum {
     QRCODE_FAILURE(100,"二维码失效，请刷新二维码重新扫描"),
     NO_BINDING(101,"用户与借书证尚未绑定"),
     NOT_SCAN(102,"尚未进行扫码"),
+    HAS_OCCUPIED(103,"座位已经被占用"),
+    NO_BOOKING(104,"当前座位空闲"),
+    NO_YOU(105,"你没有预约当前座位"),
+    CHECKIN_SUCCESS(106,"签到成功"),
     PARAMS_ERROR(400,"参数有误");
 
     private int code;

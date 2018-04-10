@@ -54,4 +54,18 @@ public class SpaceServiceImpl implements SpaceService{
         HashMap recentBookig  = spaceDao.getSeatSlot(spaceId);
         return recentBookig;
     }
+
+    /**
+     * 检查当前座位是否被占用
+     * @param spaceId
+     * @return
+     */
+    public boolean isOccupied(int spaceId) {
+        Space space = spaceDao.getSeatById(spaceId);
+        if (space.getIsOccupied() == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

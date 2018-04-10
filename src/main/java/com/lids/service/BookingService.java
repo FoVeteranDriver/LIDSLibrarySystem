@@ -13,4 +13,6 @@ public interface BookingService {
 
     List<Map<String,String>> getTodayRecords();
 
+    BookingRecord getNowBooking(int spaceId);
+
 }
