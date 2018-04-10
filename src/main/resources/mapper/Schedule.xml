@@ -9,7 +9,7 @@
         )}
     </insert>
 
-    <select id="getRoomSchedulers" resultType="com.lids.po.Scheduler">
+    <select id="getRoomSchedulers" resultType="java.util.Map">
         select space_id,date,begin_time,end_time,name
         from schedule inner join space on
         schedule.space_id = space.id
@@ -17,7 +17,7 @@
         order by date
     </select>
 
-    <select id="getSeatSchedulers" resultType="com.lids.po.Scheduler">
+    <select id="getSeatSchedulers" resultType="java.util.Map">
         select space_id,date,begin_time,end_time,name
         from schedule inner join space on
         schedule.space_id = space.id

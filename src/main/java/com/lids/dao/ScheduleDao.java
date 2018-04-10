@@ -5,13 +5,14 @@ import com.lids.po.Scheduler;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleDao {
 
     Integer generateSchedule(Date date);
 
-    List<Scheduler> getRoomSchedulers();
+    List<Map<String,String>> getRoomSchedulers();
 
-    List<Scheduler> getSeatSchedulers(int spaceId);
+    List<Map<String,String>> getSeatSchedulers(int spaceId);
 
 }

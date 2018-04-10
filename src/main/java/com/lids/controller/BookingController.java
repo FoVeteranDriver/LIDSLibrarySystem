@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("booking")
 public class BookingController {
 
     private static Logger logger = LoggerFactory.getLogger(BookingController.class);
@@ -38,7 +39,7 @@ public class BookingController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/book/addNewBooking",method = RequestMethod.POST)
+    @RequestMapping(value = "/addNewBooking",method = RequestMethod.POST)
     @ResponseBody
     public CommomDTO addNewBooking(@RequestBody Map<String,String> params) throws Exception{
         BookingRecord bookingRecord = new BookingRecord();
@@ -72,6 +73,14 @@ public class BookingController {
         bookingRecord.setSpaceId(Integer.valueOf(params.get("spaceId")));
         bookingRecord.setApplication(params.get("application"));
 
+        //判断选中的时间段是否有预约
+        if (bookingService.getBookingNowByTime(bookingRecord.getDate(),
+                bookingRecord.getBeginTime(),
+                bookingRecord.getEndTime(),
+                bookingRecord.getSpaceId())){
+            return new CommomDTO(ResultEnum.HAS_BOOKING);
+        }
+
         //获取传输的伙伴名单
         String partnersString = params.get("partners");
         boolean result = false;
@@ -91,7 +100,7 @@ public class BookingController {
      * 返回今日的预约信息
      * @return
      */
-    @RequestMapping(value = "/book/todayBookRecords")
+    @RequestMapping(value = "/todayBookRecords")
     @ResponseBody
     public CommomDTO getBookRecords(){
         List<Map<String,String>> result = bookingService.getTodayRecords();
@@ -103,7 +112,7 @@ public class BookingController {
     /**
      * 扫描二维码签到的微信回调接口
      * 二维码生成说明：https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx463f559a1afd2cd4
-     *                 &redirect_uri=http%3a%2f%2fiyou.s1.natapp.cc%2flidsLibrary%2fcheckIn
+     *                 &redirect_uri=http%3a%2f%2fiyou.s1.natapp.cc%2flidsLibrary%2fbooking%2fcheckIn
      *                 &response_type=code
      *                 &scope=snsapi_base
      *                 &state=xxx#wechat_redirect

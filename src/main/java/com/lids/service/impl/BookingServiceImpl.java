@@ -1,6 +1,7 @@
 package com.lids.service.impl;
 
 import com.lids.dao.BookingDao;
+import com.lids.dao.SpaceDao;
 import com.lids.po.BookingRecord;
 import com.lids.po.User;
 import com.lids.service.BookingService;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,8 @@ public class BookingServiceImpl implements BookingService{
 
     @Resource
     private BookingDao bookingDao;
+    @Resource
+    private SpaceDao spaceDao;
 
     public boolean addNewBooking(BookingRecord bookingRecord) {
         return addNewBooking(bookingRecord,null);
@@ -35,7 +39,8 @@ public class BookingServiceImpl implements BookingService{
         if (recordId == 0){
             return false;
         }
-        if (partners == null){
+        //根据是否有同伴决定是否预定研习间
+        if (partners == null || spaceDao.getSeatById(bookingRecord.getSpaceId()).getSpaceTypeName().equals("标准座位")){
             logger.debug("用户"+user.getLibraryCardNumber()+"预定座位");
         }else {
             logger.debug("用户"+user.getLibraryCardNumber()+"预订研习间");
@@ -60,5 +65,22 @@ public class BookingServiceImpl implements BookingService{
 
     public BookingRecord getNowBooking(int spaceId) {
         return bookingDao.getBookingNow(spaceId);
+    }
+
+    /**
+     * 检查是否有预约
+     * @param date
+     * @param beginTime
+     * @param endTime
+     * @param spaceId
+     * @return 返回true代表有预约，返回false代表没有预约
+     */
+    public boolean getBookingNowByTime(Date date, Date beginTime, Date endTime, int spaceId) {
+        List<Integer> bookingId = bookingDao.getBookingNowByTime(date,beginTime,endTime,spaceId);
+        if (bookingId == null || bookingId.isEmpty()){
+            return false;
+        }else {
+            return true;
+        }
     }
 }

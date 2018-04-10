@@ -15,4 +15,6 @@ public interface BookingDao {
     List<Map<String,String>> getTodayRecords(Date todayDate);
 
     BookingRecord getBookingNow(int spaceId);
+
+    List<Integer> getBookingNowByTime(Date date,Date beginTime,Date endTime,int spaceId);
 }

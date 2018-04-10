@@ -34,11 +34,24 @@
           WHERE `schedule`.date >= #{0}
     </select>
 
-    <!-- 获取当前座位的当前预约 -->
+    <!-- 获取当前座位的当前预约,#{0}座位id -->
     <select id="getBookingNow" resultType="com.lids.po.BookingRecord">
         SELECT * FROM booking_record
         WHERE date = CURRENT_DATE AND CURRENT_TIME BETWEEN begin_time AND end_time
             AND space_id = #{0}
+    </select>
+
+    <!-- 获取当前时间段是否有预约 #{0}当前日期date，#{1}开始时间beginTime，#{2}结束时间endTIme,#{3}spaceId -->
+    <select id="getBookingNowByTime" resultType="com.lids.po.BookingRecord">
+        SELECT id FROM booking_record
+        WHERE space_id = #{3} AND date = #{0}
+        AND
+        (
+            (begin_time &lt;= #{1}AND end_time &gt;= #{2})
+            OR (begin_time &gt;= #{1} AND end_time &lt;= #{2})
+            OR (end_time &gt; #{1} AND end_time &lt; #{2})
+            OR (begin_time &gt; #{1} AND begin_time &lt; #{2})
+        )
     </select>
 
 </mapper>

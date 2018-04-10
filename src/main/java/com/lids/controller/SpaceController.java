@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yaoyou
  * @description 座位资源Controller
  */
 @Controller
+@RequestMapping("space")
 public class SpaceController {
 
     @Resource
@@ -65,7 +67,7 @@ public class SpaceController {
     @RequestMapping("/seatSchedulers")
     @ResponseBody
     public CommomDTO getSpacesSchedulers(@RequestParam int spaceId){
-        List<Scheduler> schedulers = spaceService.getSeatStatus(spaceId);
+        List<Map<String,String>> schedulers = spaceService.getSeatStatus(spaceId);
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,schedulers);
         return  commomDTO;
@@ -78,7 +80,7 @@ public class SpaceController {
     @RequestMapping("/roomSchedulers")
     @ResponseBody
     public CommomDTO getStudyRoomScheduler(){
-        List<Scheduler> studyRoomSchedulers = spaceService.getStudyRoomSchedulers();
+        List<Map<String,String>> studyRoomSchedulers = spaceService.getStudyRoomSchedulers();
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,studyRoomSchedulers);
         return commomDTO;

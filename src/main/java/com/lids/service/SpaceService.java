@@ -6,6 +6,7 @@ import com.lids.po.Space;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface SpaceService {
 
@@ -13,11 +14,11 @@ public interface SpaceService {
 
     List<Area> getAreas();
 
-    List<Scheduler> getStudyRoomSchedulers();
+    List<Map<String,String>> getStudyRoomSchedulers();
 
     List<Space> getSpacesStatus();
 
-    List<Scheduler> getSeatStatus(int spaceId);
+    List<Map<String,String>> getSeatStatus(int spaceId);
 
     List<HashMap<String,String>> getRoomsBooking();
 

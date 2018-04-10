@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -198,6 +199,35 @@ public class UserController {
 
             return commomDTO;
         }
+    }
+
+
+    /**
+     * 模糊查询用户
+     * @param key 关键字
+     * @return
+     */
+    @RequestMapping("/searchUser")
+    @ResponseBody
+    public CommomDTO fuzzySearch(@RequestParam String key){
+        List<Map<String,String>> result = userService.fuzzySearch(key);
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
+        return commomDTO;
+    }
+
+    /**
+     * 返回用户近三个月的预约记录
+     * @return
+     */
+    @RequestMapping("/userBookingRecords")
+    @ResponseBody
+    public CommomDTO getUserBookingRecords(){
+        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+        List<Map<String,String>> result = userService.selectBookingRecordsByUser(user.getId());
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
+        return commomDTO;
     }
 
 }
