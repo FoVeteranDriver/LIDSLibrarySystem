@@ -3,10 +3,11 @@
         <h1>研习间预约</h1>
         <tab :tabList="tabList" :imgUrl="imgUrl">
             <div slot="aContent">
-                hhhhhhhhh
+                <Button type="primary" @click="handleSelect">click me</Button>
+                <bookModal :title="title" v-if="showBookModal" :key="modalState"></bookModal>
             </div>
             <div slot="bContent">
-                bbbbbbbbbbbb
+                
             </div>
             <div slot="cContent">
                 <picShow :imageList="imageList">
@@ -19,11 +20,13 @@
 <script>
 import tab from '../../common/tab/tab.vue';
 import picShow from '../../common/picShow/picShow.vue';
+import bookModal from './bookModal.vue';
 export default {
     name: 'page',
     components: {
         tab,
-        picShow
+        picShow,
+        bookModal
     },
     data(){
         return{
@@ -38,7 +41,16 @@ export default {
                 {title:'pic6',url:'./src/images/user/common/picShow/pic6.jpg'},
                 {title:'pic7',url:'./src/images/user/common/picShow/pic7.jpg'},
                 {title:'pic8',url:'./src/images/user/common/picShow/pic8.jpg'},
-            ]
+            ],
+            showBookModal:false,
+            modalState:false,
+            title:'welcome'
+        }
+    },
+    methods:{
+        handleSelect(){
+            this.showBookModal=true;
+            this.modalState=!this.modalState;
         }
     }
 };

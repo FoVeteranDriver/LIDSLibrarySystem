@@ -11,6 +11,26 @@
 <body>
     <div id="app"></div>
     <div class="lock-screen-back" id="lock_screen_back"></div>
+    <script>
+        document.documentElement.style.fontSize = document.documentElement.clientWidth/12.8 + 'px';
+        function throttle(fn,context){
+            clearTimeout(fn.tId);
+            fn.tId=setTimeout(function(){
+                fn.call(context);
+            },100);
+        }
+        function adjustFontSize(){
+            var outerWidth=window.outerWidth<1160?1160:window.outerWidth;
+            outerWidth=outerWidth>1920?1920:outerWidth;
+            document.documentElement.style.fontSize =  outerWidth/ 12.8 + 'px';
+        }
+        var isIE = !!window.ActiveXObject || "ActiveXObject" in window; //判断是否IE浏览器
+        if(!isIE){
+            window.addEventListener('resize',function(){
+                throttle(adjustFontSize);
+            },false);
+        } 
+    </script>
     <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[0] %>"></script>
     <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[1] %>"></script>
     <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[2] %>"></script>

@@ -22,9 +22,9 @@
         }
         var isIE = !!window.ActiveXObject || "ActiveXObject" in window; //判断是否IE浏览器
         if(!isIE){
-            window.onresize = function() {
+            window.addEventListener('resize',function(){
                 throttle(adjustFontSize);
-           }
+            },false);
         } 
     </script>
 </head>
