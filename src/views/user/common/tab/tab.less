@@ -6,6 +6,10 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow:0 0 10px 10px #fff;
+    margin-left: 0.1rem;
     .ivu-tabs-bar{
         order: 2;
         flex-basis:2.6rem;
@@ -128,7 +132,13 @@
             min-width: 70px;
             height: 1.72rem;
             min-height: 70px;
+            z-index: 999;
         }
+    }
+    .ivu-tabs-content{
+        width: 75%;
+        height: 100%;
+        overflow: hidden;
     }
 
 }
