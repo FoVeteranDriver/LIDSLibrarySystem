@@ -3,8 +3,8 @@
 </style>
 
 <template>
-    <div class="login">
-        <Modal v-model="show" :mask-closable="false" @on-cancel="cancel">
+    <div>
+        <Modal v-model="show" :mask-closable="false" @on-cancel="cancel" class="login">
             <div slot="header" style="font-size:0.18rem;height:0.18rem;">
                 <Tabs v-model="tabName">
                     <TabPane label="账号登录" name="accountTab">
