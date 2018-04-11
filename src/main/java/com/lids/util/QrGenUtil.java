@@ -13,7 +13,7 @@ public class QrGenUtil {
         //如果有中文，可使用withCharset("UTF-8")方法
 
         //设置二维码url链接，图片宽度250*250，JPG类型
-        return QRCode.from(url).withSize(250, 250).to(ImageType.JPG).stream();
+        return QRCode.from(url).withSize(450, 450).to(ImageType.JPG).stream();
     }
 
 

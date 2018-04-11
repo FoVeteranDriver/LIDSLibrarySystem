@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lids.po.User;
 import com.lids.service.UserService;
@@ -20,8 +21,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,16 +131,14 @@ public class UserController {
         if(code==null){
             return "code为空";
         }
-//        String getOpenIdUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-//        getOpenIdUrl=getOpenIdUrl.replace("APPID", ProjectProperties.appid);
-//        getOpenIdUrl=getOpenIdUrl.replace("SECRET",ProjectProperties.secret);
-//        String requestUrl = getOpenIdUrl.replace("CODE",code);
-//
-//        String sendResponse = HttpClientUtil.doGet(requestUrl,null);
-//
-//        JSONObject jsonObject = JSONObject.parseObject(sendResponse);
-//        String openid = jsonObject.getString("openid");
         String openid = WechatUtil.getOpenId(code);
+        if (openid.equals("false")){
+            return "用户未关注公众号";
+        }
+        User user = userService.selectUserByOpenId(openid);
+        if (user == null){
+            return "用户尚未绑定";
+        }
 
 //        QRCodeController.cache.put(uuid,openid);
         QRCodeController.uuidCache.put(new Element(uuid,openid));
@@ -200,6 +203,50 @@ public class UserController {
             return commomDTO;
         }
     }
+
+    @RequestMapping(value = "/checkScanEvent")
+    public void checkScanEvent(@RequestParam String uuid,HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/event-stream");
+        response.setCharacterEncoding("utf-8");
+        PrintWriter out = response.getWriter();
+
+        CommomDTO commomDTO = new CommomDTO();
+
+        while (commomDTO.getMsg() == null || commomDTO.getMsg().equals("")) {
+            Element element = QRCodeController.uuidCache.get(uuid);
+            String result = (String) element.getValue();
+            if (result == null || result.equals("")) {
+                logger.debug("二维码错误");
+                commomDTO.setInfo(ResultEnum.QRCODE_FAILURE);
+            } else if (result.equals(QRCodeController.one)) {
+//                logger.debug("用户未扫码");
+            } else {
+                String openId = result;
+                logger.debug("用户openid:" + openId + "已扫码");
+                User user = userService.selectUserByOpenId(openId);
+
+                if (user == null) {
+                    commomDTO.setInfo(ResultEnum.NO_BINDING);
+                } else {
+                    logger.debug("用户" + openId + "登陆");
+                    UsernamePasswordToken token = new UsernamePasswordToken(user.getLibraryCardNumber(), user.getPassword());
+                    SecurityUtils.getSubject().login(token);
+                    User getUser = userService.selectUserByLibraryCardNumber(user.getLibraryCardNumber());
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("name", getUser.getName());
+                    commomDTO.setInfo(ResultEnum.SUCCESS, map);
+                }
+                QRCodeController.uuidCache.remove(uuid);
+            }
+        }
+            String json = JSON.toJSONString(commomDTO);
+            out.println(json);
+            out.println();
+            out.flush();
+            out.close();
+    }
+
 
 
     /**

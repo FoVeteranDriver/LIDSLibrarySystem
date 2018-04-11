@@ -17,4 +17,6 @@ public interface BookingDao {
     BookingRecord getBookingNow(int spaceId);
 
     List<Integer> getBookingNowByTime(Date date,Date beginTime,Date endTime,int spaceId);
+
+    BookingRecord getBookingRecordById(int bookingRecordId);
 }

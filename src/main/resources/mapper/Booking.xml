@@ -54,4 +54,10 @@
         )
     </select>
 
+    <!-- 根据Id获取预定记录，#{0}id -->
+    <select id="getBookingRecordById" resultType="com.lids.po.BookingRecord">
+        SELECT * FROM booking_record
+        WHERE id = #{0}
+    </select>
+
 </mapper>
