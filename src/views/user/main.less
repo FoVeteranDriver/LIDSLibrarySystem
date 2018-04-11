@@ -150,6 +150,40 @@ html,body{
             .switch-theme{
                 height: 100%;
             }
+            .login-con{
+                position: absolute;
+                    right: 0;
+                    top: 0;
+                    padding: 0.1rem;
+                    height: 100%;
+                    width: 100%;
+                    font-size: 0.20rem;
+                    font-weight: 500;
+                div{
+                    text-align: right;
+                    float: right;
+                    padding: 0 0.15rem;
+                    a{
+                        font-size: 0.20rem;
+                        color: #606266;
+                        display: inline-block;
+                        margin-right: 0.1rem;
+                        &:link,&:visited {
+                            color: #606266;
+                        }
+                        &:hover,&:active{
+                            color:#F56c6c;
+                        }
+                    }
+                    img {
+                        position: relative;
+                        top: 0.07rem;
+                        width: 0.3rem;
+                        height:auto;
+                    }
+                }
+
+            }
             .user-dropdown{
                 &-menu-con{
                     position: absolute;
@@ -160,7 +194,7 @@ html,body{
                     font-weight: 500;
                     .main-user-name{
                         display: inline-block;
-                        padding:0 0.2rem 0 0.1rem;
+                        padding:0 0.2rem 0 0.03rem;
                         max-width: 2.87rem;
                         word-break: keep-all;
                         white-space: nowrap;
@@ -184,7 +218,7 @@ html,body{
                         width: 0.30rem;
                         height: auto;
                         position: relative;
-                        bottom: -0.08rem;
+                        bottom: -0.06rem;
                     }
                 }
             }
@@ -250,7 +284,7 @@ html,body{
             word-break: keep-all;
             white-space: nowrap;
             vertical-align: middle;
-            
+
         }
     }
     img{

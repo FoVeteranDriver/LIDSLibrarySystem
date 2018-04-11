@@ -1,15 +1,6 @@
 import Main from '@/views/user/Main.vue';
 
 // 不作为Main组件的子页面展示的页面单独写，如下
-export const loginRouter = {
-    path: '/login',
-    name: 'login',
-    meta: {
-        title: 'Login - 登录'
-    },
-    component: resolve => { require(['@/views/user/login/login.vue'], resolve); }
-};
-
 export const page404 = {
     path: '/*',
     name: 'error-404',
@@ -43,20 +34,19 @@ export const otherRouter = {
     name: 'otherRouter',
     component: Main,
     children: [
-        { path: 'home', title: {i18n: 'home'}, name: 'home_index', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
+        { path: 'home', title: { i18n: 'home' }, name: 'home_index', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
     ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
-export const appRouter = [
-    {
+export const appRouter = [{
         path: '/home',
         icon: './src/images/user/main-component/home.png',
         title: '主页',
         name: 'home',
         component: Main,
         children: [
-            { path: 'index', title: '主页', icon: 'ios-home-outline',name: 'home', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
+            { path: 'index', title: '主页', icon: 'ios-home-outline', name: 'home', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
         ]
     },
     {
@@ -65,8 +55,7 @@ export const appRouter = [
         name: 'systemService',
         title: '系统服务',
         component: Main,
-        children: [
-            {
+        children: [{
                 path: 'introduce',
                 name: 'introduce',
                 icon: 'social-octocat',
@@ -95,8 +84,7 @@ export const appRouter = [
         name: 'book',
         title: '预约服务',
         component: Main,
-        children: [
-            {
+        children: [{
                 path: 'studyroom',
                 icon: 'ios-bookmarks-outline',
                 name: 'studyroom',
@@ -119,14 +107,13 @@ export const appRouter = [
         name: 'user',
         component: Main,
         children: [
-            { path: 'user', title: '个人中心',icon:'ios-person-outline', name: 'user_index', component: resolve => { require(['@/views/user/user-center/user.vue'], resolve); } }
+            { path: 'user', title: '个人中心', icon: 'ios-person-outline', name: 'user_index', component: resolve => { require(['@/views/user/user-center/user.vue'], resolve); } }
         ]
     }
 ];
 
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
-    loginRouter,
     otherRouter,
     ...appRouter,
     page500,
