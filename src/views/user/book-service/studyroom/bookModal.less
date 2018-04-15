@@ -1,4 +1,5 @@
 .bookModal{
+    position: relative;
     font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
     font-style: normal;
     .ivu-modal{
@@ -8,38 +9,63 @@
             font-size: 24px;
             font-weight: 300;
             padding: 20px 10px 40px;
-            border-bottom: 1px solid #fff2ec;
+            border-bottom: 2px solid #fff2ec;
         }
         .tips{
             background: #fff2ec;
             padding: 15px;
-            margin-top: -20px;
+            padding-right: 0px;
+            margin: -10px 10px 0;
             p{
                 display: inline;
                 font-size: 10px;
             }
-            width: 620px;
+            width: 610px;
             .timeSlot{
                 color: #fab5b5;
                 padding:0 5px;
             }
             .center{
                 position: absolute;
-                left: 230px;
+                left: 220px;
             }
             .right{
                 position: absolute;
-                left: 470px;
+                left: 460px;
+                padding: 0;
             }
         }
         .svgBar{
-            .toolTip{
-                position: absolute;
-                display: inline-block;
-                width: 30px;
-                height: 10px;
-                background: #666666;
-                color: #fff;
+            .axis path,
+            .axis line{
+                fill: none;
+                stroke: #e4e4e4;
+                shape-rendering: crispEdges;
+            }
+
+            .axis text {
+                font-family: sans-serif;
+                font-size: 11px;
+                fill:#c9c9c9;
+            }
+        }
+      
+        .applyInfo{
+            position: relative;
+            .ivu-input-wrapper{
+                width: 250px;
+            }
+            .ivu-input-group{
+                
+            }
+            .ivu-tooltip{
+                position: relative;
+                .ivu-tooltip-popper{
+                    position: absolute !important;
+                    left: 260px !important;
+                    top: 0px !important;
+                }
+                
             }
         }
         .ivu-modal-footer{
