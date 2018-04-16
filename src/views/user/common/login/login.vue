@@ -54,12 +54,19 @@ export default {
         };
     },
     watch: {
+        warning2:function(val){
+            if(val === true){
+                this.warning1 = false;
+            }
+        },
         tabName: function(newVal, oldVal) {
             if (newVal === "scanTab" && oldVal === "accountTab") {
                 let that = this;
                 that.$ajax
                     .get(
                         "http://iyou.s1.natapp.cc/lidsLibrary/showLoginQRCode",
+
+                        //可改进，超时后做重新请求处理
                         { timeout: 5000 }
                     )
                     .then(function(response) {
@@ -73,7 +80,6 @@ export default {
                                         uuid
                                 )
                                 .then(function(response) {
-                                    console.log(response);
                                     let data = response.data;
                                     if (data.code === 0) {
                                         console.log("登录成功");
@@ -143,11 +149,15 @@ export default {
             this.warning1 = false;
             this.warning2 = false;
         },
+
+        //成功登录触发store的mutation
         successLog(data) {
             this.$store.commit("writeUserName", data);
             this.$store.commit("login");
             this.$options.methods.cancel.call(this);
         },
+
+        //触发父组件事件关闭窗口
         cancel() {
             this.$emit("clickCancel");
             this.tabName = "accountTab";

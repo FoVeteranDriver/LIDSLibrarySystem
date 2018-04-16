@@ -1,4 +1,4 @@
-.main-tab{
+.main-tab {
     width: 100%;
     min-width: 400px;
     height: 100%;
@@ -8,115 +8,111 @@
     align-items: flex-start;
     background: #fff;
     border-radius: 8px;
-    box-shadow:0 0 10px 10px #fff;
+    box-shadow: 0 0 10px 10px #fff;
     margin-left: 0.1rem;
-    .ivu-tabs-bar{
+    .ivu-tabs-bar {
         order: 2;
-        flex-basis:2.6rem;
+        flex-basis: 2.6rem;
         min-width: 300px;
         width: 2.6rem;
         background: url(../../../../images/user/common/tab/tab.png) no-repeat transparent;
         background-position: 0 0;
         background-size: 2.50rem 2.29rem;
-        position: relative; 
-        height: 6rem;
+        border: 0;
+        position: relative;
         /*去除下划线*/
-        .ivu-tabs-ink-bar{
+        .ivu-tabs-ink-bar {
             width: 0;
             height: 0;
         }
         /*去除左右箭头*/
-        .ivu-tabs-nav-prev i,.ivu-tabs-nav-next  i{
+        .ivu-tabs-nav-prev i,
+        .ivu-tabs-nav-next i {
             visibility: hidden;
         }
-        .ivu-tabs-nav-scroll{
+        .ivu-tabs-nav-scroll {
             position: relative;
             z-index: 99;
-            overflow:visible;
+            overflow: visible;
             width: 4rem;
-            height: 6rem;
-            .ivu-tabs-nav{
+            .ivu-tabs-nav {
                 width: 4rem;
                 height: 6rem;
-                .ivu-tabs-tab{
+                .ivu-tabs-tab {
                     position: relative;
                     float: left;
                     display: inline-block;
                     width: 0.44rem;
-                    
                     height: 0.44rem;
-                    
                     font-size: 0rem;
                     margin: 0;
                     padding: 0;
                     border: none;
                 }
-                .ivu-tabs-tab-active{
+                .ivu-tabs-tab-active {
                     background-color: transparent;
                     color: transparent;
                 }
-                .ivu-tabs-tab:nth-child(2){
+                .ivu-tabs-tab:nth-child(2) {
                     top: 0.4%;
                     left: 13%;
                     background: url(../../../../images/user/common/tab/bookState.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
-                .ivu-tabs-tab:nth-child(3){
+                .ivu-tabs-tab:nth-child(3) {
                     top: 9%;
                     left: -7.2%;
                     background: url(../../../../images/user/common/tab/bookNote.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
-                .ivu-tabs-tab:nth-child(4){
+                .ivu-tabs-tab:nth-child(4) {
                     top: 18%;
                     left: -19%;
                     background: url(../../../../images/user/common/tab/picShow.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
-                .ivu-tabs-tab:nth-child(5){
+                .ivu-tabs-tab:nth-child(5) {
                     top: 25.4%;
                     left: -25%;
                     background: url(../../../../images/user/common/tab/deploy.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
-                .ivu-tabs-tab-active:nth-child(2){
+                .ivu-tabs-tab-active:nth-child(2) {
                     background: url(../../../../images/user/common/tab/bookState-active.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
-                .ivu-tabs-tab-active:nth-child(3){
+                .ivu-tabs-tab-active:nth-child(3) {
                     background: url(../../../../images/user/common/tab/bookNote-active.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
-                .ivu-tabs-tab-active:nth-child(4){
+                .ivu-tabs-tab-active:nth-child(4) {
                     background: url(../../../../images/user/common/tab/picShow-active.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
-                .ivu-tabs-tab-active:nth-child(5){
+                .ivu-tabs-tab-active:nth-child(5) {
                     background: url(../../../../images/user/common/tab/deploy-active.png) no-repeat transparent;
                     background-size: contain;
                     background-position: top left;
-                    background-color:transparent; 
+                    background-color: transparent;
                 }
             }
-            
-        }   
-        
+        }
     }
-    .display-area{
+    .display-area {
         position: absolute;
         top: 0rem;
         right: 0rem;
@@ -124,7 +120,7 @@
         min-width: 300px;
         height: 6rem;
         display: inline-block;
-        img{
+        img {
             position: absolute;
             top: 0.24rem;
             left: 0.6rem;
@@ -135,10 +131,9 @@
             z-index: 999;
         }
     }
-    .ivu-tabs-content{
+    .ivu-tabs-content {
         width: 75%;
         height: 100%;
         overflow: hidden;
     }
-
 }

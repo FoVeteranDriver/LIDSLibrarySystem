@@ -12,7 +12,7 @@
                     <slot :name="item.state" class="tab-content"></slot>
                 </TabPane>
             </template>
-        </Tabs>        
+        </Tabs>
     </div>
 </template>
 <script>

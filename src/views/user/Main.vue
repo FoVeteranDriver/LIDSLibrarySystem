@@ -99,7 +99,21 @@ export default {
             this.shrink = !this.shrink;
         },
         handleClickUserDropdown(name) {
-            this.$store.commit("logout");
+            let that = this;
+            this.$ajax
+                .get("http://iyou.s1.natapp.cc/lidsLibrary/user/logout")
+                .then(function(response) {
+                    if (response.data.code === 0) {
+                        console.log("退出登录成功");
+                        that.$store.commit("logout");
+                    }else {
+                        console.log("退出登录失败");
+                        console.log(response.data);
+                    }
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
         },
         showLogin(event) {
             event.preventDefault();

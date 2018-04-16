@@ -8,13 +8,14 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        logged: false,
+        logged: false, //登录状态
         userInfo: {
             name: '',
         },
     },
 
     mutations: {
+        //获取用户名
         writeUserName(state, data) {
             state.userInfo.name = data.result.name;
         },
