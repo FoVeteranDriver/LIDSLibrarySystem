@@ -26,7 +26,7 @@
 
     <!-- 获取今天后的所有预约记录，参数0为今天零点的时间戳-->
     <select id="getTodayRecords" resultType="java.util.Map">
-        SELECT space.`name`,`schedule`.date,schedule_slot.begin_time,schedule_slot.duration,booking_record.application,booking_record.is_active,booking_record.has_check_in
+        SELECT space.`name`,`schedule`.date,schedule_slot.begin_time,booking_record.end_time,booking_record.application,booking_record.is_active,booking_record.has_check_in
           from schedule_slot
           INNER JOIN `schedule` ON schedule_slot.schedule_id=`schedule`.id
           INNER JOIN space ON `schedule`.space_id = space.id
