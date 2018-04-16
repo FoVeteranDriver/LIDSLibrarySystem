@@ -1,0 +1,14 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.CreditDao">
+
+    <insert id="newCreditRecord" statementType="CALLABLE">
+        {call add_new_booking(
+        #{0, mode=IN,jdbcType=INTEGER},
+        #{1, mode=IN,jdbcType=INTEGER},
+        #{2, mode=IN,jdbcType=INTEGER}
+        )}
+    </insert>
+
+</mapper>

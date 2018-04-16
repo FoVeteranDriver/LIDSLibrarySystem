@@ -38,14 +38,16 @@
         <!--<property name="cronExpression" value="0 0 1 * * ?"/>-->
     <!--</bean>-->
 
+    <bean id="jobFactory" class="com.lids.quartz.MyJobFactory"></bean>
 
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean name="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
                 <ref bean="AccessTokenJobTrigger" />
                 <!--<ref bean="SchedulerJobTrigger" />-->
             </list>
         </property>
+        <property name="jobFactory" ref="jobFactory"></property>
     </bean>
 
 </beans>

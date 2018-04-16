@@ -4,6 +4,7 @@ import com.lids.dao.BookingDao;
 import com.lids.dao.SpaceDao;
 import com.lids.po.BookingRecord;
 import com.lids.po.User;
+import com.lids.quartz.CreditDetectJob;
 import com.lids.service.BookingService;
 import com.lids.util.TimeUtil;
 import org.apache.shiro.SecurityUtils;
@@ -39,6 +40,14 @@ public class BookingServiceImpl implements BookingService{
         if (recordId == 0){
             return false;
         }
+
+        //TODO 可以使用spring aop进行分离
+        //添加定时任务判断是否违约
+        String time = TimeUtil.formatDate(bookingRecord.getDate().getTime())
+                +" "
+                +TimeUtil.formatTime(bookingRecord.getEndTime().getTime());
+        QuartzService.addJob(time, CreditDetectJob.class,recordId+"");
+
         //根据是否有同伴决定是否预定研习间
         if (partners == null || spaceDao.getSeatById(bookingRecord.getSpaceId()).getSpaceTypeName().equals("标准座位")){
             logger.debug("用户"+user.getLibraryCardNumber()+"预定座位");

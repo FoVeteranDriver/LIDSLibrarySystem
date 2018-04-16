@@ -11,6 +11,28 @@ import java.util.Date;
  */
 public class TimeUtil {
 
+
+    public static String formatDate(long time){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(new Date(time));
+    }
+
+    public static String formatTime(long time){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:MM:SS");
+        return sdf.format(new Date(time));
+    }
+
+    /**
+     * 将yyyy-MM-dd HH:mm:ss格式的字符串转换成Date对象
+     * @param dateString yyyy-MM-dd HH:mm:ss字符串
+     * @return 相对应的Date对象
+     * @throws ParseException
+     */
+    public static Date parseDateAndTime(String dateString) throws ParseException{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.parse(dateString);
+    }
+
     /**
      * 将yymmdd格式的字符串转换成Date对象
      * @param dateString "yymmdd"格式字符串

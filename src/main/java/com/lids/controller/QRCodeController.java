@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.lids.service.impl.QuartzService;
 import com.lids.util.ProjectProperties;
 import com.lids.util.QrGenUtil;
 import com.lids.vo.CommomDTO;
@@ -71,6 +72,8 @@ public class QRCodeController {
         os.flush();
         os.close();
         String imgURL = ProjectProperties.myDomain+"jpg/"+fileName;
+        //TODO 可以使用spring aop进行分离
+        QuartzService.addJobForQrCodeDelete(fileName,randomUUID.toString());
 
         CommomDTO commomDTO = new CommomDTO();
         Map<String,String> map = new HashMap<String, String>();
