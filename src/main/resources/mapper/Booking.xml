@@ -32,6 +32,15 @@
           INNER JOIN space ON `schedule`.space_id = space.id
           INNER JOIN booking_record ON schedule_slot.booking_record_id = booking_record.id
           WHERE `schedule`.date >= #{0}
+          limit #{1},10
+    </select>
+
+    <select id="getTopId" resultType="java.lang.Integer">
+        select MAX(id) from booking_record ORDER BY id DESC
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT count(id) FROM booking_record
     </select>
 
     <!-- 获取当前座位的当前预约,#{0}座位id -->

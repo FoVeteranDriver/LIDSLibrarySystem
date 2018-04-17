@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,8 +69,24 @@ public class BookingServiceImpl implements BookingService{
         return true;
     }
 
-    public List<Map<String, String>> getTodayRecords() {
-        return bookingDao.getTodayRecords(TimeUtil.getTodayDate());
+    public List<Map<String, String>> getTodayRecords(HttpSession session) {
+        Integer offset = (Integer)session.getAttribute("offset");
+        Integer count = (Integer)session.getAttribute("count");
+        //TODO 新预定优先返回
+        if (offset == null || offset == 0){
+            Integer maxId = bookingDao.getTopId();
+            count = bookingDao.getCount();
+            offset = 0;
+            session.setAttribute("maxId",maxId);
+            session.setAttribute("count",count);
+            session.setAttribute("offset",10);
+        }else if (offset >= count){
+            session.setAttribute("offset",0);
+            offset = 0;
+        }else {
+            session.setAttribute("offset",offset+10);
+        }
+        return bookingDao.getTodayRecords(TimeUtil.getTodayDate(),Integer.valueOf(offset));
     }
 
     public BookingRecord getNowBooking(int spaceId) {

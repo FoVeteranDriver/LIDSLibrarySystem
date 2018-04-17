@@ -12,11 +12,15 @@ public interface BookingDao {
 
     Integer addParnter(Map<String,Integer> map);
 
-    List<Map<String,String>> getTodayRecords(Date todayDate);
+    List<Map<String,String>> getTodayRecords(Date todayDate,Integer offset);
 
     BookingRecord getBookingNow(int spaceId);
 
     List<Integer> getBookingNowByTime(Date date,Date beginTime,Date endTime,int spaceId);
 
     BookingRecord getBookingRecordById(int bookingRecordId);
+
+    Integer getTopId();
+
+    Integer getCount();
 }

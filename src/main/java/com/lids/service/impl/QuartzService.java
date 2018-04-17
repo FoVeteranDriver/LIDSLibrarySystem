@@ -11,6 +11,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 import static org.quartz.DateBuilder.dateOf;
 import static org.quartz.DateBuilder.futureDate;
@@ -40,9 +41,7 @@ public class QuartzService {
 
     private static Logger logger = LoggerFactory.getLogger(QuartzService.class);
     private static Scheduler scheduler;
-    private static String jobName = "CreditDetect";
     private static String jobGroupName = "CreditDetectGroup";
-    private static String jobName1 = "QrCodeDelete";
     private static String jobGroupName1 = "QrCodeDeleteGroup";
 
     /**
@@ -52,8 +51,9 @@ public class QuartzService {
      * @param bookingRecordId
      */
     public static void addJob(String time,Class<? extends Job> jobClass, String bookingRecordId){
+        UUID randomUUID = UUID.randomUUID();
         JobDetail job = newJob(CreditDetectJob.class)
-                .withIdentity(jobName, jobGroupName)
+                .withIdentity(randomUUID.toString(), jobGroupName)
                 .usingJobData("bookingRecordId", bookingRecordId)
                 .build();
 
@@ -65,9 +65,9 @@ public class QuartzService {
         }
 
         SimpleTrigger trigger = (SimpleTrigger) newTrigger()
-                .withIdentity(jobName, jobGroupName)
+                .withIdentity(randomUUID.toString(), jobGroupName)
                 .startAt(date)
-                .forJob(jobName, jobGroupName)
+                .forJob(randomUUID.toString(), jobGroupName)
                 .build();
 
 //        //简略测试
@@ -88,7 +88,7 @@ public class QuartzService {
 
     public static void addJobForQrCodeDelete(String fileName,String randomUUID){
         JobDetail job = newJob(QRCodeDeleteJob.class)
-                .withIdentity(jobName1, jobGroupName1)
+                .withIdentity(randomUUID, jobGroupName1)
                 .usingJobData("fileName", fileName)
                 .usingJobData("randomUUID",randomUUID)
                 .build();
@@ -96,7 +96,7 @@ public class QuartzService {
         logger.debug("1分钟后删除"+fileName);
 
         SimpleTrigger  trigger = (SimpleTrigger)newTrigger()
-                .withIdentity(jobName, jobGroupName)
+                .withIdentity(randomUUID, jobGroupName)
                 .startAt(futureDate(1, DateBuilder.IntervalUnit.MINUTE))
                 .build();
 
