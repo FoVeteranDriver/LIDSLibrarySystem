@@ -9,6 +9,7 @@ import com.lids.service.SpaceService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +32,8 @@ public class SpaceServiceImpl implements SpaceService{
         return spaceDao.getAllAreas();
     }
 
-    public List<Map<String,String>> getStudyRoomSchedulers() {
-        List<Map<String,String>> schedulers = scheduleDao.getRoomSchedulers();
+    public List<Map<String,String>> getStudyRoomSchedulers(Date date) {
+        List<Map<String,String>> schedulers = scheduleDao.getRoomSchedulers(date);
         return schedulers;
     }
 
@@ -46,8 +47,8 @@ public class SpaceServiceImpl implements SpaceService{
         return schedulers;
     }
 
-    public List<HashMap<String, String>> getRoomsBooking() {
-        List<HashMap<String,String>> recentsBooking = spaceDao.getRoomsSlot();
+    public List<HashMap<String, String>> getRoomsBooking(Date date) {
+        List<HashMap<String,String>> recentsBooking = spaceDao.getRoomsSlot(date);
         return recentsBooking;
     }
 

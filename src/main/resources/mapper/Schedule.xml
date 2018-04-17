@@ -14,6 +14,7 @@
         from schedule inner join space on
         schedule.space_id = space.id
         where space.space_type_name = "标准研习间"
+        AND DATE = #{0}
         order by date
     </select>
 

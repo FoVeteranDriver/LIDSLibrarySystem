@@ -11,7 +11,7 @@ public interface ScheduleDao {
 
     Integer generateSchedule(Date date);
 
-    List<Map<String,String>> getRoomSchedulers();
+    List<Map<String,String>> getRoomSchedulers(Date date);
 
     List<Map<String,String>> getSeatSchedulers(int spaceId);
 

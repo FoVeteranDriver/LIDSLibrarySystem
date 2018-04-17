@@ -4,6 +4,7 @@ import com.lids.po.Area;
 import com.lids.po.Scheduler;
 import com.lids.po.Space;
 import com.lids.service.SpaceService;
+import com.lids.util.TimeUtil;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,10 +81,21 @@ public class SpaceController {
      */
     @RequestMapping("/roomSchedulers")
     @ResponseBody
-    public CommomDTO getStudyRoomScheduler(){
-        List<Map<String,String>> studyRoomSchedulers = spaceService.getStudyRoomSchedulers();
+    public CommomDTO getStudyRoomScheduler(@RequestParam String date){
+        Date dateObject = null;
+        try{
+            dateObject = TimeUtil.parseDate(date);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+        List<Map<String,String>> studyRoomSchedulers = spaceService.getStudyRoomSchedulers(dateObject);
         CommomDTO commomDTO = new CommomDTO();
-        commomDTO.setInfo(ResultEnum.SUCCESS,studyRoomSchedulers);
+        if (studyRoomSchedulers == null || studyRoomSchedulers.size() == 0){
+            commomDTO.setInfo(ResultEnum.NOT_BOOKING);
+        }else {
+            commomDTO.setInfo(ResultEnum.SUCCESS,studyRoomSchedulers);
+        }
         return commomDTO;
     }
 
@@ -92,8 +105,15 @@ public class SpaceController {
      */
     @RequestMapping("/roomBookings")
     @ResponseBody
-    public CommomDTO getRoomsBooking(){
-        List<HashMap<String,String>> roomsBooking = spaceService.getRoomsBooking();
+    public CommomDTO getRoomsBooking(@RequestParam String date){
+        Date dateObject = null;
+        try{
+            dateObject = TimeUtil.parseDate(date);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+        List<HashMap<String,String>> roomsBooking = spaceService.getRoomsBooking(dateObject);
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,roomsBooking);
         return commomDTO;

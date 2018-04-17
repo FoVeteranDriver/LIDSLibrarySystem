@@ -24,6 +24,7 @@
         on schedule_slot.schedule_id = schedule.id
         inner join space on `schedule`.space_id = space.id
         where space.space_type_name = "标准研习间"
+        AND schedule.date = #{0}
         ORDER BY space_id,schedule_slot.begin_time
     </select>
 

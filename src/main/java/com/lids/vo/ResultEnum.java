@@ -22,6 +22,7 @@ public enum ResultEnum {
     NO_YOU(105,"你没有预约当前座位"),
     CHECKIN_SUCCESS(106,"签到成功"),
     HAS_BOOKING(107,"当前时段已被预约"),
+    NOT_BOOKING(108,"不开放预约"),
     PARAMS_ERROR(400,"参数有误");
 
     private int code;

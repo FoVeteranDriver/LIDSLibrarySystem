@@ -3,6 +3,7 @@ package com.lids.service.impl;
 import com.lids.dao.BookingDao;
 import com.lids.dao.SpaceDao;
 import com.lids.po.BookingRecord;
+import com.lids.po.Space;
 import com.lids.po.User;
 import com.lids.quartz.CreditDetectJob;
 import com.lids.service.BookingService;
@@ -35,6 +36,15 @@ public class BookingServiceImpl implements BookingService{
 
     public boolean addNewBooking(BookingRecord bookingRecord, String[] partners) {
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
+
+        //获取要预定的座位，判断是座位还是研习间
+        Space space2Book = spaceDao.getSeatById(bookingRecord.getSpaceId());
+        boolean isSeat = space2Book.getSpaceTypeName().equals("标准座位");
+        if (isSeat){
+            bookingRecord.setApplication("");
+        }
+
+        //插入预定记录，返回预定记录ID
         bookingRecord.setUserId(user.getId());
         bookingDao.addNewBooking(bookingRecord);
         int recordId = bookingRecord.getId();
@@ -50,7 +60,7 @@ public class BookingServiceImpl implements BookingService{
         QuartzService.addJob(time, CreditDetectJob.class,recordId+"");
 
         //根据是否有同伴决定是否预定研习间
-        if (partners == null || spaceDao.getSeatById(bookingRecord.getSpaceId()).getSpaceTypeName().equals("标准座位")){
+        if (partners == null || isSeat){
             logger.debug("用户"+user.getLibraryCardNumber()+"预定座位");
         }else {
             logger.debug("用户"+user.getLibraryCardNumber()+"预订研习间");
