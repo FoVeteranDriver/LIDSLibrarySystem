@@ -56,9 +56,13 @@
                     </div>
                     <div class="content">
                         <img src="../../../images/user/home/notice.png"/>
-                        <h2>关于信息共享空间网上预约时间调整的通知</h2>
-                        <p class="notice-tip"> 为合理利用图书馆资源，提升馆内座位使用效率，从2017年4月1日起，个人座位预约时间将由提前7日改为提前2日可预约，具体包括基础馆三楼信息共享</p>
-                        <span class="publish-time">2018/03/19 13:59</span>
+                        <h2>{{notice.noticeTitle}}</h2>
+                        <p class="notice-tip">{{notice.noticeText}}</p>
+                        <span class="publish-time" v-if="notice.publishTime!==''">
+                            {{notice.publishTime.year}}/{{notice.publishTime.month}}/{{notice.publishTime.day}}
+                            &nbsp;
+                            {{notice.publishTime.hour}}:{{notice.publishTime.minute}}
+                        </span>
                     </div>
                 </div>
                 <div class="bookList">
@@ -71,6 +75,7 @@
                             <template v-for="(item, index) in bookList">
                                 <div v-if="index%2==0" class="even book-item">
                                     <div v-if="typeof item.note!=='undefined'"  class="remark">{{item.note}}</div>
+                                    <div v-else class="noRemark"></div>
                                     <div class="seatNote">
                                         <span class="seatNum">{{item.seatNUm}}</span>
                                         <span class="bState state" v-if="item.state==0">预约成功</span>
@@ -85,6 +90,7 @@
                                 </div>
                                 <div v-else class="odd book-item">
                                     <div v-if="typeof item.note!=='undefined'" class="remark">{{item.note}}</div>
+                                    <div v-else class="noRemark"></div>
                                     <div class="seatNote">
                                         <span class="seatNum">{{item.seatNUm}}</span>
                                          <span class="bState state" v-if="item.state==0">预约成功</span>
@@ -108,79 +114,116 @@
 </template>
 
 <script>
+import util from '../../../libs/util.js';
 export default {
     name: 'home',
     data () {
         return {
-          bookList:[
-              {
-                  "note":'自习',
-                  "seatNUm":'F8-004',
-                  "state":0,
-                  "startTime":'6:42',
-                  "endTime":'14:50',
-                  "date":'-04-26'
-              },
-              {
-                  "seatNUm":'F8-004',
-                  "state":1,
-                  "startTime":'6:42',
-                  "endTime":'14:50',
-                  "date":'-04-26'
-              },
-              {
-                  "seatNUm":'F8-004',
-                  "state":0,
-                  "startTime":'6:42',
-                  "endTime":'14:50',
-                  "date":'-04-26'
-              },
-              {
-                  "note":'自习',
-                  "seatNUm":'F8-004',
-                  "state":1,
-                  "startTime":'6:42',
-                  "endTime":'14:50',
-                  "date":'-04-26'
-              },
-              {
-                  "note":'自习',
-                  "seatNUm":'F8-004',
-                  "state":1,
-                  "startTime":'6:42',
-                  "endTime":'14:50',
-                  "date":'-04-26'
-              },
-               {
-                  "seatNUm":'F8-004',
-                  "state":1,
-                  "startTime":'6:42',
-                  "endTime":'14:50',
-                  "date":'-04-26'
-              },
-          ]
+          bookList:[],
+          notice:{
+              noticeTitle:'',
+              noticeText:'',
+              publishTime:''
+          }
         };
     },
     mounted(){
         var original=this.$refs.original;
         var copy=this.$refs.copy;
         var carousel=this.$refs.carousel;
-        var speed=100;
-        copy.innerHTML=original.innerHTML;
+        var speed=50;
         var marquee=function(){
             if(copy.offsetTop-carousel.scrollTop<=0){
-                carousel.scrollTop-=copy.offsetHeight;
+                carousel.scrollTop-=original.offsetHeight;
             }else{
                 carousel.scrollTop+=2;
+                console.log(carousel.scrollTop,original.offsetHeight);
             }
             marId=setTimeout(marquee,speed);
         }
         var marId=setTimeout(marquee,speed);
         carousel.onmouseout=function(){marId=setTimeout(marquee,speed);}
         carousel.onmouseover=function(){clearTimeout(marId);}
+        this.$nextTick(()=>{
+            copy.innerHTML=original.innerHTML;
+        });
+        this.init();
     },
     methods:{
-        
+        init(){
+            let that=this;
+            that.$ajax
+                .get(
+                    util.baseurl+"/notice"
+                )
+                .then(function(response){
+                    let data=response.data;
+                    if(data.code==0){
+                        that.notice.noticeTitle=data.result.noticeTitle;
+                        that.notice.noticeText=data.result.noticeText;
+                        that.notice.publishTime=util.parseTimestamp(data.result.createTime);
+                    }else{
+                        that.notice.noticeTitle='没有通知!';
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+            that.getBookRecords();
+            setTimeout(that.polling,30000);
+        },
+        getBookRecords(){
+            let that=this;
+            that.bookList=[];
+            that.$ajax
+                .get(
+                    util.baseurl+"/booking/todayBookRecords"
+                )
+                .then(function(response){
+                    let data=response.data;
+                    if(data.code==0){
+                        let dataList=data.result;
+                        for(let item of dataList){
+                            let temp={};
+                            temp.note=item.application;
+                            temp.seatNUm=item.name;
+                            temp.state=(item.is_active&&!item.has_check_in)?0:1;
+                            temp.startTime=item.begin_time.slice(0,5);
+                            temp.endTime=item.end_time.slice(0,5);
+                            temp.date=item.date.slice(4);
+                            that.bookList.push(temp);
+                        }
+                        let len=that.bookList.length;
+                        if(len>=3&&len<=5){    //数目在此范围内的预约条目会被加倍
+                            let mirror=[];
+                            for(let item of that.bookList){
+                                mirror.push(item);
+                            }
+                            that.bookList=that.bookList.concat(mirror);
+                        }
+                        if(that.bookList.length%2!==0&&that.bookList.length>6){
+                            that.bookList.pop();  //只有偶数条目才不会出现连续颜色块
+                        }
+                        that.scrollShow();
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        },
+        scrollShow(){
+            var original=this.$refs.original;
+            var copy=this.$refs.copy;
+            var carousel=this.$refs.carousel;
+            this.$nextTick(()=>{
+                copy.innerHTML=original.innerHTML;
+                carousel.scrollTop=0;
+            });
+        },
+        polling(){
+            this.getBookRecords();
+            setTimeout(this.polling,30000);
+        }
     }
 };
 </script>

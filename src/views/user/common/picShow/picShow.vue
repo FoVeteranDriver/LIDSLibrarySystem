@@ -52,7 +52,6 @@
                 type:Array,
                 required: true
             },
-            screenWidth: document.body.clientWidth
         },
         mounted(){
             function init(){

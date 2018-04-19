@@ -273,4 +273,15 @@ util.throttle=function(fn,context){
         fn.call(context);
     },100);
 };
+util.parseTimestamp=function(time){
+    let date=new Date(time);
+    let dateObj={};
+    dateObj.year=date.getFullYear();
+    dateObj.month=date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1;
+    dateObj.day=date.getDate()<10?'0'+date.getDate():date.getDate();
+    dateObj.hour=date.getHours()<10?'0'+date.getHours():date.getHours();
+    dateObj.minute=date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes();
+    return dateObj;
+};
+util.baseurl='http://iyou.s1.natapp.cc/lidsLibrary';
 export default util;

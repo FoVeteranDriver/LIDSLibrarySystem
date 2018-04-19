@@ -8,14 +8,14 @@
         .header{
             font-size: 24px;
             font-weight: 300;
-            padding: 20px 10px 40px;
+            padding: 10px 10px 34px;
             border-bottom: 2px solid #fff2ec;
         }
         .tips{
             background: #fff2ec;
-            padding: 15px;
+            padding: 10px;
             padding-right: 0px;
-            margin: -10px 10px 0;
+            margin: -5px 10px 0;
             p{
                 display: inline;
                 font-size: 10px;
@@ -52,6 +52,57 @@
       
         .applyInfo{
             position: relative;
+            height: 400px;
+            input:hover,input:focus{
+                border-color: #fff2ec;
+                outline: 0;
+            }
+            .applyItem{
+                width: 100%;
+                padding:4px;
+                position: relative;
+                height: 40px;
+                line-height: 3;
+                .label{
+                    font-weight: 600;
+                    font-size: 14px;
+                    position: absolute;
+                    right: 550px;
+                }
+                .right{
+                    position: relative;
+                    left: 80px;
+                }
+                
+            }
+            .theme{
+                top: 4px;
+            }
+            .member{
+                top: 24px;
+            }
+            .applyDate{
+                top: 28px;
+            }
+            .applyTime{
+                top: 32px;
+                .ivu-select-dropdown{
+                    top: 20px !important;
+                }
+            }
+            .applyNote{
+                top: 70px;
+                .noteTip{
+                    position: absolute;
+                    left: 86px;
+                    top: -24px;
+                }
+            }
+            .isAgree{
+                position: absolute;
+                top: 384px;
+                left: 84px;
+            }
             .ivu-input-wrapper{
                 width: 250px;
             }
@@ -64,6 +115,17 @@
                     position: absolute !important;
                     left: 260px !important;
                     top: 0px !important;
+                    .ivu-tooltip-arrow{
+                        border-right-color:#e9e9e9;
+                        border-width:8px 8px 8px 0;
+                        left: 0;
+                        top: 8px;
+                    }
+                    .ivu-tooltip-inner{
+                        min-height: 60px;
+                        background: transparent;
+                        color: #c6c6c6;
+                    }
                 }
                 
             }
