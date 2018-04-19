@@ -24,6 +24,26 @@
         <property name="cronExpression" value="0 0 */2 * * ?"/>
     </bean>
 
+    <!-- 更新redis的任务 -->
+    <bean id="LatestBookingRecordJob" class="com.lids.quartz.LatestBookingRecordJob"></bean>
+    <bean id="LatestBookingRecordJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="LatestBookingRecordJob" />
+        <!-- 指定任务执行的方法 -->
+        <property name="targetMethod" value="execute" />
+    </bean>
+    <!-- redis的触发器 -->
+    <bean id="LatestBookingRecordJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="LatestBookingRecordJobDetail" />
+        <!-- 每10秒运行一次 -->
+        <!--<property name="cronExpression" value="0/20 * * * * ?" />-->
+        <!-- 每两个小时运行一次 -->
+        <property name="startDelay" value="0"/>
+        <property name="cronExpression" value="0 0 */2 * * ?"/>
+    </bean>
+
     <!--<bean id="ScheduleJob" class="com.lids.quartz.ScheduleJob"></bean>-->
     <!--<bean id="SchedulerJobDetail"-->
           <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
@@ -45,6 +65,7 @@
             <list>
                 <ref bean="AccessTokenJobTrigger" />
                 <!--<ref bean="SchedulerJobTrigger" />-->
+                <ref bean="LatestBookingRecordJobTrigger"/>
             </list>
         </property>
         <property name="jobFactory" ref="jobFactory"></property>

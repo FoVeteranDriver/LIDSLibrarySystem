@@ -35,6 +35,15 @@
         limit #{1},10
     </select>
 
+    <select id="getAllTodayRecords" resultType="java.util.Map">
+        SELECT space.`name`,`schedule`.date,schedule_slot.begin_time,booking_record.end_time,booking_record.application,booking_record.is_active,booking_record.has_check_in
+        from schedule_slot
+        INNER JOIN `schedule` ON schedule_slot.schedule_id=`schedule`.id
+        INNER JOIN space ON `schedule`.space_id = space.id
+        INNER JOIN booking_record ON schedule_slot.booking_record_id = booking_record.id
+        WHERE `schedule`.date >= CURRENT_DATE
+    </select>
+
     <select id="getTopId" resultType="java.lang.Integer">
         select MAX(id) from booking_record ORDER BY id DESC
     </select>

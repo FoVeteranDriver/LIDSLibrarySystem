@@ -1,24 +1,25 @@
 package com.lids.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.lids.dao.BookingDao;
 import com.lids.dao.SpaceDao;
 import com.lids.po.BookingRecord;
 import com.lids.po.Space;
 import com.lids.po.User;
 import com.lids.quartz.CreditDetectJob;
+import com.lids.quartz.LatestBookingRecordJob;
 import com.lids.service.BookingService;
+import com.lids.util.RedisPoolUtil;
 import com.lids.util.TimeUtil;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("BookingService")
 public class BookingServiceImpl implements BookingService{
@@ -29,6 +30,8 @@ public class BookingServiceImpl implements BookingService{
     private BookingDao bookingDao;
     @Resource
     private SpaceDao spaceDao;
+    @Resource
+    private LatestBookingRecordJob latestBookingRecordJob;
 
     public boolean addNewBooking(BookingRecord bookingRecord) {
         return addNewBooking(bookingRecord,null);
@@ -80,23 +83,71 @@ public class BookingServiceImpl implements BookingService{
     }
 
     public List<Map<String, String>> getTodayRecords(HttpSession session) {
-        Integer offset = (Integer)session.getAttribute("offset");
-        Integer count = (Integer)session.getAttribute("count");
-        //TODO 新预定优先返回
-        if (offset == null || offset == 0){
-            Integer maxId = bookingDao.getTopId();
-            count = bookingDao.getCount();
-            offset = 0;
-            session.setAttribute("maxId",maxId);
-            session.setAttribute("count",count);
-            session.setAttribute("offset",10);
-        }else if (offset >= count){
-            session.setAttribute("offset",0);
-            offset = 0;
-        }else {
-            session.setAttribute("offset",offset+10);
+//        Integer offset = (Integer)session.getAttribute("offset");
+//        Integer count = (Integer)session.getAttribute("count");
+//        //TODO 新预定优先返回
+//        if (offset == null || offset == 0){
+//            Integer maxId = bookingDao.getTopId();
+//            count = bookingDao.getCount();
+//            offset = 0;
+//            session.setAttribute("maxId",maxId);
+//            session.setAttribute("count",count);
+//            session.setAttribute("offset",10);
+//        }else if (offset >= count){
+//            session.setAttribute("offset",0);
+//            offset = 0;
+//        }else {
+//            session.setAttribute("offset",offset+10);
+//        }
+//        return bookingDao.getTodayRecords(TimeUtil.getTodayDate(),Integer.valueOf(offset));
+        //初始化redis中的记录
+        if (!LatestBookingRecordJob.init){
+            latestBookingRecordJob.execute();
+            LatestBookingRecordJob.init = true;
         }
-        return bookingDao.getTodayRecords(TimeUtil.getTodayDate(),Integer.valueOf(offset));
+
+        Jedis jedis = null;
+        List<Map<String,String>> resultList;
+        String result;
+        Integer newBookingRecordId;
+
+        try {
+            jedis = RedisPoolUtil.getJedis();
+            newBookingRecordId = Integer.valueOf(jedis.get(LatestBookingRecordJob.newBookingRecordId));
+        }finally {
+            RedisPoolUtil.returnResource(jedis);
+        }
+
+        Integer group = (Integer)session.getAttribute("group");
+        Integer maxIdThisExploer = (Integer)session.getAttribute("maxIdThisExploer");
+
+//        if (maxIdThisExploer == null || newBookingRecordId > maxIdThisExploer){
+        if (false){
+            resultList = null;
+        }else {
+            //第一次请求则请求第一组
+            if (group == null){
+                group = 1;
+            }
+
+            //从redis获取数据
+            try{
+                jedis = RedisPoolUtil.getJedis();
+                int gourpMax = Integer.valueOf(jedis.get(LatestBookingRecordJob.bookingRecordGroup));
+                if (group > gourpMax){
+                    group = 1;
+                }
+                result = jedis.get(LatestBookingRecordJob.getKey+group);
+            }finally {
+                RedisPoolUtil.returnResource(jedis);
+            }
+            resultList = JSON.parseObject(result,List.class);
+
+            group ++ ;
+            session.setAttribute("group",group);
+        }
+
+        return resultList;
     }
 
     public BookingRecord getNowBooking(int spaceId) {
