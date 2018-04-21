@@ -13,7 +13,9 @@
                             <img src="../../../../images/user/login/account.png"></span>
                         </Input>
                         </br>
-                        <Input v-model="password" type="password" placeholder="密码" autocomplete="new-password" @on-focus="inputFocus">
+                        <!-- 隐藏input输入框，防止账号密码自动填充 -->
+                         <input type="password" name="password" style="width:0;height:0;">
+                        <Input v-model="password" type="password" placeholder="密码"  @on-focus="inputFocus">
                         <span slot="prepend">
                             <img src="../../../../images/user/login/password.png">
                         </span>
@@ -53,13 +55,22 @@ export default {
             QRAddress: ""
         };
     },
+     computed: {
+        QRcode() {
+            if (this.tabName == "scanTab") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
     watch: {
-        warning2:function(val){
+        warning2(val){
             if(val === true){
                 this.warning1 = false;
             }
         },
-        tabName: function(newVal, oldVal) {
+        tabName(newVal, oldVal) {
             if (newVal === "scanTab" && oldVal === "accountTab") {
                 let that = this;
                 that.$ajax
@@ -83,8 +94,8 @@ export default {
                                     let data = response.data;
                                     if (data.code === 0) {
                                         console.log("登录成功");
-                                        that.$options.methods.successLog.call(that,data);
-                                        that.$options.methods.cancel.call(that);
+                                        that.successLog.call(that,data);
+                                        that.cancel.call(that);
                                     } else {
                                         console.log("登录失败");
                                         console.log(data);
@@ -95,15 +106,6 @@ export default {
                                 });
                         }
                     });
-            }
-        }
-    },
-    computed: {
-        QRcode: function() {
-            if (this.tabName == "scanTab") {
-                return true;
-            } else {
-                return false;
             }
         }
     },
@@ -130,8 +132,8 @@ export default {
                         let data = response.data;
                         if (data.code === 0) {
                             console.log("登录成功");
-                            that.$options.methods.successLog.call(that,data);
-                            that.$options.methods.cancel.call(that);
+                            that.successLog.call(that,data);
+                            that.cancel.call(that);
                         } else {
                             console.log("登录失败");
                             console.log(data);
@@ -154,7 +156,7 @@ export default {
         successLog(data) {
             this.$store.commit("writeUserName", data);
             this.$store.commit("login");
-            this.$options.methods.cancel.call(this);
+            this.cancel.call(this);
         },
 
         //触发父组件事件关闭窗口

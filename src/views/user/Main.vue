@@ -63,7 +63,6 @@
     </div>
 </template>
 <script>
-import Cookies from "js-cookie";
 import shrinkableMenu from "./main-components/shrinkable-menu/shrinkable-menu.vue";
 import loginModal from "./common/login/login";
 export default {
@@ -85,7 +84,7 @@ export default {
             return this.$store.state.logged;
         },
         userName() {
-            return this.$store.state.userInfo.name;
+            return this.$store.state.username;
         }
     },
     methods: {
@@ -122,6 +121,9 @@ export default {
         hideLogin() {
             this.showLoginModal = false;
         }
+    },
+    mounted(){
+        this.$store.commit("keepLogin");
     }
 };
 </script>
