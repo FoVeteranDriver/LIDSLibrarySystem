@@ -56,7 +56,7 @@
             </div>
             <div class="single-page-con" :style="{left: shrink?'0.51rem':'2.1rem'}">
                 <div class="single-page">
-                    <router-view></router-view>
+                    <router-view @needLogin="needLogin"></router-view>
                 </div>
             </div>
         </div>
@@ -116,6 +116,9 @@ export default {
         },
         showLogin(event) {
             event.preventDefault();
+            this.showLoginModal = true;
+        },
+        needLogin(){
             this.showLoginModal = true;
         },
         hideLogin() {

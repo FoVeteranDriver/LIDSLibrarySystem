@@ -123,6 +123,20 @@
                         color: #F88888;
                         font-size: 0.11rem;
                         cursor: default;
+                        &::selection {
+                            background:#ffffff;
+                            color:#F88888;
+                        }
+
+                        &::-moz-selection {
+                            background:#ffffff;
+                            color:#F88888;
+                        }
+
+                        &::-webkit-selection {
+                            background:#ffffff;
+                            color:#F88888;
+                        }
                     }
                     td {
                         position: relative;
@@ -144,6 +158,20 @@
                             color: #797979;
                             padding-top: 2px;
                             margin: 0;
+                            &::selection {
+                                background:#ffffff;
+                                color:#797979;
+                            }
+
+                            &::-moz-selection {
+                                background:#ffffff;
+                                color:#797979;
+                            }
+
+                            &::-webkit-selection {
+                                background:#ffffff;
+                                color:#797979;
+                            }
                         }
                     }
                 }
@@ -155,5 +183,8 @@
 .drag-box {
     z-index: 999;
     background-color: #fbc3c3;
+    border: 1px solid transparent;
+    border-left-color: rgb(248, 61, 61);
+    border-right-color: rgb(248, 61, 61);
     opacity: 0.5;
 }

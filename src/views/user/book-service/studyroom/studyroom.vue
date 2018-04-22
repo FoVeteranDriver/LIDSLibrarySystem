@@ -180,7 +180,7 @@ export default {
             /*---------------------------需要传递给预定信息确认模态窗的数据-------------------------------*/
             currentTime: 0, //选中日期的时间戳
             startTime: "",
-            endTime: "",
+            endTime: ""
             // 还有用户名，在computed属性
         };
     },
@@ -198,7 +198,7 @@ export default {
             }
         },
         //选中研习间的名称
-        selectRoom(){
+        selectRoom() {
             if (this.selectTr === -1) {
                 return "";
             } else {
@@ -304,12 +304,6 @@ export default {
             }
         },
 
-        //弹出预约信息模态窗
-        handleSelect() {
-            this.showBookModal = true;
-            this.modalState = !this.modalState;
-        },
-
         //按下鼠标键，计算预定起始时间
         mousedownHandler(event) {
             let dragBox = document.getElementById("drag-box");
@@ -411,9 +405,21 @@ export default {
         mouseupHandler(event) {
             this.keepClick = false;
             this.draging = false;
+            //当所选时间小于1小时时，自动取消所选区域
             if ((this.endPosX - this.startPosX) / this.unitWidth < 12) {
                 let dragBox = document.getElementById("drag-box");
                 document.body.removeChild(dragBox);
+            } else {
+                //用局部变量暂存然后初始化所有data，并清除所选区域
+                if (!this.username) {
+                    console.log("未登录，请先登录");
+                    this.$emit("needLogin");
+                } else {
+                    console.log("已登录，请确认预定信息");
+                    //弹出预约信息模态窗
+                    this.showBookModal = true;
+                    this.modalState = !this.modalState;
+                }
             }
         },
 
@@ -427,7 +433,7 @@ export default {
             let { year, month, day } = getYMD(nowDate);
             timeStr = year + "-" + month + "-" + day;
             this.currentTime = new Date(timeStr).getTime();
-            console.log(this.currentTime); //当前选中天的时间戳
+            console.log("所选日期的时间戳:" + this.currentTime); //当前选中天的时间戳
             that.$ajax
                 .get(
                     "http://iyou.s1.natapp.cc/lidsLibrary//space/roomBookings?date=" +

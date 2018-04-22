@@ -5,7 +5,7 @@
 <template>
     <div>
         <Modal v-model="show" :mask-closable="false" @on-cancel="cancel" class="login">
-            <div slot="header" style="font-size:0.18rem;height:0.18rem;">
+            <div slot="header" style="font-size:0.18rem;height:0.18rem;-moz-user-select:none;" unselectable="on" onselectstart="return false;">
                 <Tabs v-model="tabName">
                     <TabPane label="账号登录" name="accountTab">
                         <Input v-model="account" type="text" placeholder="读书证号" @on-focus="inputFocus">
@@ -14,7 +14,7 @@
                         </Input>
                         </br>
                         <!-- 隐藏input输入框，防止账号密码自动填充 -->
-                         <input type="password" name="password" style="width:0;height:0;">
+                         <input type="password" name="password" style="width:0;height:0;padding:0;margin:0;border:0;display:none">
                         <Input v-model="password" type="password" placeholder="密码"  @on-focus="inputFocus">
                         <span slot="prepend">
                             <img src="../../../../images/user/login/password.png">
@@ -31,7 +31,7 @@
                     </TabPane>
                 </Tabs>
             </div>
-            <div slot="footer">
+            <div slot="footer" unselectable="on" onselectstart="return false;" style="-moz-user-select:none;">
                 <a @click="login" v-show="!QRcode"><img src="../../../../images/user/login/login.png"></a>
                 <p class="tip" v-show="QRcode">请使用已绑定图书证的微信账号登录</p>
             </div>
