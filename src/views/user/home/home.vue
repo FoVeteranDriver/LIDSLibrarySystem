@@ -137,7 +137,6 @@ export default {
                 carousel.scrollTop-=original.offsetHeight;
             }else{
                 carousel.scrollTop+=2;
-                console.log(carousel.scrollTop,original.offsetHeight);
             }
             marId=setTimeout(marquee,speed);
         }

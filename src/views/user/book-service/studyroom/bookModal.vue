@@ -26,15 +26,15 @@
             <div class="applyInfo">
                 <p class="spaceName applyItem">
                     <span class="label">申请空间</span>
-                    <span class="right">{{applyInfo.applySpace}}</span>
+                    <span class="right">{{ applyInfo.applySpace }}</span>
                 </p>
                 <p class="userName applyItem">
                     <span class="label">申请人员</span>
-                    <span class="right">{{applyInfo.applyUser}}</span>
+                    <span class="right">{{ applyInfo.applyUser }}</span>
                 </p>
                 <p class="theme applyItem">
                     <span class="label">主题</span>
-                    <Input v-model="applyInfo.theme" class="right" ></Input>
+                    <Input v-model="applyInfo.theme" class="right" ref="theme"></Input>
                 </p>
                 <div class="member applyItem">
                     <span class="label">成员</span>
@@ -42,18 +42,23 @@
                          <a href="javascript:">
                             <Select 
                                 filterable 
-                                remote 
-                                label-in-value
+                                remote
+                                clearable
                                 placeholder="校园卡号/读者证号/学号/工号搜索" 
                                 :remote-method="loadMember" 
                                 :loading="loadingMember" 
-                                v-model="currentMember"
+                                @on-change='handleMemberSelect'
                                 style="width:250px">
-                                <Option v-for="(option,index) in memberOptions" :value="option.name":label="option" :key="option.id">{{ option.name }}</Option>
+                                <Option v-for="option in memberOptions" :value="JSON.stringify(option)":label="option.name" :key="option.id">
+                                    {{ option.name }}
+                                </Option>
                             </Select>
                         </a>
                         <div slot="content">
-                            <p>Display multiple lines of information</p>
+                            <Tag type="dot">{{applyInfo.applyUser}}</Tag>
+                            <Tag v-for="item in memberGroup" :key="item.id" :name="item.id" closable type="dot" @on-close="handleDeleteMember">
+                                {{ item.name }}
+                            </Tag>
                         </div>
                     </Tooltip>         
                 </div>
@@ -68,7 +73,7 @@
                            <Option v-for="item in beginTime" :value="item" :key="item">{{ item }}</Option>
                         </Select>
                         -
-                        <Select v-model="timeObject.selectTime[0].eTime" style="width: 80px" @on-change='handleEndtTimeChange'>
+                        <Select v-model="timeObject.selectTime[0].eTime" style="width: 80px" @on-change='handleEndTimeChange'>
                             <Option v-for="item in endTime" :value="item" :key="item">{{ item }}</Option>
                         </Select>
                     </span>
@@ -78,11 +83,11 @@
                     <span class="label">申请说明</span>
                     <Input v-model="applyInfo.note" type="textarea" placeholder="Enter something..." class="right"></Input>
                 </p>
-                <p class="isAgree"><Radio v-model="isAgree">同意《预约须知》条例</Radio></p>
+                <p class="isAgree"><Radio v-model="isAgree"></Radio><a target='_blank' @click="handleNoticeOpen">同意《预约须知》条例</a></p>
             </div>
             <div slot="footer" class="footer">
-                <Button type="primary" @click="del">同意</Button>
-                <Button type="ghost" @click="del">返回</Button>
+                <Button type="primary" @click="handleSubmit" class="submit">提交</Button>
+                <Button type="ghost" @click="del" class="return">返回</Button>
             </div>
         </Modal>
     </div>   
@@ -97,21 +102,62 @@ export default {
             state:false,
             isSameDay:false,  //是否预约当天
             loadingMember:false,
-            currentMember:'',
-            memberOptions:[],
-            open_time:'08:30',
-            close_time:'22:00', 
-            date:1524105761475,
+            memberGroup:[],
+            open_time:this.openTime,
+            close_time:this.closeTime, 
+            date:this.bookDate,
             isAgree:false,
             beginTime:[],
             endTime:[],
-            applyInfo:{applySpace:'合作研修室1',applyUser:'卓文君',theme:'',note:''},
-            timeObject:{outTime:[],occupyTime:[{sTime:'09:30',eTime:'13:00'},{sTime:'19:00',eTime:'20:00'}],selectTime:[{sTime:'17:30',eTime:'18:30'}]},
+            memberOptions:[],
+            applyInfo:{
+                applySpace:this.spaceName,
+                spaceId:this.spaceId,
+                applyUser:this.bookUser,
+                theme:'',
+                note:''
+            },
+            timeObject:{
+                outTime:[],
+                occupyTime:[],
+                selectTime:[]
+            },
         }
     },
-    props:[
-        'title'
-    ],
+    props:{
+            bookDate:{
+                type:Number,
+                required: true
+            },
+            openTime:{
+                type:String,
+                required:true
+            },
+            closeTime:{
+                type:String,
+                required:true
+            },
+            bookUser:{
+                type:String,
+                required:true
+            },
+            spaceName:{
+                type:String,
+                required:true
+            },
+            spaceId:{
+                type:String,
+                required:true
+            },
+            occupyTime:{   //每个元素是一个对象，每个对象拥有两个属性:sTime、eTime
+                type:Array,
+                required:true
+            },
+            selectTime:{      //两个属性：sTime、eTime
+                type:Object,
+                required:true
+            }
+    },
     methods:{
         del(){
             this.state=!this.state;
@@ -122,6 +168,33 @@ export default {
             time.hour=parseInt(temp/100);
             time.minute=temp%100;
             return time;
+        },
+        dataInit(){
+            if(this.open_time.length!==5){
+                let temp=this.open_time.split(':');
+                this.open_time=this.timeFormat(temp[0])+':'+this.timeFormat(temp[1]);
+            }
+            if(this.close_time.length!==5){
+                let temp=this.close_time.split(':');
+                this.close_time=this.timeFormat(temp[0])+':'+this.timeFormat(temp[1]);
+            }
+            this.timeObject.selectTime.push(this.selectTime);
+            for(let item of this.occupyTime){
+                this.timeObject.occupyTime.push(item);
+            }
+            for(let item in this.timeObject){
+                let arr=this.timeObject[item];
+                if(arr.length){
+                    for(let time of arr){
+                        for(let i in time){
+                            if(time[i].length!==5){
+                                let temp=time[i].split(':');
+                                time[i]=this.timeFormat(temp[0])+':'+this.timeFormat(temp[1]);
+                            }
+                        }
+                    }
+                }
+            }
         },
         timeInit(){
             //确认是否当天预约
@@ -138,21 +211,25 @@ export default {
                 out.sTime=this.open_time;
                 out.eTime=now.getHours()+':'+this.timeFormat(now.getMinutes());
                 this.timeObject.outTime.push(out);
-                this.timeObject.occupyTime.forEach((item,index,arr)=>{
+                let occupyTime=this.timeObject.occupyTime;
+                for(let i=0;i<occupyTime.length;i++){              //当天已过期时间不再显示预约信息
+                    let item=occupyTime[i];
                     let sBool=this.compareTime(out.eTime.split(':'),item.sTime.split(':'));
                     let eBool=this.compareTime(item.eTime.split(':'),out.eTime.split(':'));
                     if(sBool&&eBool){
                         let temp=this.findTimePoint(this.parseTime(out.eTime));
                         temp=this.timeFormat(temp.hour)+':'+this.timeFormat(temp.minute);
-                        if(temp!=item.eTime){
+                        if(temp!=item.eTime){    //他人预约时间部分过期，将开始时间截取到当前时刻点
                             item.sTime=temp;
                         }else{
-                            arr.splice(index,1);
+                            occupyTime.splice(i,1);
+                            i--;
                         }  
-                    }else if(sBool&&!eBool){
-                        arr.splice(index,1);
+                    }else if(sBool&&!eBool){  //他人预约时间已完全过期
+                        occupyTime.splice(i,1);
+                        i--;
                     }
-                });
+                }
             }else{
                 delete this.timeObject.outTime;
             }
@@ -189,12 +266,23 @@ export default {
             var selectTime=this.timeObject.selectTime[0];
             return typeof selectTime.sTime!=='undefined'&&typeof selectTime.eTime!=='undefined';
         },
+        timeWarning(){
+            if(typeof this.timeObject.selectTime[0].eTime=='undefined'){
+                this.$Notice.error({
+                        title: '错误',
+                        desc: '缺少结束时间，请重新选择开始时间'
+                });
+            }
+        },
         generateBeginTime(){
             let sPoint;
             let ePoint;
             if(this.isSameDay){
                 let outTime=this.timeObject.outTime[0];
                 sPoint=this.findTimePoint(this.parseTime(outTime.eTime));
+                if(this.compareTime(outTime.eTime.split(':'),this.timeObject.selectTime[0].sTime.split(':'))){
+                    this.timeObject.selectTime[0].sTime=this.timeFormat(sPoint.hour)+':'+this.timeFormat(sPoint.minute);
+                }
             }else{
                 sPoint=this.findTimePoint(this.parseTime(this.open_time));
             }
@@ -208,7 +296,7 @@ export default {
                 }    
             }
             let occupyTime=this.timeObject.occupyTime;
-            for(let item of occupyTime){
+            for(let item of occupyTime){  //除去他人已占用时间段
                 let sIndex=this.beginTime.indexOf(item.sTime);
                 let eIndex=this.beginTime.indexOf(item.eTime);
                 if(sIndex!==-1&&eIndex!==-1);
@@ -223,6 +311,7 @@ export default {
             sRange[1]=parseInt(sSplit[1]);
             let closeTime=this.close_time.split(':');
             if(this.compareTime(sRange,closeTime)){      //超过关闭时间
+                this.timeWarning();
                 return;
             }
             closeTime.map(item=>parseInt(item));
@@ -242,16 +331,31 @@ export default {
             for(let item of this.timeObject.occupyTime){
                 let sTime=item.sTime;
                 let sNode=sTime.split(':');
-                if(!this.compareTime(sSplit,sNode)&&this.compareTime(sRange,sNode)){
+                if(!this.compareTime(sSplit,sNode)&&this.compareTime(sRange,sNode)){  //无法满足至少预约一小时的要求
                     this.endTime=[];
+                    this.timeWarning()
                     return;
                 }
                 let sIndex=this.endTime.indexOf(sTime);
-                if(sIndex!=-1){
+                if(sIndex!=-1){     //4小时时间段部分被他人占用，丢弃被他人占用时间以及后续时间
                     this.endTime.splice(sIndex+1,this.endTime.length-sIndex);
                 }
             }
             return this.endTime[0];
+        },
+        handleNoticeOpen(){
+            this.$Notice.open({
+                    title: '信息共享空间须知',
+                    desc: `&nbsp;&nbsp;信息共享空间面向全校师生开放，为您提供一个灵活多样的学习、工作环境，有利于释放您的创新能量。
+                          <p>1.使用信息共享空间需遵守国家法律及学校有关规章制度，信息共享空间仅提供本校师生学术研究所用，不得用于任何商业用途。</p>
+                          <p>2.信息共享空间实行预约使用，用户通过图书馆信息共享空间网站进行空间预约。无预约用户在信息共享空间有待分配空间时在服务台现场预约。申请条件请阅各空间说明。</p>
+                          <p>3.进入信息共享空间，需至服务台刷卡登记，空间使用结束后如时间未到请刷卡退出。预约成功后如不能按时到场，请提前登陆系统删除预约，否则将作该帐户一周内不能进行预约的处罚。</p>
+                          <p>4.使用电脑请预约知识空间：100号以上普通PC；100号以下Mac电脑，需先到咨询台领取无线键鼠；自带电脑请预约学习空间：分为有显示器和无显示器座位，请根据个人需求进行选择；学习空间和知识空间在预约时间30分钟内刷卡选座（未到预约时间请勿刷卡以免删除预约记录），其他空间到咨询台登记使用。</p>
+                          <p>5.知识空间资源有限，仅用于电子资源检索，空间预约半小时内不登陆系统（输入学/工号和校园卡消费密码，初始身份证后六位数字）将产生违约；使用电子资源请遵守知识产权保护条例，严禁恶意下载。</p>
+                          <p>6.请爱护使用信息共享空间所有设施，规范使用设备、软件等，如发现信息共享空间设备故障或有其他疑问，请立即与工作人员联系，不得擅自处理，否则由此造成的机器损坏或软件破坏须做相应赔偿。<p>
+                          <p>7.请按照预约分配到的空间和设备进行使用，空间内请勿饮食，保持环境整洁。</p>`,
+                    duration: 0
+            });
         },
         handleStartTimeChange(){
             let eTime=this.generateEndTime();
@@ -262,11 +366,39 @@ export default {
             }
             this.drawTimeAxis();
         },
-        handleEndtTimeChange(value){
+        handleEndTimeChange(value){
             if(value===''){
                 delete this.timeObject.selectTime[0].eTime;
+                this.timeWarning();
             }
             this.drawTimeAxis();
+        },
+        handleMemberSelect(value){
+            if(value!==''){
+                let member=JSON.parse(value);
+                let doubleMember=this.memberGroup.filter(item=>{  
+                    return item.id==member.id;
+                });
+                if(!doubleMember.length){        //不可重复选择同一个partner
+                    this.memberGroup.push(member);
+                }else{
+                    this.$Notice.warning({
+                        title: '提示',
+                        desc: '此成员已在列表中'
+                    });
+                }
+            }
+            
+        },
+        handleDeleteMember(event,name){
+            let id=parseInt(name);
+            for(let i=0;i<this.memberGroup.length;i++){
+                let item=this.memberGroup[i];
+                if(item.id==id){
+                    this.memberGroup.splice(i,1);
+                    break;
+                }
+            }
         },
         loadMember(query){
             if(query!=''){
@@ -277,11 +409,11 @@ export default {
                         util.baseurl+"/user/searchUser/?key="+query
                     )
                     .then(function(response){
+                        query='';
                         let data=response.data;
                         if(data.code==0){
                              that.loadingMember=false;
                              that.memberOptions=data.result;
-                            console.log(data.result);
                         }else{
                              that.loadingMember=false;
                         }
@@ -324,13 +456,13 @@ export default {
             color=new Array(dataset.length);
             if(this.isSameDay){
                 for(let i=0,len=color.length;i<len;i++){
-                    if(i==len-1){
-                        color[i]=this.isSelectDone()?'#ffcc80':'#fab5b5';
-                    }else if(i==0){
+                    if(i==0){
                         color[i]='#c9c9c9';
+                    }else if(i==len-1){
+                        color[i]=this.isSelectDone()?'#ffcc80':'#fab5b5';
                     }else{
                         color[i]='#fab5b5';
-                    }    
+                    }
                 }
                 for(let j=1,dlen=dataset.length;j<dlen;j++){
                     textSet.push(dataset[j].s);
@@ -417,10 +549,73 @@ export default {
                 .text(function(d){
                     return d.getHours()+':'+that.timeFormat(d.getMinutes());
                 });
+        },
+        handleSubmit(){
+            let data={};
+            data.spaceId=this.applyInfo.spaceId;
+            data.application=this.applyInfo.theme;
+            if(data.application==''){
+                this.$Notice.error({
+                        title: '错误',
+                        desc: '主题信息不可为空'
+                });
+                this.$refs.theme.focus();
+                return;
+            }
+            let date=util.parseTimestamp(this.date);
+            data.date=date.year+'-'+date.month+'-'+date.day;
+            data.beginTime=this.timeObject.selectTime[0].sTime;
+            data.endTime=this.timeObject.selectTime[0].eTime;
+            if(typeof data.endTime=='undefined'){
+                this.timeWarning();
+                return;
+            }
+            data.note=this.applyInfo.note;
+            let partners=[];
+            for(let item of this.memberGroup){
+                partners.push(item.id);
+            }
+            if(partners.length<3||partners.length>9){
+                this.$Notice.error({
+                        title: '错误',
+                        desc: '预约人数不符合限制要求（4-10）'
+                });
+                return;
+            }
+            data.partners=partners.join(":");
+            if(!this.isAgree){
+                this.$Notice.warning({
+                        title: '提示',
+                        desc: '请阅读《预约须知》条例并勾选'
+                });
+                return;
+            }
+            let that=this;
+            that.$ajax
+                .post(
+                    util.baseurl+"/booking/addNewBooking/",
+                    JSON.stringify(data),
+                    {
+                        headers: {"Content-Type": "application/json;charset=utf-8"}
+                    }
+                )
+                .then(function(response){
+                    let data=response.data;
+                    if(data.code==0){
+                    }else{
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         }
     },
-    mounted(){
+    created(){
         this.state=true;
+        this.dataInit();
+        
+    },
+    mounted(){
         this.timeInit();
         this.drawTimeAxis();
         this.generateBeginTime();

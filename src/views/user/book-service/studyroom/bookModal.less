@@ -5,11 +5,13 @@
     .ivu-modal{
         position: relative;
         width:650px !important;
-        .header{
-            font-size: 24px;
-            font-weight: 300;
-            padding: 10px 10px 34px;
-            border-bottom: 2px solid #fff2ec;
+        .ivu-modal-header{
+            border-bottom-color: #fff2ec;
+            .header{
+                font-size: 24px;
+                font-weight: 300;
+                padding: 10px 10px 24px;
+            }
         }
         .tips{
             background: #fff2ec;
@@ -53,9 +55,20 @@
         .applyInfo{
             position: relative;
             height: 400px;
-            input:hover,input:focus{
-                border-color: #fff2ec;
-                outline: 0;
+            input{
+                outline: none;
+                box-shadow:none;
+            }
+            .ivu-input{
+                outline: none;
+                box-shadow:none;
+                transition: none;
+            }
+            .ivu-input:hover,.ivu-input:focus{
+                border-color: #fff2ec; 
+            }
+            .ivu-input:focus{
+                border-width: 2px;
             }
             .applyItem{
                 width: 100%;
@@ -63,6 +76,12 @@
                 position: relative;
                 height: 40px;
                 line-height: 3;
+                .ivu-select-visible .ivu-select-selection{
+                    border-color: #fff2ec;
+                    border-width: 2px;
+                    box-shadow: none;
+                    transition: none;
+                }
                 .label{
                     font-weight: 600;
                     font-size: 14px;
@@ -79,15 +98,50 @@
                 top: 4px;
             }
             .member{
-                top: 24px;
+                top: 24px;  
+                a{
+                    color: #fab5b5;
+                    transition: none;
+                    .ivu-select:focus .ivu-select-selection{
+                        border-color: #fff2ec;
+                    }
+                    .ivu-select-visible{
+                        border: none;
+                    }
+                    .ivu-select-input{
+                        cursor: default;
+                    }
+                    .ivu-select-selection:hover,.ivu-select-selection:active{
+                        border-color: #fff2ec;
+                    }
+                    .ivu-select-dropdown{
+                        top: 36px !important;
+                    }
+                }
+              
+             
             }
             .applyDate{
                 top: 28px;
             }
             .applyTime{
                 top: 32px;
+                .ivu-select-input{
+                    cursor: default;
+                }
                 .ivu-select-dropdown{
                     top: 20px !important;
+                    .ivu-select-item-selected, .ivu-select-item-selected:hover{
+                        background: #fab5b5;
+                    }
+                }
+                .ivu-select:focus .ivu-select-selection{
+                    border: 2px solid #fff2ec;
+                    box-shadow: none;
+                    transition: none;
+                }
+                .ivu-select-selection:hover{
+                    border-color: #fff2ec;
                 }
             }
             .applyNote{
@@ -100,8 +154,18 @@
             }
             .isAgree{
                 position: absolute;
-                top: 384px;
+                top: 388px;
                 left: 84px;
+                a{
+                    color: #777272;
+                    text-decoration: underline;
+                }
+                .ivu-radio-checked .ivu-radio-inner{
+                    border-color:#fab5b5;
+                }
+                .ivu-radio-inner:after{
+                    background-color:#fab5b5;
+                }
             }
             .ivu-input-wrapper{
                 width: 250px;
@@ -123,8 +187,18 @@
                     }
                     .ivu-tooltip-inner{
                         min-height: 60px;
+                        min-width: 160px;
                         background: transparent;
                         color: #c6c6c6;
+                        .ivu-tag{
+                            display: block;
+                            position: relative;
+                            i{
+                                position: absolute;
+                                right: 10px;
+                                top: 10px;
+                            }
+                        }
                     }
                 }
                 
@@ -132,7 +206,34 @@
         }
         .ivu-modal-footer{
             background: transparent;
+            border: none;
+            .ivu-btn-primary,.ivu-btn-ghost:active,.ivu-btn-ghost:hover{
+                background-color: #fab5b5;
+                border-color: #fab5b5;
+                outline: none;
+                transition: none;
+            }
+            .ivu-btn-ghost:active,.ivu-btn-ghost:hover{
+                background: transparent;
+                color: #c6c6c6;
+                border-color: #fff2ec;
+            }
+            .submit{
+                position: relative;
+                left:-400px;
+            }
+            .return{
+                position: relative;
+                left: -360px;
+            }
         }
     }
 
+}
+.bookModal+.ivu-notice{
+    margin: 0 20px;
+    width: 330px;
+    .ivu-notice-with-info:after, .ivu-notice-with-normal:after{
+        background: #fab5b5;
+    }
 }
