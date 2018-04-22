@@ -268,9 +268,8 @@ export default {
         },
         timeWarning(){
             if(typeof this.timeObject.selectTime[0].eTime=='undefined'){
-                this.$Notice.error({
-                        title: '错误',
-                        desc: '缺少结束时间，请重新选择开始时间'
+                this.$Message.error({
+                        content: '缺少结束时间，请重新选择开始时间'
                 });
             }
         },
@@ -382,9 +381,8 @@ export default {
                 if(!doubleMember.length){        //不可重复选择同一个partner
                     this.memberGroup.push(member);
                 }else{
-                    this.$Notice.warning({
-                        title: '提示',
-                        desc: '此成员已在列表中'
+                    this.$Message.warning({
+                        content: '此成员已在列表中'
                     });
                 }
             }
@@ -555,9 +553,8 @@ export default {
             data.spaceId=this.applyInfo.spaceId;
             data.application=this.applyInfo.theme;
             if(data.application==''){
-                this.$Notice.error({
-                        title: '错误',
-                        desc: '主题信息不可为空'
+                this.$Message.error({
+                        content: '主题信息不可为空'
                 });
                 this.$refs.theme.focus();
                 return;
@@ -576,21 +573,20 @@ export default {
                 partners.push(item.id);
             }
             if(partners.length<3||partners.length>9){
-                this.$Notice.error({
-                        title: '错误',
-                        desc: '预约人数不符合限制要求（4-10）'
+                this.$Message.error({
+                        content: '预约人数不符合限制要求（4-10）'
                 });
                 return;
             }
             data.partners=partners.join(":");
             if(!this.isAgree){
-                this.$Notice.warning({
-                        title: '提示',
-                        desc: '请阅读《预约须知》条例并勾选'
+                this.$Message.warning({
+                        content: '请阅读《预约须知》条例并勾选'
                 });
                 return;
             }
             let that=this;
+            that.$Spin.show();
             that.$ajax
                 .post(
                     util.baseurl+"/booking/addNewBooking/",
@@ -601,11 +597,47 @@ export default {
                 )
                 .then(function(response){
                     let data=response.data;
-                    if(data.code==0){
-                    }else{
+                    that.$Spin.hide();
+                    switch(data.code){
+                        case 0:
+                            that.state=false;
+                            that.$Message.success({
+                                content:'预约成功',
+                                duration:8
+                            });
+                            break;
+                        case 107:
+                            that.$Message.warning({
+                                content:'当前时段已被他人预约',
+                                duration:8
+                            });
+                            break;
+                        case 1:
+                            that.$Message.warning({
+                                content:'预约失败，请稍后重试',
+                                duration:8
+                            });
+                            break;
+                        case 400:
+                            that.$Message.warning({
+                                content:'参数有误，请认真检查后提交',
+                                duration:8
+                            });
+                            break;
+                        default:
+                            that.$Message.warning({
+                                content:'预约失败，请稍后重试',
+                                duration:8
+                            });
+                            break;
                     }
                 })
                 .catch(function(err){
+                    that.$Spin.hide();
+                    that.$Message.warning({
+                        content:'预约失败，请稍后重试',
+                        duration:8
+                    });
                     console.log(err);
                 });
         }
