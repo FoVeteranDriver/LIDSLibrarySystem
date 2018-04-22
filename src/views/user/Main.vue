@@ -56,14 +56,13 @@
             </div>
             <div class="single-page-con" :style="{left: shrink?'0.51rem':'2.1rem'}">
                 <div class="single-page">
-                    <router-view></router-view>
+                    <router-view @needLogin="needLogin"></router-view>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import Cookies from "js-cookie";
 import shrinkableMenu from "./main-components/shrinkable-menu/shrinkable-menu.vue";
 import loginModal from "./common/login/login";
 export default {
@@ -85,7 +84,7 @@ export default {
             return this.$store.state.logged;
         },
         userName() {
-            return this.$store.state.userInfo.name;
+            return this.$store.state.username;
         }
     },
     methods: {
@@ -99,15 +98,35 @@ export default {
             this.shrink = !this.shrink;
         },
         handleClickUserDropdown(name) {
-            this.$store.commit("logout");
+            let that = this;
+            this.$ajax
+                .get("http://iyou.s1.natapp.cc/lidsLibrary/user/logout")
+                .then(function(response) {
+                    if (response.data.code === 0) {
+                        console.log("退出登录成功");
+                        that.$store.commit("logout");
+                    }else {
+                        console.log("退出登录失败");
+                        console.log(response.data);
+                    }
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
         },
         showLogin(event) {
             event.preventDefault();
             this.showLoginModal = true;
         },
+        needLogin(){
+            this.showLoginModal = true;
+        },
         hideLogin() {
             this.showLoginModal = false;
         }
+    },
+    mounted(){
+        this.$store.commit("keepLogin");
     }
 };
 </script>

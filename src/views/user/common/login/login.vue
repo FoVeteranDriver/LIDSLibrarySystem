@@ -5,7 +5,7 @@
 <template>
     <div>
         <Modal v-model="show" :mask-closable="false" @on-cancel="cancel" class="login">
-            <div slot="header" style="font-size:0.18rem;height:0.18rem;">
+            <div slot="header" style="font-size:0.18rem;height:0.18rem;-moz-user-select:none;" unselectable="on" onselectstart="return false;">
                 <Tabs v-model="tabName">
                     <TabPane label="账号登录" name="accountTab">
                         <Input v-model="account" type="text" placeholder="读书证号" @on-focus="inputFocus">
@@ -13,7 +13,9 @@
                             <img src="../../../../images/user/login/account.png"></span>
                         </Input>
                         </br>
-                        <Input v-model="password" type="password" placeholder="密码" autocomplete="new-password" @on-focus="inputFocus">
+                        <!-- 隐藏input输入框，防止账号密码自动填充 -->
+                         <input type="password" name="password" style="width:0;height:0;padding:0;margin:0;border:0;display:none">
+                        <Input v-model="password" type="password" placeholder="密码"  @on-focus="inputFocus">
                         <span slot="prepend">
                             <img src="../../../../images/user/login/password.png">
                         </span>
@@ -29,7 +31,7 @@
                     </TabPane>
                 </Tabs>
             </div>
-            <div slot="footer">
+            <div slot="footer" unselectable="on" onselectstart="return false;" style="-moz-user-select:none;">
                 <a @click="login" v-show="!QRcode"><img src="../../../../images/user/login/login.png"></a>
                 <p class="tip" v-show="QRcode">请使用已绑定图书证的微信账号登录</p>
             </div>
@@ -53,13 +55,29 @@ export default {
             QRAddress: ""
         };
     },
+     computed: {
+        QRcode() {
+            if (this.tabName == "scanTab") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
     watch: {
-        tabName: function(newVal, oldVal) {
+        warning2(val){
+            if(val === true){
+                this.warning1 = false;
+            }
+        },
+        tabName(newVal, oldVal) {
             if (newVal === "scanTab" && oldVal === "accountTab") {
                 let that = this;
                 that.$ajax
                     .get(
                         "http://iyou.s1.natapp.cc/lidsLibrary/showLoginQRCode",
+
+                        //可改进，超时后做重新请求处理
                         { timeout: 5000 }
                     )
                     .then(function(response) {
@@ -73,12 +91,11 @@ export default {
                                         uuid
                                 )
                                 .then(function(response) {
-                                    console.log(response);
                                     let data = response.data;
                                     if (data.code === 0) {
                                         console.log("登录成功");
-                                        that.$options.methods.successLog.call(that,data);
-                                        that.$options.methods.cancel.call(that);
+                                        that.successLog.call(that,data);
+                                        that.cancel.call(that);
                                     } else {
                                         console.log("登录失败");
                                         console.log(data);
@@ -89,15 +106,6 @@ export default {
                                 });
                         }
                     });
-            }
-        }
-    },
-    computed: {
-        QRcode: function() {
-            if (this.tabName == "scanTab") {
-                return true;
-            } else {
-                return false;
             }
         }
     },
@@ -124,8 +132,8 @@ export default {
                         let data = response.data;
                         if (data.code === 0) {
                             console.log("登录成功");
-                            that.$options.methods.successLog.call(that,data);
-                            that.$options.methods.cancel.call(that);
+                            that.successLog.call(that,data);
+                            that.cancel.call(that);
                         } else {
                             console.log("登录失败");
                             console.log(data);
@@ -143,11 +151,15 @@ export default {
             this.warning1 = false;
             this.warning2 = false;
         },
+
+        //成功登录触发store的mutation
         successLog(data) {
             this.$store.commit("writeUserName", data);
             this.$store.commit("login");
-            this.$options.methods.cancel.call(this);
+            this.cancel.call(this);
         },
+
+        //触发父组件事件关闭窗口
         cancel() {
             this.$emit("clickCancel");
             this.tabName = "accountTab";
