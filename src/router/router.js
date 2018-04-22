@@ -34,7 +34,7 @@ export const otherRouter = {
     name: 'otherRouter',
     component: Main,
     children: [
-        { path: 'home', title: { i18n: 'home' }, name: 'home_index', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
+        { path: '/', title: { i18n: 'home' }, name: 'home_index', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
     ]
 };
 
