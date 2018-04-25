@@ -35,13 +35,15 @@
         limit #{1},10
     </select>
 
-    <select id="getAllTodayRecords" resultType="java.util.Map">
-        SELECT space.`name`,`schedule`.date,schedule_slot.begin_time,booking_record.end_time,booking_record.application,booking_record.is_active,booking_record.has_check_in
-        from schedule_slot
-        INNER JOIN `schedule` ON schedule_slot.schedule_id=`schedule`.id
-        INNER JOIN space ON `schedule`.space_id = space.id
-        INNER JOIN booking_record ON schedule_slot.booking_record_id = booking_record.id
-        WHERE `schedule`.date >= CURRENT_DATE
+    <!--SELECT space.`name`,`schedule`.date,schedule_slot.begin_time,booking_record.end_time,booking_record.application,booking_record.is_active,booking_record.has_check_in-->
+    <!--from schedule_slot-->
+    <!--INNER JOIN `schedule` ON schedule_slot.schedule_id=`schedule`.id-->
+    <!--INNER JOIN space ON `schedule`.space_id = space.id-->
+    <!--INNER JOIN booking_record ON schedule_slot.booking_record_id = booking_record.id-->
+    <!--WHERE `schedule`.date >= CURRENT_DATE-->
+    <select id="getAllTodayRecords" resultType="java.util.Map" statementType="CALLABLE">
+        {call select_interested_record(
+        )}
     </select>
 
     <select id="getTopId" resultType="java.lang.Integer">
@@ -53,10 +55,14 @@
     </select>
 
     <!-- 获取当前座位的当前预约,#{0}座位id -->
-    <select id="getBookingNow" resultType="com.lids.po.BookingRecord">
-        SELECT * FROM booking_record
-        WHERE date = CURRENT_DATE AND CURRENT_TIME BETWEEN begin_time AND end_time
-            AND space_id = #{0}
+    <!--SELECT * FROM booking_record-->
+    <!--WHERE date = CURRENT_DATE AND CURRENT_TIME BETWEEN begin_time AND end_time-->
+    <!--AND space_id = #{0}-->
+    <select id="getBookingNow" resultType="com.lids.po.BookingRecord" statementType="CALLABLE">
+        SELECT *
+        FROM booking_record
+        WHERE space_id=#{0} AND is_active=1 AND CURRENT_TIME BETWEEN begin_time AND end_time
+        AND date = CURRENT_DATE
     </select>
 
     <!-- 获取当前时间段是否有预约 #{0}当前日期date，#{1}开始时间beginTime，#{2}结束时间endTIme,#{3}spaceId -->

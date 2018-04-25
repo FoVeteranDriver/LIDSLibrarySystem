@@ -98,8 +98,10 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--/book/**=authc,roles[teacher]-->
-                /book/**=authc
+                <!--/book/**=authc-->
                 /user/userInfo=authc
+                <!--/booking/addNewBooking=authc-->
+                <!--/user/userBookingRecords=authc-->
             </value>
         </property>
     </bean>

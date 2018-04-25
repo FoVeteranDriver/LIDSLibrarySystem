@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author yaoyou
@@ -125,6 +122,38 @@ public class SpaceController {
         HashMap<String,String> seatBooking = spaceService.getSeatBooking(spaceId);
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,seatBooking);
+        return commomDTO;
+    }
+
+    /**
+     * 三合一接口
+     * @return
+     */
+    @RequestMapping("/roomInfo")
+    @ResponseBody
+    public CommomDTO roomInfo(@RequestParam String date){
+        Date dateObject = null;
+        try{
+            dateObject = TimeUtil.parseDate(date);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+        List<HashMap<String,String>> roomsBooking = spaceService.getRoomsBooking(dateObject);
+        List<Map<String,String>> studyRoomSchedulers = spaceService.getStudyRoomSchedulers(dateObject);
+
+        Date time = new Date();
+        String timeS = TimeUtil.formatHHMM(time);
+        List<String> nowTime= new ArrayList<String>();
+        nowTime.add(timeS);
+
+        Map<String,List> result = new HashMap<String, List>();
+        result.put("serverTime",nowTime);
+        result.put("roomScheduler",studyRoomSchedulers);
+        result.put("roomBooking",roomsBooking);
+
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
         return commomDTO;
     }
 

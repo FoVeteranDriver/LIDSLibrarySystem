@@ -18,8 +18,13 @@ public class TimeUtil {
     }
 
     public static String formatTime(long time){
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:MM:SS");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:SS");
         return sdf.format(new Date(time));
+    }
+
+    public static String formatHHMM(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        return sdf.format(date);
     }
 
     /**
@@ -101,6 +106,13 @@ public class TimeUtil {
         currentDate.set(Calendar.SECOND, 0);
         currentDate.set(Calendar.MILLISECOND, 0);
         return currentDate.getTime();
+    }
+
+
+    public static void main(String[] args){
+        Date time = new Date();
+        String timeS = formatHHMM(time);
+        System.out.println(timeS);
     }
 
 }

@@ -40,6 +40,12 @@ public class BookingServiceImpl implements BookingService{
     public boolean addNewBooking(BookingRecord bookingRecord, String[] partners) {
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
 
+        //TODO 去掉权限测试
+        if (user == null){
+            user = new User();
+            user.setId(9);
+        }
+
         //获取要预定的座位，判断是座位还是研习间
         Space space2Book = spaceDao.getSeatById(bookingRecord.getSpaceId());
         boolean isSeat = space2Book.getSpaceTypeName().equals("标准座位");

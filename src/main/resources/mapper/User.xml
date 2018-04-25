@@ -26,7 +26,7 @@
 
     <!-- 模糊查询用户 -->
     <select id="fuzzySearch" parameterType="java.util.Map" resultType="java.util.Map">
-        SELECT id,library_card_number,name
+        SELECT id,library_card_number,name,grade,college
         FROM user
         WHERE library_card_number LIKE  '%${key}%'
         OR name LIKE  '%${key}%'
@@ -35,10 +35,9 @@
 
     <!-- 查询用户的近三个月预定记录，#{0}用户id -->
     <select id="selectThreeMonthBookingRecordsByUser" resultType="java.util.Map">
-        SELECT space.name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
+        SELECT br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
         br.is_active,br.has_check_in,br.booking_time
         FROM booking_record_history as br
-        INNER JOIN space on br.space_id = space.id
         INNER JOIN user ON  br.user_id = user.id
         WHERE user_id = #{0}
         AND br.booking_time > SUBDATE(CURDATE(),INTERVAL 3 month)
