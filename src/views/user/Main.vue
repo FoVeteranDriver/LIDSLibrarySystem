@@ -117,9 +117,11 @@ export default {
         showLogin(event) {
             event.preventDefault();
             this.showLoginModal = true;
+            this.$store.commit("loginShow");
         },
         needLogin(){
             this.showLoginModal = true;
+            this.$store.commit("loginShow");
         },
         hideLogin() {
             this.showLoginModal = false;

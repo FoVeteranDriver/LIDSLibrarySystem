@@ -8,7 +8,9 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         logged: false, //登录状态
-        username: ""
+        username: "",
+        loginShow: false,
+        rootSize: -1
     },
 
     mutations: {
@@ -32,6 +34,15 @@ const store = new Vuex.Store({
                 state.logged = true;
                 state.username = sessionStorage.username;
             }
+        },
+        loginShow(state) {
+            state.loginShow = true;
+        },
+        loginClose(state) {
+            state.loginShow = false;
+        },
+        storeREM(state, data) {
+            state.rootSize = data;
         }
     },
 

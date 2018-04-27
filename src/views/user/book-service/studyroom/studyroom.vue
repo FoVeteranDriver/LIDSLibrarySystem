@@ -25,7 +25,7 @@
                         <Button class="next-week" type="default" icon="arrow-right-b" @click="nextWeek"></Button>
                     </div>
                     <table class="orderTable">
-                        <tr v-for="(room,roomIndex) in rooms" :key="roomIndex" @mousedown="mousedownHandler" @mouseup="mouseupHandler" @mousemove="mousemoveHandler" @mouseenter="mouseenterHandler" @mouseleave="mouseleaveHandler">
+                        <tr class="orderTr" v-for="(room,roomIndex) in rooms" :key="roomIndex" @mousedown="mousedownHandler" @mouseup="mouseupHandler" @mousemove="mousemoveHandler" @mouseenter="mouseenterHandler" @mouseleave="mouseleaveHandler" @mouseclick="mouseclickHandler">
                             <th unselectable="on" onselectstart="return false;" style="-moz-user-select:none;">{{rooms[roomIndex].name}}</th>
                             <td unselectable="on" onselectstart="return false;" style="-moz-user-select:none;" v-for="(hour,hourIndex) in hours">
                                 <div>{{hours[hourIndex]}}</div>
@@ -34,7 +34,7 @@
                     </table>
                 </div>
                 <Button v-if="false" type="primary" @click="handleSelect">click me</Button>
-                <bookModal :title="title" v-if="showBookModal" :key="modalState"></bookModal>
+                <bookModal v-if="showBookModal" :key="modalState" :bookDate="currentTime" openTime="8:00" closeTime="22:00" :bookUser="username" :spaceName="selectRoom" :spaceId="selectRoomId" :occupyTime="occupations" :selectTime="selectTime"></bookModal>
             </div>
             <div slot="bContent">
             </div>
@@ -162,7 +162,8 @@ export default {
                 "18:00",
                 "19:00",
                 "20:00",
-                "21:00"
+                "21:00",
+                "22:00"
             ], //所有研习间当天的开放时间，需要从后台获取（created时先请求当天）
             time: this.getCurrentTime().time, //用于头部时间展示（今天）
             date: this.getCurrentTime().date - 28800000, //当前周一时间，点击上/下周时更改
@@ -174,14 +175,22 @@ export default {
             startPosX: 0,
             endPosX: 0,
             posY: 0,
-            trHeight: 0,
             selectTr: -1,
+            REM: -1,
+            tableLeft: -1,
+            tableTop: -1,
 
             /*---------------------------需要传递给预定信息确认模态窗的数据-------------------------------*/
             currentTime: 0, //选中日期的时间戳
             startTime: "",
-            endTime: ""
-            // 还有用户名，在computed属性
+            endTime: "",
+            occupations: [
+                {
+                    sTime: "8:00",
+                    eTime: "9:00"
+                }
+            ]
+            // 还有用户名、房间名称、房间id、所选时间等在computed属性
         };
     },
     computed: {
@@ -189,12 +198,16 @@ export default {
         username() {
             return this.$store.state.username;
         },
+        //从store读取目前登录框显示状态
+        loginShow() {
+            return this.$store.state.loginShow;
+        },
         //选中研习间的id
         selectRoomId() {
             if (this.selectTr === -1) {
-                return -1;
+                return "";
             } else {
-                return this.rooms[this.selectTr].id;
+                return this.rooms[this.selectTr].id.toString();
             }
         },
         //选中研习间的名称
@@ -204,6 +217,17 @@ export default {
             } else {
                 return this.rooms[this.selectTr].name;
             }
+        },
+        //所选时间
+        selectTime() {
+            return {
+                sTime: this.startTime,
+                eTime: this.endTime
+            };
+        },
+
+        rootSize() {
+            return this.$store.state.rootSize;
         },
         //获取一周的日期
         week() {
@@ -306,54 +330,41 @@ export default {
 
         //按下鼠标键，计算预定起始时间
         mousedownHandler(event) {
+            let e = event || window.event;
+            let table = document.getElementsByClassName("orderTable")[0];
+            this.tableLeft = table.getBoundingClientRect().left;
+            this.tableTop = table.getBoundingClientRect().top; //获取表格相对于body的位置（单位为px)
+            this.tableWidth = table.offsetWidth;
             let dragBox = document.getElementById("drag-box");
             if (dragBox) {
-                document.body.removeChild(dragBox);
+                table.removeChild(dragBox);
             }
-            let e = event || window.event;
             let tagName = e.target.tagName.toLowerCase();
             if (tagName !== "th") {
+                this.REM = Number(
+                    document.documentElement.style.fontSize.split("p")[0]
+                ); //获取当前的rem
+                // console.log(this.REM);
                 let currentTr = e.currentTarget;
                 let startTd = tagName === "td" ? e.target : e.target.parentNode;
-                let x = e.clientX;
-                this.trHeight = startTd.offsetHeight;
-                this.tdWidth = startTd.offsetWidth;
-                this.unitWidth = this.tdWidth / 12; //保存单位长度
-                this.keepClick = true;
-                this.draging = true; //处于拖动状态
-                this.selectTr = currentTr.rowIndex; //保存所选行id
-                this.startPosX = e.clientX; //保存起始坐标
-                this.posY = e.clientY - e.offsetY;
-                let hour = startTd.innerText.split(":")[0];
-                let ratio = parseInt(e.offsetX / this.unitWidth);
-                let minute = ratio * 5 > 9 ? ratio * 5 : "0" + ratio * 5;
-                let startTime = hour + ":" + minute;
-                let dragBox = paintDragBox(
-                    this.startPosX,
-                    this.posY,
-                    this.trHeight
-                );
-                let that = this;
-                let table = document.getElementsByTagName("table")[0];
-                let tr = table.getElementsByTagName("tr")[this.selectTr];
-                dragBox.addEventListener("mouseenter", function(e) {
-                    tr.classList.add("active");
-                    that.draging = true;
-                });
-                dragBox.addEventListener("mousemove", function(e) {
-                    if (that.draging && that.keepClick) {
-                        that.endPosX = e.clientX;
-                        this.style.width = that.endPosX - that.startPosX + "px";
-                    }
-                });
-                dragBox.addEventListener("mouseleave", function(e) {
-                    tr.classList.remove("active");
-                    that.draging = false;
-                });
-                document.body.appendChild(dragBox);
-                console.log(this.selectRoom);
-                console.log(this.selectRoomId);
-                // console.log("起始时间:" + startTime);
+                if (!startTd.classList.contains("past")) {
+                    this.tdWidth = startTd.offsetWidth;
+                    this.unitWidth = this.tdWidth / 12;
+                    this.keepClick = true; //处于点击状态
+                    this.draging = true; //处于拖动状态
+                    this.selectTr = currentTr.rowIndex; //保存所选行id
+                    this.startPosX = e.clientX - this.tableLeft; //保存距离表格左端的rem数起始坐标
+                    this.endPosX = e.clientX - this.tableLeft;
+                    this.posY =
+                        (e.clientY - e.offsetY - this.tableTop - 2) / this.REM;
+                    let hour = startTd.innerText.split(":")[0];
+                    let ratio = parseInt(e.offsetX / this.unitWidth);
+                    let minute = ratio * 5 > 9 ? ratio * 5 : "0" + ratio * 5;
+                    this.startTime = hour + ":" + minute;
+                    console.log("研习间名称" + this.selectRoom);
+                    console.log("研习间id" + this.selectRoomId);
+                    console.log("起始时间:" + this.startTime);
+                }
             }
         },
 
@@ -361,13 +372,51 @@ export default {
         mousemoveHandler(event) {
             let e = event || window.event;
             if (this.draging && this.keepClick) {
-                this.endPosX = e.clientX;
-                let dragBox = document.getElementById("drag-box");
+                this.endPosX = e.clientX - this.tableLeft;
                 if (this.endPosX > this.startPosX) {
+                    if (!document.getElementsByClassName("drag-box").length) {
+                        let dragBox = this.paintDragBox(
+                            this.startPosX,
+                            this.posY
+                        );
+                        let that = this;
+                        let table = document.getElementsByTagName("table")[0];
+                        let tr = table.getElementsByTagName("tr")[
+                            this.selectTr
+                        ];
+                        dragBox.addEventListener("mouseenter", function(e) {
+                            tr.classList.add("active");
+                            that.draging = true;
+                        });
+                        dragBox.addEventListener("mousemove", function(e) {
+                            if (that.draging && that.keepClick) {
+                                that.endPosX = e.clientX - that.tableLeft;
+                                this.style.width =
+                                    (that.endPosX - that.startPosX) /
+                                        that.tableWidth *
+                                        100 +
+                                    "%";
+                            }
+                        });
+                        dragBox.addEventListener("mouseleave", function(e) {
+                            tr.classList.remove("active");
+                            that.draging = false;
+                        });
+                        document
+                            .getElementsByClassName("orderTable")[0]
+                            .appendChild(dragBox);
+                    }
+                    let sTimeStr = document.getElementsByClassName("sTimeStr")[0];
+                    sTimeStr.innerText = this.startTime;
+                    let eTimeTip = document.getElementsByClassName("eTimeTip")[0];
+                    eTimeTip.innerText = this.endTime;
+                    let eTimeStr = document.getElementsByClassName("eTimeStr")[0];
+                    let dragBox = document.getElementById("drag-box");
                     let offset = this.endPosX - this.startPosX;
                     let totalHours = offset / this.tdWidth;
                     if (totalHours <= 4) {
-                        dragBox.style.width = offset + "px";
+                        dragBox.style.width =
+                            offset / this.tableWidth * 100 + "%";
                         let tagName = e.target.tagName.toLowerCase();
                         let currentTd =
                             tagName === "td" ? e.target : e.target.parentNode;
@@ -375,16 +424,17 @@ export default {
                         let ratio = parseInt(e.offsetX / this.unitWidth);
                         let minute =
                             ratio * 5 > 9 ? ratio * 5 : "0" + ratio * 5;
-                        let currentTime = hour + ":" + minute;
-                        // console.log("当前时间:" + currentTime);
+                        this.endTime = hour + ":" + minute;
                     } else {
-                        dragBox.style.width = 4 * this.tdWidth;
+                        this.endTime = (Number(this.startTime.split(":")[0])+4).toString()+":"+this.startTime.split(":")[1];
+                        dragBox.style.width = "23.2%";
                     }
+                    eTimeStr.innerText = this.endTime;
                 }
             }
         },
 
-        //鼠标移入所选行或移入选择区域div
+        //鼠标移入所选行
         mouseenterHandler(event) {
             let e = event || window.event;
             let tr = e.currentTarget;
@@ -403,22 +453,46 @@ export default {
 
         //松开鼠标键，计算结束时间,判断是否登录
         mouseupHandler(event) {
+            // console.log(this.endTime);
             this.keepClick = false;
             this.draging = false;
             //当所选时间小于1小时时，自动取消所选区域
-            if ((this.endPosX - this.startPosX) / this.unitWidth < 12) {
-                let dragBox = document.getElementById("drag-box");
-                document.body.removeChild(dragBox);
+            let dragBox = document.getElementById("drag-box");
+            if (dragBox) {
+                console.log("结束时间:" + this.endTime);
+                // document.getElementsByClassName("orderTable")[0].removeChild(dragBox);
+                if (this.endPosX - this.startPosX > 12 * this.unitWidth) {
+                    //用局部变量暂存然后初始化所有data，并清除所选区域
+                    if (!this.username) {
+                        console.log("未登录，请先登录");
+                        this.$emit("needLogin");
+                        setTimeout(this.loginState, 5000);
+                    } else {
+                        console.log("已登录，请确认预定信息");
+                        //弹出预约信息模态窗
+                        this.showBookModal = true;
+                        this.modalState = !this.modalState;
+                    }
+                }
+            }
+        },
+        mouseclickHandler() {
+            let dragBox = document.getElementById("drag-box");
+            document.body.removeChild(dragBox);
+        },
+
+        //选择时间后循环询问是否已经登录
+        loginState() {
+            if (this.username) {
+                this.showBookModal = true;
+                this.modalState = !this.modalState;
+                console.log("已登录，弹出预约信息确认窗口");
+                return;
             } else {
-                //用局部变量暂存然后初始化所有data，并清除所选区域
-                if (!this.username) {
-                    console.log("未登录，请先登录");
-                    this.$emit("needLogin");
-                } else {
-                    console.log("已登录，请确认预定信息");
-                    //弹出预约信息模态窗
-                    this.showBookModal = true;
-                    this.modalState = !this.modalState;
+                console.log("还未登录，继续等待");
+                let that = this;
+                if (that.loginShow) {
+                    setTimeout(that.loginState, 1000);
                 }
             }
         },
@@ -436,12 +510,31 @@ export default {
             console.log("所选日期的时间戳:" + this.currentTime); //当前选中天的时间戳
             that.$ajax
                 .get(
-                    "http://iyou.s1.natapp.cc/lidsLibrary//space/roomBookings?date=" +
+                    "http://iyou.s1.natapp.cc/lidsLibrary/space/roomInfo?date=" +
                         timeStr
                 )
                 .then(function(response) {
-                    let data = response.data;
-                    console.log(data);
+                    let data = response.data.result;
+                    console.log(data.serverTime);
+                    let serverTime = data.serverTime[0].split(":")[0];
+                    console.log(serverTime);
+                    let pastTdIndex = serverTime - 8;
+                    // for (let i = 0; i < 15; i++) {
+                    //     if (that.hours[i].split(":")[0] === serverTime) {
+                    //         let pastTdIndex = i;
+                    //         break;
+                    //     }
+                    // }
+
+                    //禁止选择当天当前时间之前的时间
+                    let trs = document.getElementsByTagName("tr");
+                    let length = trs.length;
+                    if (new Date(timeStr).getTime() < new Date().getTime()) {
+                        that.togglePast("add", trs, length,pastTdIndex);
+                    } else {
+                        that.togglePast("remove", trs, length,pastTdIndex);
+                    }
+
                     if (data.code === 0) {
                     } else {
                     }
@@ -449,12 +542,61 @@ export default {
                 .catch(function(err) {
                     console.log(err);
                 });
+        },
+        //绘制矩形
+        paintDragBox(x, y) {
+            let dragBox = document.createElement("div");
+            dragBox.id = "drag-box";
+            dragBox.className = "drag-box";
+            dragBox.style.position = "absolute";
+            dragBox.style.top = y + "rem";
+            dragBox.style.left = x / this.tableWidth * 100 + "%";
+            dragBox.style.height = "0.42rem";
+            let sTimeStr = document.createElement("span");
+            sTimeStr.className = "sTimeStr";
+            dragBox.appendChild(sTimeStr);
+            let br = document.createElement("br");
+            dragBox.appendChild(br);
+            let eTimeStr = document.createElement("span");
+            eTimeStr.className = "eTimeStr";
+            dragBox.appendChild(eTimeStr);
+            let eTimeTip = document.createElement("div");
+            eTimeTip.className = "eTimeTip";
+            eTimeTip.style.zIndex= 1000;
+            eTimeTip.style.width = "auto"
+            eTimeTip.style.position = "absolute";
+            eTimeTip.style.top= "-20px";
+            eTimeTip.style.right = "3px;";
+            dragBox.appendChild(eTimeTip);
+            return dragBox;
+        },
+
+        //添加/删除单元格"past"类
+        togglePast(operation, trs, length,pastTdIndex) {
+            for (let i = 0; i < length; i++) {
+                let tds = trs[i].getElementsByTagName("td");
+                let tdNum = tds.length;
+                for (let j = 0; j < pastTdIndex; j++) {
+                    let fun = "tds[j].classList." + operation + "('past')";
+                    eval(fun);
+                }
+            }
         }
     },
 
     //页面加载时请求今天的数据
     created() {
-        this.getOrderInfoAjax.call(this, 0);
+        let that = this;
+        that.$ajax
+            .get("http://iyou.s1.natapp.cc/lidsLibrary/space/roomMap")
+            .then(function(response) {
+                let resInfo = response.data;
+                let data = resInfo.results;
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+        that.getOrderInfoAjax.call(this, 0);
     },
     mounted() {
         let firstDayBtn = document.getElementsByClassName("week-day")[0];
@@ -481,17 +623,5 @@ function getYMD(date) {
         month: month,
         day: day
     };
-}
-
-//绘制矩形
-function paintDragBox(x, y, h) {
-    let dragBox = document.createElement("div");
-    dragBox.id = "drag-box";
-    dragBox.className = "drag-box";
-    dragBox.style.position = "absolute";
-    dragBox.style.top = y + "px";
-    dragBox.style.left = x + "px";
-    dragBox.style.height = h + "px";
-    return dragBox;
 }
 </script>
