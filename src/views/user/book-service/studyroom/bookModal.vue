@@ -34,7 +34,7 @@
                 </p>
                 <p class="theme applyItem">
                     <span class="label">主题</span>
-                    <Input v-model="applyInfo.theme" class="right" ref="theme"></Input>
+                    <Input v-model="applyInfo.theme" class="right" ref="theme" :maxlength=30 ></Input>
                 </p>
                 <div class="member applyItem">
                     <span class="label">成员</span>
@@ -81,7 +81,7 @@
                 <p class="applyNote applyItem">
                     <span class="noteTip">请输入需要备注的信息（45）</span>
                     <span class="label">申请说明</span>
-                    <Input v-model="applyInfo.note" type="textarea" placeholder="Enter something..." class="right"></Input>
+                    <Input v-model="applyInfo.note" type="textarea" placeholder="Enter something..." class="right" @on-keyup='handleNoteChange'></Input>
                 </p>
                 <p class="isAgree"><Radio v-model="isAgree"></Radio><a target='_blank' @click="handleNoticeOpen">同意《预约须知》条例</a></p>
             </div>
@@ -243,7 +243,16 @@ export default {
             return false;
         },
         timeFormat(num){  //num代表时钟/分钟
-            return num<10?'0'+num:num;
+            if(typeof num=='string'){
+                if(parseInt(num)<10&&num.length<2){
+                    num='0'+num;
+                }
+            }else if(typeof num=='number'){
+                if(num<10){
+                    num='0'+num;
+                }
+            }
+            return num;
         },
         getDate(date){
             date=new Date(date);
@@ -355,6 +364,13 @@ export default {
                           <p>7.请按照预约分配到的空间和设备进行使用，空间内请勿饮食，保持环境整洁。</p>`,
                     duration: 0
             });
+        },
+        handleNoteChange(){
+            let note=this.applyInfo.note;
+            if(note.length>45){
+                note=note.slice(0,45);
+                this.applyInfo.note=note;
+            }
         },
         handleStartTimeChange(){
             let eTime=this.generateEndTime();

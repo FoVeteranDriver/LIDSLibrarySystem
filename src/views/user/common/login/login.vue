@@ -3,19 +3,19 @@
 </style>
 
 <template>
-    <div>
-        <Modal v-model="show" :mask-closable="false" @on-cancel="cancel" class="login">
+    <div unselectable="on" onselectstart="return false;" style="-moz-user-select:none;">
+        <Modal v-model="show" :mask-closable="false" @on-cancel="cancel" class="login" unselectable="on" onselectstart="return false;" style="-moz-user-select:none;">
             <div slot="header" style="font-size:0.18rem;height:0.18rem;-moz-user-select:none;" unselectable="on" onselectstart="return false;">
                 <Tabs v-model="tabName">
                     <TabPane label="账号登录" name="accountTab">
-                        <Input v-model="account" type="text" placeholder="读书证号" @on-focus="inputFocus">
+                        <Input id="username-input" v-model="account" type="text" placeholder="读书证号" @on-focus="inputFocus" @on-keydown="keydown">
                         <span slot="prepend">
                             <img src="../../../../images/user/login/account.png"></span>
                         </Input>
                         </br>
                         <!-- 隐藏input输入框，防止账号密码自动填充 -->
                          <input type="password" name="password" style="width:0;height:0;padding:0;margin:0;border:0;display:none">
-                        <Input v-model="password" type="password" placeholder="密码"  @on-focus="inputFocus">
+                        <Input v-model="password" type="password" placeholder="密码"  @on-focus="inputFocus"  @on-keydown="keydown">
                         <span slot="prepend">
                             <img src="../../../../images/user/login/password.png">
                         </span>
@@ -32,7 +32,7 @@
                 </Tabs>
             </div>
             <div slot="footer" unselectable="on" onselectstart="return false;" style="-moz-user-select:none;">
-                <a @click="login" v-show="!QRcode"><img src="../../../../images/user/login/login.png"></a>
+                <a id="login-btn" @click="login" v-show="!QRcode"><img src="../../../../images/user/login/login.png"></a>
                 <p class="tip" v-show="QRcode">请使用已绑定图书证的微信账号登录</p>
             </div>
         </Modal>
@@ -165,6 +165,16 @@ export default {
             this.tabName = "accountTab";
             this.account = "";
             this.password = "";
+            this.$store.commit("loginClose")
+            this.inputFocus();
+        },
+
+        //回车键登录
+        keydown(event){
+            let e = event || window.event;
+            if (e.keyCode === 13){
+                document.getElementById("login-btn").click();
+            }
         }
     }
 };
