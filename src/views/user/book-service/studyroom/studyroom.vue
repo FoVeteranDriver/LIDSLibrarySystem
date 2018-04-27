@@ -4,7 +4,7 @@
         <tab :tabList="tabList" :imgUrl="imgUrl">
             <div slot="aContent">
                 <Button type="primary" @click="handleSelect">click me</Button>
-                <bookModal :title="title" v-if="showBookModal" :key="modalState"></bookModal>
+                <bookModal :title="title" :bookDate='bookDate' :openTime='openTime' :closeTime='closeTime' :selectTime='selectTime' :occupyTime='occupyTime' :bookUser='bookUser' :spaceName='spaceName' :spaceId='spaceId' v-if="showBookModal" :key="modalState"></bookModal>
             </div>
             <div slot="bContent">
                 
@@ -44,7 +44,15 @@ export default {
             ],
             showBookModal:false,
             modalState:false,
-            title:'welcome'
+            title:'welcome',
+            bookDate:+new Date(),
+            bookUser:'zhuowenjun',
+            spaceName:'研习间1',
+            spaceId:'12',
+            openTime:'08:30',
+            closeTime:'22:00',
+            selectTime:{sTime:'17:00',eTime:'18:30'},
+            occupyTime:[{sTime:'09:30',eTime:'13:00'},{sTime:'19:00',eTime:'20:30'}]
         }
     },
     methods:{
