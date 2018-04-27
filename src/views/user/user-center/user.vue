@@ -86,35 +86,37 @@ export default {
             currentQuery:'',
             isNewRecord:true,
             recordTableState:true,
-            recordTableList:[{
-                recordID:0,
-                orderTime:'2018-04-23 17:39',
-                orderSpace:'研究空间RED(紫金港信息空间)',
-                members:'卓文君1',
-                bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-                bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
-            },{
-                recordID:1,
-                orderTime:'2018-04-23 17:39',
-                orderSpace:'研究空间RED(紫金港信息空间)',
-                members:'卓文君2',
-                bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-                bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
-            },{
-                recordID:2,
-                orderTime:'2018-04-23 17:39',
-                orderSpace:'研究空间RED(紫金港信息空间)',
-                members:'卓文君3',
-                bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-                bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
-            },{
-                recordID:3,
-                orderTime:'2018-04-23 17:39',
-                orderSpace:'研究空间RED(紫金港信息空间)',
-                members:'刘润华',
-                bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-                bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
-            }],
+            recordTableList:[
+                //{
+            //     recordID:0,
+            //     orderTime:'2018-04-23 17:39',
+            //     orderSpace:'研究空间RED(紫金港信息空间)',
+            //     members:'卓文君1',
+            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
+            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
+            // },{
+            //     recordID:1,
+            //     orderTime:'2018-04-23 17:39',
+            //     orderSpace:'研究空间RED(紫金港信息空间)',
+            //     members:'卓文君2',
+            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
+            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
+            // },{
+            //     recordID:2,
+            //     orderTime:'2018-04-23 17:39',
+            //     orderSpace:'研究空间RED(紫金港信息空间)',
+            //     members:'卓文君3',
+            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
+            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
+            // },{
+            //     recordID:3,
+            //     orderTime:'2018-04-23 17:39',
+            //     orderSpace:'研究空间RED(紫金港信息空间)',
+            //     members:'刘润华',
+            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
+            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
+            //}
+            ],
             activityTableList:[{
                 recordID:1,
                 activityName:'大学城高校图书馆共享会',
@@ -142,20 +144,20 @@ export default {
     },
     methods:{
         handleQueryChange(){
-            // let that=this;
-            // that.$ajax
-            //     .get(
-            //         util.baseurl+"/user/userBookingRecords/?key="+this.currentQuery
-            //     )
-            //     .then(function(response){
-            //         let data=response.data;
-            //         if(data.code==0){
-            //             that.recordTableList=data.result;
-            //         }
-            //     })
-            //     .catch(function(err){
-            //         console.log(err);
-            //     });
+            let that=this;
+            that.$ajax
+                .get(
+                    util.baseurl+"/user/userBookingRecords/?key="+this.currentQuery
+                )
+                .then(function(response){
+                    let data=response.data;
+                    if(data.code==0){
+                        that.recordTableList=data.result;
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
             if(this.currentQuery==this.queryList[0].value){
                 this.isNewRecord=true;
             }else{
@@ -169,6 +171,13 @@ export default {
         userName() {
             return this.$store.state.username;
         },
+    },
+    watch:{
+        userName:function(newValue,oldValue){
+            if(newValue){
+                this.currentQuery=this.queryList[0].value;
+            }
+        }
     }
 };
 </script>
