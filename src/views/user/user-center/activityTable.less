@@ -1,0 +1,89 @@
+.activityTable{
+    font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
+    position: relative;
+    top: 0.1rem;
+    overflow: visible;
+    .ivu-table-wrapper {
+        border: none;
+        .ivu-table::before,.ivu-table::after{
+            width: 0;
+            height: 0;
+        }
+        .ivu-table-title{
+            background-color: #f78888;
+            color: #fff;
+            font-size: 0.14rem;
+            line-height: 1.2;
+            font-weight: 500;
+            padding-bottom: 0.4rem;
+            height: 0.2rem;
+            .activity-header{
+                div{
+                    display: inline-block;
+                    padding-left: 1.02rem;
+                }
+                div:first-child{
+                    padding-left: 0rem;
+                }
+                div:last-child{
+                    padding-left: 0.2rem;
+                }
+            }
+        }
+        .ivu-table-body{
+            background-color: #f78888;
+            table{
+                border: 0;
+                
+                .ivu-table-tbody{
+                    border: 0;
+                    .ivu-table-row{
+                        border: 0;
+                        td{
+                            background: #ffeaea;
+                            border:1px solid #fff;
+                            color: #8f8b8d;
+                            height: 0.6rem;
+                            font-size: 0.14rem;
+                            padding-bottom: 0.1rem;
+                        }
+                    }
+                }
+            
+            }
+          
+        }
+    }
+    .ivu-page.mini{
+        position: relative;
+        top: 0.2rem;
+        left: 8rem;
+        font-size: 0.12rem;
+        width: 2rem;
+        .ivu-page-total{
+            color: #8f8b8d;
+        }
+        .ivu-page-item-active{
+            background: #ffc6c6;
+        }
+        .ivu-page-item:hover a {
+            color: #ffc6c6;
+        }
+        .ivu-page-next:hover a, .ivu-page-prev:hover a {
+            color: #ffc6c6;
+        }
+        .ivu-page-item,.ivu-page-next,.ivu-page-prev,.ivu-page-total{
+            min-width: 24px;
+            height: 0.24rem;
+            line-height: 0.24rem;
+        }
+        .ivu-page-total{
+            min-width: 44px;
+        }
+        .ivu-page-next,.ivu-page-prev{
+            .ivu-icon{
+                line-height: 1.8;
+            }
+        }
+    }
+}
