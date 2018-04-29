@@ -3,6 +3,7 @@
 </style>
 <template>
     <div class="user-center">
+        <span class="hot">{{ currentState }}</span>
         <div class="header">
             <h1>Personal Center</h1>
             <img src="../../../images/user/user-center/user-background.png" class="backImg"/>
@@ -15,7 +16,7 @@
             <div class="inline-item">{{instituteName}}</div>
             <div class="inline-item">{{userIdentity}}</div>
         </div>
-        <Tabs type="card" :animated="false" class="user-tab">
+        <Tabs type="card" :animated="false" class="user-tab" v-model="hotTab" @on-click='handleTabChange'>
             <TabPane label="个人预约">
                 <Select v-model="currentQuery" style="width:200px" @on-change='handleQueryChange'>
                     <Option v-for="item in queryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -42,7 +43,7 @@
                 </div>
             </TabPane>
             <TabPane label="积分管理">
-                <creditsTable :tableList='creditsTableList'></creditsTable>
+                <creditsTable :tableList='creditsTableList' :key="creditsTableState"></creditsTable>
             </TabPane>
         </Tabs> 
     </div>
@@ -63,12 +64,15 @@ export default {
     },
     data () {
         return {
+            //userName:'',
+            currentState:true,
             userNumber:'201730712386',
             instituteName:'软件学院',
             userIdentity:'2014级学生',
             phoneNumber:'',
             mailBox:'',
             checkMessage:true,
+            hotTab: 0,
             queryList:[
                 {
                     label:'新预约记录',
@@ -86,6 +90,7 @@ export default {
             currentQuery:'',
             isNewRecord:true,
             recordTableState:true,
+            creditsTableState:true,
             recordTableList:[
                 //{
             //     recordID:0,
@@ -132,14 +137,21 @@ export default {
                 violateState:'预约未签到',
                 spaceName:'研习间1',
                 deductedCredits:'100'
+            },{
+                recordID:1,
+                violateTime:'2018-04-25 14:00-15:00',
+                violateState:'预约未签到',
+                spaceName:'研习间1',
+                deductedCredits:'100'
             }]
         }
     },
     mounted(){
-        if(!this.username){
+        this.currentState=!this.currentState; //触发beforeUpdate生命周期
+    },
+    beforeUpdate(){
+        if(!this.userName){
             this.$emit("needLogin");
-        }else{
-            this.currentQuery=this.queryList[0].value;
         }
     },
     methods:{
@@ -147,23 +159,69 @@ export default {
             let that=this;
             that.$ajax
                 .get(
-                    util.baseurl+"/user/userBookingRecords/?key="+this.currentQuery
+                    util.baseurl+"/user/userBookingRecords/?key="+that.currentQuery
                 )
                 .then(function(response){
                     let data=response.data;
                     if(data.code==0){
                         that.recordTableList=data.result;
+                        if(that.currentQuery==that.queryList[0].value){
+                            that.isNewRecord=true;
+                            that.recordTableState=!that.recordTableState;
+                        }else{
+                            that.isNewRecord=false;
+                        }
                     }
                 })
                 .catch(function(err){
                     console.log(err);
                 });
-            if(this.currentQuery==this.queryList[0].value){
-                this.isNewRecord=true;
-            }else{
-                this.isNewRecord=false;
+        },
+        handleTabChange(tab){
+            this.hotTab=parseInt(this.hotTab);
+           this.tabLoad();
+        },
+        tabLoad(){
+            let that=this;
+            switch(this.hotTab){    //0 1 2 3分别对应四个标签页的value
+                case 0:
+                    this.currentQuery=this.queryList[0].value;
+                    break;
+                case 1:
+                    // that.$ajax
+                    //     .get(
+                    //         util.baseurl+"/user/activityRecords/"
+                    //     )
+                    //     .then(function(response){
+                    //         let data=response.data;
+                    //         if(data.code==0){
+                    //             that.activityTableList=data.result;
+                    //         }
+                    //     })
+                    //     .catch(function(err){
+                    //         console.log(err);
+                    //     });
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    // that.$ajax
+                    //     .get(
+                    //         util.baseurl+"/user/creditsRecords/"
+                    //     )
+                    //     .then(function(response){
+                    //         let data=response.data;
+                    //         if(data.code==0){
+                    //             that.creditsTableList=data.result;
+                    //         }
+                    //     })
+                    //     .catch(function(err){
+                    //         console.log(err);
+                    //     });
+                    break;
+                default:
+                    break;
             }
-            this.recordTableState=!this.recordTableState;
         }
     },
     computed:{
@@ -175,7 +233,14 @@ export default {
     watch:{
         userName:function(newValue,oldValue){
             if(newValue){
-                this.currentQuery=this.queryList[0].value;
+                this.hotTab=0;
+                this.tabLoad();
+            }else{
+                this.recordTableList=[];
+                this.activityTableList=[];
+                this.creditsTableList=[];
+                this.creditsTableState=!this.creditsTableState;
+                this.recordTableState=!this.recordTableState;
             }
         }
     }

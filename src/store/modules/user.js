@@ -1,10 +1,10 @@
-import {otherRouter, appRouter} from '@/router/router';
+import {otherRouter, appRouter} from '@/router/userRouter';
 
-const app = {
+const appUser = {
     state: {
         menuList: [],
         routers: [
-            otherRouter,
+            ...otherRouter,
             ...appRouter
         ]
     },
@@ -15,4 +15,4 @@ const app = {
     }
 };
 
-export default app;
+export default appUser;

@@ -78,7 +78,7 @@ export default {
     },
     computed: {
         menuList() {
-            return this.$store.state.app.menuList;
+            return this.$store.state.appUser.menuList;
         },
         logged() {
             return this.$store.state.logged;
