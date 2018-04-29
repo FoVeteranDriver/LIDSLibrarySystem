@@ -70,4 +70,8 @@ public class SpaceServiceImpl implements SpaceService{
             return false;
         }
     }
+
+    public List<HashMap<String, String>> getSeatNameAndId() {
+        return spaceDao.getSeatNameAndId();
+    }
 }

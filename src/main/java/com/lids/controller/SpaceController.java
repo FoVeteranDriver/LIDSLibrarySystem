@@ -157,4 +157,17 @@ public class SpaceController {
         return commomDTO;
     }
 
+    /**
+     * 返回所有研习间的名字和ID
+     * @return
+     */
+    @RequestMapping("roomMap")
+    @ResponseBody
+    public CommomDTO roomMap(){
+        CommomDTO commomDTO = new CommomDTO();
+        List<HashMap<String, String>> result = spaceService.getSeatNameAndId();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
+        return commomDTO;
+    }
+
 }

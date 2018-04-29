@@ -27,4 +27,6 @@ public interface SpaceService {
 
     boolean isOccupied(int spaceId);
 
+    List<HashMap<String,String>> getSeatNameAndId();
+
 }

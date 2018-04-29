@@ -13,6 +13,8 @@ import java.util.Map;
 @Service("UserService")
 public class UserServiceImpl implements UserService{
 
+    private static final Integer numPerPage = 10;
+
     @Resource
     private UserDao userDao;
 
@@ -42,7 +44,21 @@ public class UserServiceImpl implements UserService{
         return result;
     }
 
-    public List<Map<String, String>> selectBookingRecordsByUser(int userId) {
-        return userDao.selectThreeMonthBookingRecordsByUser(userId);
+    public List<Map<String, String>> selectBookingRecordsByUser(int userId,int page) {
+        return userDao.selectThreeMonthBookingRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
+    }
+
+    public List<Map<String, String>> selectAllBookingRecordsByUser(int userId) {
+        return userDao.selectAllThreeMonthBookingRecordsByUser(userId);
+    }
+
+    public List<Map<String, String>> selectCreditRecordsByUser(int userId, int page) {
+        //TODO 查询用户近三个月违约记录
+        return null;
+    }
+
+    public List<Map<String, String>> selectNewBookingByUser(int userId, int page) {
+        //TODO 查询用户新预约记录
+        return null;
     }
 }

@@ -264,6 +264,38 @@ public class UserController {
     }
 
     /**
+     * 返回用户近三个月的预约记录,带分页
+     * @return
+     */
+    @RequestMapping("/userRecords")
+    @ResponseBody
+    public CommomDTO getUserBookingRecords(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "new") String type){
+        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+
+        //TODO 去掉权限测试
+        if (user == null){
+            user = new User();
+            user.setId(28);
+        }
+
+        List<Map<String,String>> result;
+        if (type.equals("new")){
+            result = userService.selectNewBookingByUser(user.getId(),page);
+        }else if (type.equals("old")){
+            result = userService.selectBookingRecordsByUser(user.getId(),page);
+        }else if (type.equals("credit")){
+            result = userService.selectCreditRecordsByUser(user.getId(),page);
+        }else {
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
+        return commomDTO;
+    }
+
+
+    /**
      * 返回用户近三个月的预约记录
      * @return
      */
@@ -271,7 +303,15 @@ public class UserController {
     @ResponseBody
     public CommomDTO getUserBookingRecords(){
         User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
-        List<Map<String,String>> result = userService.selectBookingRecordsByUser(user.getId());
+
+        //TODO 去掉权限测试
+        if (user == null){
+            user = new User();
+            user.setId(28);
+        }
+
+        List<Map<String,String>> result = userService.selectAllBookingRecordsByUser(user.getId());
+
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,result);
         return commomDTO;

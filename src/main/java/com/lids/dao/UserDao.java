@@ -15,5 +15,7 @@ public interface UserDao {
 
     List<Map<String,String>> fuzzySearch(Map<String,String> key);
 
-    List<Map<String,String>> selectThreeMonthBookingRecordsByUser(int userId);
+    List<Map<String,String>> selectThreeMonthBookingRecordsByUser(int userId,int page,int numPerPage);
+
+    List<Map<String,String>> selectAllThreeMonthBookingRecordsByUser(int userId);
 }

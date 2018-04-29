@@ -15,5 +15,11 @@ public interface UserService {
 
     List<Map<String,String>> fuzzySearch(String key);
 
-    List<Map<String,String>> selectBookingRecordsByUser(int userId);
+    List<Map<String,String>> selectBookingRecordsByUser(int userId,int page);
+
+    List<Map<String,String>> selectAllBookingRecordsByUser(int userId);
+
+    List<Map<String,String>> selectCreditRecordsByUser(int userId,int page);
+
+    List<Map<String,String>> selectNewBookingByUser(int userId,int page);
 }

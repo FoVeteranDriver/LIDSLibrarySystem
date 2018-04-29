@@ -29,8 +29,10 @@
       SELECT space_id as spaceId,begin_time as beginTime,end_time as endTime,application
       FROM booking_record INNER JOIN user ON booking_record.user_id = user.id
       WHERE is_room = "1"
-      AND date = CURRENT_DATE
-      AND end_time > CURRENT_TIME
+      AND date = #{0}
+      <!--<if test="date = CURRENT_DATE ">-->
+        <!--AND end_time > CURRENT_TIME-->
+      <!--</if>-->
     </select>
 
     <select id="getSeatSlot" resultType="java.util.Map">
@@ -46,6 +48,11 @@
     <select id="getSeatById" resultType="com.lids.po.Space">
         SELECT  * FROM space
         WHERE id = #{0}
+    </select>
+
+    <select id="getSeatNameAndId" resultType="java.util.Map">
+        SELECT id,name FROM space
+        WHERE space_type_name = "标准研习间"
     </select>
 
 </mapper>

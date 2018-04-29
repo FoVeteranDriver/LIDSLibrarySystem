@@ -33,8 +33,19 @@
         ORDER  BY id
     </select>
 
-    <!-- 查询用户的近三个月预定记录，#{0}用户id -->
+    <!-- 查询用户的近三个月预定记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
     <select id="selectThreeMonthBookingRecordsByUser" resultType="java.util.Map">
+        SELECT br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
+        br.is_active,br.has_check_in,br.booking_time
+        FROM booking_record_history as br
+        INNER JOIN user ON  br.user_id = user.id
+        WHERE user_id = #{0}
+        AND br.booking_time > SUBDATE(CURDATE(),INTERVAL 3 month)
+        ORDER BY booking_time
+        limit #{1},#{2}
+    </select>
+
+    <select id="selectAllThreeMonthBookingRecordsByUser" resultType="java.util.Map">
         SELECT br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
         br.is_active,br.has_check_in,br.booking_time
         FROM booking_record_history as br
