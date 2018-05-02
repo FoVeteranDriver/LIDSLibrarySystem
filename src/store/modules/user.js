@@ -2,15 +2,15 @@ import {otherRouter, appRouter} from '@/router/userRouter';
 
 const appUser = {
     state: {
-        menuList: [],
-        routers: [
+        userMenuList: [],
+        userRouters: [
             ...otherRouter,
             ...appRouter
         ]
     },
     mutations: {
-        updateMenulist (state) {
-            state.menuList = appRouter;
+        updateUserMenulist (state) {
+            state.userMenuList = appRouter;
         }
     }
 };

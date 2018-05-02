@@ -8,8 +8,8 @@
                 :shrink="shrink"
                 :menu-list="menuList">
                 <div slot="top" class="logo-con">
-                    <img v-show="!shrink"  src="../../images/logo.jpg" key="max-logo" />
-                    <img v-show="shrink" src="../../images/logo-min.jpg" key="min-logo" />
+                    <img src="../../images/user/main-component/logo.png" key="max-logo" :style="{ height: '0.55rem', paddingLeft: '0.1rem'}" />
+                    <!--<img v-show="shrink" src="../../images/logo-min.jpg" key="min-logo" />-->
                 </div>
             </shrinkable-menu>
         </div>
@@ -61,12 +61,14 @@ export default {
     },
     computed: {
         menuList () {
-            return this.$store.state.app.menuList;
+            return this.$store.state.appAdmin.adminMenuList;
         }
     },
     methods: {
         init () {
             this.userName = Cookies.get('user');
+            this.$store.commit('updateAccessList');
+            this.$store.commit('updateAdminMenulist');
         },
         toggleClick () {
             this.shrink = !this.shrink;

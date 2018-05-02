@@ -60,8 +60,71 @@ export default {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
                     Cookies.set('user', this.form.userName);
+                    let accessList=[{
+                        name:'admin-settings',
+                        access:1,
+                        children:[
+                            {
+                                name:'admin-authority',
+                                access:1
+                            },
+                             {
+                                name:'admin-rules',
+                                access:0
+                            },
+                            {
+                                name:'admin-display',
+                                access:0,
+                            },
+                              {
+                                name:'admin-space',
+                                access:0,
+                            }
+                        ]
+                    },{
+                        name:'admin-management',
+                        access:1,
+                        children:[
+                            {
+                                name:'daily1',
+                                access:1
+                            },
+                             {
+                                name:'daily2',
+                                access:1
+                            }
+                        ]
+                    },{
+                        name:'admin-data',
+                        access:1,
+                        children:[
+                            {
+                                name:'data1',
+                                access:1
+                            },
+                             {
+                                name:'data2',
+                                access:1
+                            }
+                        ]
+                    }];
+                    let limits=[];
+                    accessList.forEach(item=>{
+                        if(item.access==0){
+                            limits.push(item.name);
+                        }
+                        if(item.children&&item.children.length){
+                            item.children.forEach(i=>{
+                                if(i.access==0){
+                                    limits.push(i.name);
+                                }
+                            })
+                        }
+                    });
+                    sessionStorage.setItem('accessList',JSON.stringify(accessList));
+                    sessionStorage.setItem('limits',JSON.stringify(limits));
                     this.$router.push({
-                        name: 'home_index'
+                        name: 'admin_index'
                     });
                 }
             });

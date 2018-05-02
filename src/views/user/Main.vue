@@ -29,9 +29,14 @@
                     <div class="header-avator-con">
                         <div class="login-con" v-show="!logged">
                             <div class="login-link">
-                                <a @click="showLogin">登录</a><img src="../../images/user/home/login.png"></div>
+                                <a @click="showLogin">登录</a><img src="../../images/user/home/login.png">
+                            </div>
                             <div class="admin-link">
-                                <a href="https://www.baidu.com">【管理端】</a><img src="../../images/user/home/admin.png"></div>
+                                <router-link :to="{name:'admin_login'}">
+                                    【管理端】<img src="../../images/user/home/admin.png">
+                                </router-link>
+                            </div>
+                            
                         </div>
                         <div class="user-dropdown-menu-con" v-show="logged">
                             <div class="user-dropdown-innercon">
@@ -78,7 +83,7 @@ export default {
     },
     computed: {
         menuList() {
-            return this.$store.state.appUser.menuList;
+            return this.$store.state.appUser.userMenuList;
         },
         logged() {
             return this.$store.state.logged;

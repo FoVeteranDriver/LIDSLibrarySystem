@@ -2,7 +2,6 @@ import axios from 'axios';
 import env from '../../build/env';
 import semver from 'semver';
 import packjson from '../../package.json';
-
 let util = {
 
 };
@@ -233,7 +232,7 @@ util.toDefaultPage = function (routers, name, route, next) {
     let i = 0;
     let notHandle = true;
     while (i < len) {
-        if (routers[i].name === name && routers[i].redirect === undefined) {
+        if (routers[i].name === name && routers[i].children && routers[i].redirect === undefined) {
             route.replace({
                 name: routers[i].children[0].name
             });
@@ -247,6 +246,7 @@ util.toDefaultPage = function (routers, name, route, next) {
         next();
     }
 };
+
 
 util.fullscreenEvent = function (vm) {
     // 权限菜单过滤相关

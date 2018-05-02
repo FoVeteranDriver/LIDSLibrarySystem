@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import appUser from './modules/user';
+import appAdmin from './modules/admin';
 
 Vue.use(Vuex);
 
@@ -52,6 +53,7 @@ const store = new Vuex.Store({
 
     modules: {
         appUser,
+        appAdmin
     }
 });
 

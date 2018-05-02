@@ -16,6 +16,6 @@ new Vue({
     store: store,
     render: h => h(App),
     mounted() {
-        this.$store.commit('updateMenulist');
+        this.$store.commit('updateUserMenulist');
     }
 });

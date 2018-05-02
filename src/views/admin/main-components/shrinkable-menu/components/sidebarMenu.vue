@@ -6,18 +6,18 @@
     <Menu ref="sideMenu" :active-name="$route.name" :open-names="openNames" :theme="menuTheme" width="auto" @on-select="changeMenu">
         <template v-for="item in menuList">
             <MenuItem v-if="item.children.length<=1" :name="item.children[0].name" :key="item.path">
-                <Icon :type="item.icon" :size="iconSize" :key="item.path"></Icon>
+                <img v-bind:src='item.icon' class="nav-icon"/>
                 <span class="layout-text" :key="item.path">{{ itemTitle(item) }}</span>
             </MenuItem>
 
             <Submenu v-if="item.children.length > 1" :name="item.name" :key="item.path">
                 <template slot="title">
-                    <Icon :type="item.icon" :size="iconSize"></Icon>
+                    <img v-bind:src='item.icon' class="nav-icon"/>
                     <span class="layout-text">{{ itemTitle(item) }}</span>
                 </template>
                 <template v-for="child in item.children">
-                    <MenuItem :name="child.name" :key="child.name">
-                        <Icon :type="child.icon" :size="iconSize" :key="child.name"></Icon>
+                    <MenuItem :name="child.name" :key="child.path">
+                       
                         <span class="layout-text" :key="child.name">{{ child.title }}</span>
                     </MenuItem>
                 </template>
@@ -51,6 +51,9 @@ export default {
                 return item.title;
             }
         }
+    },
+    mounted(){
+        console.log(this.menuList);
     },
     updated () {
         this.$nextTick(() => {
