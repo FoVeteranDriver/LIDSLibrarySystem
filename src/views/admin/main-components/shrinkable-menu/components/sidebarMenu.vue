@@ -3,46 +3,60 @@
 </style>
 
 <template>
-    <Menu ref="sideMenu" :active-name="$route.name" :open-names="openNames" :theme="menuTheme" width="auto" @on-select="changeMenu">
-        <template v-for="item in menuList">
-            <MenuItem v-if="item.children.length<=1" :name="item.children[0].name" :key="item.path">
-                <img v-bind:src='item.icon' class="nav-icon"/>
-                <span class="layout-text" :key="item.path">{{ itemTitle(item) }}</span>
-            </MenuItem>
-
-            <Submenu v-if="item.children.length > 1" :name="item.name" :key="item.path">
-                <template slot="title">
-                    <img v-bind:src='item.icon' class="nav-icon"/>
-                    <span class="layout-text">{{ itemTitle(item) }}</span>
-                </template>
-                <template v-for="child in item.children">
-                    <MenuItem :name="child.name" :key="child.path">
-                       
-                        <span class="layout-text" :key="child.name">{{ child.title }}</span>
-                    </MenuItem>
-                </template>
-            </Submenu>
-        </template>
-    </Menu>
+    <div class="admin-sideBar">
+        <Tabs v-model="hotTab" :animated="false" @on-click='handleTabClick'>
+            <template v-for="item in menuList">
+                <TabPane 
+                :label='item.title'
+                :icon='item.icon'
+                :key='item.name'>
+                    <RadioGroup type="button" v-model="currentRoute" @on-change='changeMenu'>
+                        <template v-for="child in item.children">
+                            <Radio :label="child.name">
+                                <Icon :type="child.icon"></Icon>
+                                {{child.title.slice(0,2)}}
+                                <br/>
+                                {{child.title.slice(2)}}
+                            </Radio>
+                        </template>
+                    </RadioGroup>
+                </TabPane>
+            </template>
+        </Tabs>
+    </div>       
 </template>
 
 <script>
 export default {
     name: 'sidebarMenu',
+    data(){
+        return{
+            currentRoute:'',
+            hotTab:'-1',
+            label:(h,params)=>{
+                console.log(params);
+                return h('div', [
+                    h('span', '标签一'),
+                    h('Badge', {
+                        props: {
+                            count: 3
+                        }
+                    })
+                ])
+            } 
+        }
+    },
     props: {
         menuList: Array,
-        iconSize: Number,
         menuTheme: {
             type: String,
             default: 'dark'
         },
-        openNames: {
-            type: Array
-        }
+       
     },
     methods: {
         changeMenu (active) {
-            this.$emit('on-change', active);
+            this.$emit('on-change', this.currentRoute);
         },
         itemTitle (item) {
             if (typeof item.title === 'object') {
@@ -50,18 +64,13 @@ export default {
             } else {
                 return item.title;
             }
+        },
+        handleTabClick(name){
+            this.$emit('on-menuOpen',name);
         }
     },
     mounted(){
-        console.log(this.menuList);
-    },
-    updated () {
-        this.$nextTick(() => {
-            if (this.$refs.sideMenu) {
-                this.$refs.sideMenu.updateOpened();
-            }
-        });
+       
     }
-
 };
 </script>

@@ -70,15 +70,15 @@ export default {
                             },
                              {
                                 name:'admin-rules',
-                                access:0
+                                access:1
                             },
                             {
                                 name:'admin-display',
-                                access:0,
+                                access:1,
                             },
                               {
                                 name:'admin-space',
-                                access:0,
+                                access:1,
                             }
                         ]
                     },{
@@ -86,11 +86,15 @@ export default {
                         access:1,
                         children:[
                             {
-                                name:'daily1',
+                                name:'admin-mSpace',
                                 access:1
                             },
                              {
-                                name:'daily2',
+                                name:'admin-credits',
+                                access:1
+                            },
+                            {
+                                name:'admin-activity',
                                 access:1
                             }
                         ]

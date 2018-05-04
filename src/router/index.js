@@ -28,7 +28,9 @@ router.beforeEach((to, from, next) => {
             });
         }else if (Cookies.get('user') && to.name === 'admin_login') { // 判断是否已经登录且前往的是登录页
             Util.title();
-            next(false);
+            next({
+                name:'admin_index'
+            });
         } else {
             const curRouterObj = Util.getRouterObjByName([...otherRouter, ...appRouter], to.name);
             const limits=store.state.appAdmin.limits;

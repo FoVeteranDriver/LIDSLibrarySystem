@@ -50,7 +50,7 @@ export const otherRouter = [{
 export const appRouter = [ 
     {
         path: '/admin-settings',
-        icon: './src/images/admin/main-component/sys-service.png',
+        icon: 'ios-gear-outline',
         name: 'admin-settings',
         title: '设置',
         access:1,
@@ -59,7 +59,7 @@ export const appRouter = [
             {
                 path: 'admin-authority',
                 name: 'admin-authority',
-                icon: 'social-octocat',
+                icon: 'locked',
                 title: '权限管理',
                 access: 1,
                 component: resolve => { require(['@/views/admin/settings/authority/index.vue'], resolve); }
@@ -67,7 +67,7 @@ export const appRouter = [
             {
                 path: 'admin-rules',
                 name: 'admin-rules',
-                icon: 'ios-alarm-outline',
+                icon: 'ionic',
                 title: '系统规则',
                 access: 1,
                 component: resolve => { require(['@/views/user/system-service/notice/notice.vue'], resolve); }
@@ -75,7 +75,7 @@ export const appRouter = [
             {
                 path: 'admin-display',
                 name: 'admin-display',
-                icon: 'ios-star-outline',
+                icon: 'chatbubble-working',
                 title: '通知展示',
                 access: 1,
                 component: resolve => { require(['@/views/user/system-service/review/review.vue'], resolve); }
@@ -83,7 +83,7 @@ export const appRouter = [
             {
                 path: 'admin-space',
                 name: 'admin-space',
-                icon: 'ios-star-outline',
+                icon: 'cube',
                 title: '空间区域',
                 access: 1,
                 component: resolve => { require(['@/views/user/system-service/review/review.vue'], resolve); }
@@ -92,33 +92,41 @@ export const appRouter = [
     },
     {
         path: '/admin-management',
-        icon: './src/images/admin/main-component/sys-service.png',
+        icon: 'ios-ionic-outline',
         name: 'admin-management',
-        title: '日常管理',
+        title: '管理',
         access: 1,
         component: Main,
         children: [
             {
-                path: 'daily1',
-                name: 'daily1',
-                icon: 'social-octocat',
-                title: 'daily1',
+                path: 'admin-mSpace',
+                name: 'admin-mSpace',
+                icon: 'cube',
+                title: '空间区域',
                 access: 1,
                 component: resolve => { require(['@/views/user/system-service/introduce/introduce.vue'], resolve); }
             },
             {
-                path: 'daily2',
-                name: 'daily2',
-                icon: 'ios-alarm-outline',
-                title: 'daily2',
+                path: 'admin-credits',
+                name: 'admin-credits',
+                icon: 'ios-list',
+                title: '积分处罚',
                 access: 1,
                 component: resolve => { require(['@/views/user/system-service/notice/notice.vue'], resolve); }
             },
+            {
+                path: 'admin-activity',
+                name: 'admin-activity',
+                icon: 'social-chrome-outline',
+                title: '活动安排',
+                access: 1,
+                component: resolve => { require(['@/views/user/system-service/notice/notice.vue'], resolve); }
+            }
         ]
     },
     {
         path: '/admin-data',
-        icon: './src/images/admin/main-component/sys-service.png',
+        icon: 'ios-pie-outline',
         name: 'admin-data',
         title: '数据',
         access: 1,
@@ -127,15 +135,15 @@ export const appRouter = [
             {
                 path: 'data1',
                 name: 'data1',
-                icon: 'social-octocat',
-                title: 'data1',
+                icon: 'ios-analytics',
+                title: '数据整合',
                 component: resolve => { require(['@/views/user/system-service/introduce/introduce.vue'], resolve); }
             },
             {
                 path: 'data2',
                 name: 'data2',
                 icon: 'ios-alarm-outline',
-                title: 'data2',
+                title: '数据统计',
                 component: resolve => { require(['@/views/user/system-service/notice/notice.vue'], resolve); }
             },
         ]

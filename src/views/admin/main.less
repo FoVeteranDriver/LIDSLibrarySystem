@@ -14,7 +14,7 @@ html,body{
     transform: translate(-50%,-50%);
     transition: all 3s;
 }
-.main{
+.admin-main{
     position: absolute;
     width: 100%;
     height: 100%;
@@ -33,6 +33,14 @@ html,body{
         left: 0;
         z-index: 21;
         transition: width .3s;
+        .subMenu-con{
+            position: absolute;
+            width: 1.2rem;
+            height: 100%;
+            left: 0.9rem;
+            top: 0;
+            background: #3f3140;
+        }
     }
     .layout-text{
         display: inline-block;
@@ -97,7 +105,7 @@ html,body{
         }
     }
     &-header{
-        height: 60px;
+        height: 0.6rem;
         background: #fff;
         box-shadow: 0 2px 1px 1px rgba(100,100,100,.1);
         position: relative;
@@ -191,7 +199,7 @@ html,body{
     }
     .single-page-con{
         position: absolute;
-        top: 60px;
+        top: 0.6rem;
         right: 0;
         bottom: 0;
         overflow: auto;
@@ -207,15 +215,16 @@ html,body{
         padding: 10px 0 20px;
         color: #9ea7b4;
     }
+    .logo-con{
+        padding: 8px;
+        text-align: left;
+        background: transparent;
+        img{
+            height: 44px;
+            width: auto;
+        }
+    }
 }
 .taglist-moving-animation-move{
     transition: transform .3s;
-}
-.logo-con{
-    padding: 8px;
-    text-align: left;
-    img{
-        height: 44px;
-        width: auto;
-    }
 }
