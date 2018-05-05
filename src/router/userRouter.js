@@ -4,23 +4,15 @@ import Main from '@/views/user/Main.vue';
 //为空
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
-export const otherRouter = [{
+export const otherRouter = {
     path: '/',
     name: 'otherRouter',
     component: Main,
     children: [
-        { path: '/', title: { i18n: 'home' }, name: 'home', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } }
-    ]
-},
-{
-    path: '/',
-    name: 'otherRouter',
-    component: Main,
-    children: [
+        { path: '/', title: { i18n: 'home' }, name: 'home', component: resolve => { require(['@/views/user/home/home.vue'], resolve); } },
         { path: 'noticeDetail', title: 'noticeDetail', name: 'noticeDetail', component: resolve => { require(['@/views/user/home/noticeDetail.vue'], resolve); } }
     ]
 }
-];
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
@@ -106,6 +98,6 @@ export const appRouter = [
 
 // 所有上面定义的路由都要写在下面的routers里
 export const userRouters = [
-    ...otherRouter,
+    otherRouter,
     ...appRouter,
 ];

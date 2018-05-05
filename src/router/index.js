@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
                 name:'admin_index'
             });
         } else {
-            const curRouterObj = Util.getRouterObjByName([...otherRouter, ...appRouter], to.name);
+            const curRouterObj = Util.getRouterObjByName([otherRouter, ...appRouter], to.name);
             const limits=store.state.appAdmin.limits;
             if (curRouterObj && curRouterObj.access !== undefined) { // 需要判断权限的路由
                 let temp=[];
@@ -47,10 +47,10 @@ router.beforeEach((to, from, next) => {
                         name: 'error-403'
                     });
                 }else{
-                    Util.toDefaultPage([...otherRouter, ...appRouter], to.name, router, next); // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
+                    Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next); // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
                 }
                 // if (curRouterObj.access === parseInt(Cookies.get('access'))) {
-                //     Util.toDefaultPage([...otherRouter, ...appRouter], to.name, router, next); // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
+                //     Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next); // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
                 // } else {
                 //     next({
                 //         replace: true,
@@ -67,6 +67,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to) => {
+    Util.openNewPage(router.app, to.name, to.params, to.query);
     iView.LoadingBar.finish();
     window.scrollTo(0, 0);
 });

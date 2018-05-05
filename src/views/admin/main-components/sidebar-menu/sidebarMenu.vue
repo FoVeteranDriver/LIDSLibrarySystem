@@ -1,16 +1,14 @@
 <style lang="less">
-    @import '../styles/menu.less';
+    @import './menu.less';
 </style>
 
 <template>
     <div class="admin-sideBar">
-        <Tabs v-model="hotTab" :animated="false" @on-click='handleTabClick'>
+        <slot name="top"></slot>
+        <Tabs v-model="tab" :animated="false" @on-click='handleTabClick'>
             <template v-for="item in menuList">
-                <TabPane 
-                :label='item.title'
-                :icon='item.icon'
-                :key='item.name'>
-                    <RadioGroup type="button" v-model="currentRoute" @on-change='changeMenu'>
+                <TabPane  :label='item.title' :icon='item.icon' :key='item.path' :name='item.name'>
+                    <RadioGroup type="button" v-model="route" @on-change='changeMenu'>
                         <template v-for="child in item.children">
                             <Radio :label="child.name">
                                 <Icon :type="child.icon"></Icon>
@@ -30,20 +28,9 @@
 export default {
     name: 'sidebarMenu',
     data(){
-        return{
-            currentRoute:'',
-            hotTab:'-1',
-            label:(h,params)=>{
-                console.log(params);
-                return h('div', [
-                    h('span', '标签一'),
-                    h('Badge', {
-                        props: {
-                            count: 3
-                        }
-                    })
-                ])
-            } 
+        return{  
+            tab:this.hotTab,
+            route:this.currentRoute
         }
     },
     props: {
@@ -52,11 +39,30 @@ export default {
             type: String,
             default: 'dark'
         },
-       
+        hotTab:{
+            type:String
+        },
+        currentRoute:{
+            type:String
+        },
+        onMenuOpen:{
+            type:Function
+        }
     },
     methods: {
         changeMenu (active) {
-            this.$emit('on-change', this.currentRoute);
+            let willpush = true;
+            if (this.beforePush !== undefined) {
+                if (!this.beforePush(this.route)) {
+                    willpush = false;
+                }
+            }
+            if (willpush) {
+                this.$router.push({
+                    name: this.route
+                });
+            }
+            this.$emit('on-change', this.route);
         },
         itemTitle (item) {
             if (typeof item.title === 'object') {

@@ -37,14 +37,14 @@ export const page500 = {
     component: resolve => { require(['@/views/error-page/500.vue'], resolve); }
 };
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
-export const otherRouter = [{
+export const otherRouter = {
     path: '/admin',
     name: 'otherRouter',
     component: Main,
     children: [
         { path: '/', title: { i18n: 'admin_index' }, name: 'admin_index', component: resolve => { require(['@/views/admin/settings/authority/index.vue'], resolve); } }
     ]
-}];
+};
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [ 
@@ -153,7 +153,7 @@ export const appRouter = [
 // 所有上面定义的路由都要写在下面的routers里
 export const adminRouters = [
     loginRouter,
-    ...otherRouter,
+    otherRouter,
     ...appRouter,
     page500,
     page403,
