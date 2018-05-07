@@ -38,6 +38,13 @@
                         title:'id',
                         key:'recordID',
                         width:1,
+                        render:(h,params)=>{
+                            return h('span',{
+                                style:{
+                                    color:'transparent'
+                                }
+                            },'')
+                        }
                     },
                     {
                         title:'活动名称',

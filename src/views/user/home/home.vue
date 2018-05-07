@@ -50,6 +50,7 @@
             </Col>
             <Col :xs="{ span: 7, offset: 1 }" :lg="{ span: 5, offset: 1 }" class="sidebar">
                 <div class="notice">
+                    <router-link :to="{name:'noticeDetail',params:{notice:notice}}">
                     <div class="heaer">
                         <h1>最新通知</h1>
                         <h3>Latest Notice</h3>
@@ -57,13 +58,19 @@
                     <div class="content">
                         <img src="../../../images/user/home/notice.png"/>
                         <h2>{{notice.noticeTitle}}</h2>
-                        <p class="notice-tip">{{notice.noticeText}}</p>
+                        <p class="notice-tip">
+                            {{noticeOmit}}
+                            <span v-if="notice.noticeText.length>45">
+                                ...<span class="detailIcon">[详情]</span>
+                            </span>
+                        </p>
                         <span class="publish-time" v-if="notice.publishTime!==''">
                             {{notice.publishTime.year}}/{{notice.publishTime.month}}/{{notice.publishTime.day}}
                             &nbsp;
                             {{notice.publishTime.hour}}:{{notice.publishTime.minute}}
                         </span>
                     </div>
+                    </router-link>
                 </div>
                 <div class="bookList">
                     <div class="header">
@@ -193,6 +200,15 @@ export default {
                             that.bookList.push(temp);
                         }
                         let len=that.bookList.length;
+                        if(len==1){
+                            that.bookList.push(that.bookList[0]);
+                            that.bookList.push(that.bookList[0]);
+                            len=that.bookList.length;
+                        }else if(len==2){
+                            that.bookList.push(that.bookList[0]);
+                            that.bookList.push(that.bookList[1]);
+                            len=that.bookList.length;
+                        }
                         if(len>=3&&len<=5){    //数目在此范围内的预约条目会被加倍
                             let mirror=[];
                             for(let item of that.bookList){
@@ -215,13 +231,21 @@ export default {
             var copy=this.$refs.copy;
             var carousel=this.$refs.carousel;
             this.$nextTick(()=>{
-                copy.innerHTML=original.innerHTML;
-                carousel.scrollTop=0;
+                if(original){
+                    copy.innerHTML=original.innerHTML;
+                    carousel.scrollTop=0;
+                }
+              
             });
         },
         polling(){
             this.getBookRecords();
             setTimeout(this.polling,30000);
+        }
+    },
+     computed:{
+        noticeOmit(){
+            return this.notice.noticeText.slice(0,45);
         }
     }
 };

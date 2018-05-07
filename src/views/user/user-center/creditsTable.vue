@@ -3,8 +3,12 @@
 </style>
 <template>
     <div class="creditsTable">
-        <Table border :columns="activityTable" :data='partialRecords' :show-header=false>
-            <div slot="header" class="activity-header">
+        <div class="top">
+            <div class="left"><span>总积分（学期）</span><span>{{totalCredits}}</span></div>
+            <div class="right"><span>当前积分（学期）</span><span class="score">{{currentCredits}}</span></div>
+        </div>
+        <Table border :columns="creditsTable" :data='partialRecords' :show-header=false>
+            <div slot="header" class="credits-header">
                 <div>序号</div>
                 <div>违约时间</div>
                 <div>违约状态</div>
@@ -30,8 +34,10 @@
                 pageSize:2,
                 partialRecords:[],
                 dialogState:false,
-                activityList:[],
-                activityTable:[
+                totalCredits:0,
+                currentCredits:0,
+                creditsList:[],
+                creditsTable:[
                     {
                         title:'id',
                         key:'recordID',
@@ -64,15 +70,15 @@
         methods:{
             handlePageChange(currentPage){
                 let index=(currentPage-1)*this.pageSize;
-                this.partialRecords=this.activityList.slice(index,index+this.pageSize);
+                this.partialRecords=this.creditsList.slice(index,index+this.pageSize);
             },
         },
         mounted(){
             for(let item of this.tableList){
-                this.activityList.push(item);
+                this.creditsList.push(item);
             }
-            this.totolSize=this.activityList.length;
-            this.partialRecords=this.activityList.slice(0,this.pageSize);
+            this.totolSize=this.creditsList.length;
+            this.partialRecords=this.creditsList.slice(0,this.pageSize);
         }
     }
 </script>

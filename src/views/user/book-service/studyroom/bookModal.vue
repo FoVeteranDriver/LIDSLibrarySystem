@@ -394,12 +394,12 @@ export default {
                 let doubleMember=this.memberGroup.filter(item=>{  
                     return item.id==member.id;
                 });
-                if(!doubleMember.length){        //不可重复选择同一个partner
-                    this.memberGroup.push(member);
-                }else{
+                if(doubleMember.length||member.name==this.bookUser){        //不可重复选择同一个partner
                     this.$Message.warning({
                         content: '此成员已在列表中'
                     });
+                }else{
+                    this.memberGroup.push(member);
                 }
             }
             

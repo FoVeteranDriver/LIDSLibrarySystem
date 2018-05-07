@@ -3,22 +3,39 @@
     position: relative;
     top: 0.1rem;
     overflow: visible;
+    .top{
+        color: #fff;
+        font-size: 0.15rem;
+        position: relative;
+        top: -0.3rem;
+        div{
+            display: inline-block;
+        }
+        .right{
+            margin-left: 1.8rem;
+            .score{
+                color:#ffc875;
+            }
+        }
+    }
     .ivu-table-wrapper {
+        margin-top: -0.2rem;
         border: none;
         .ivu-table::before,.ivu-table::after{
             width: 0;
             height: 0;
         }
         .ivu-table-title{
-            background-color: #f78888;
-            color: #fff;
+            background-color: #fafbfc;
+            color: #8f8b8d;
             font-size: 0.14rem;
             line-height: 1.2;
             font-weight: 500;
-            padding-bottom: 0.4rem;
-            border-bottom: none;
+            padding-bottom: 0.26rem;
+            border-bottom: 0.08rem solid #f78888;
+            border-top: 0.1rem solid #fafbfc;
             height: 0.2rem;
-            .activity-header{
+            .credits-header{
                 div{
                     display: inline-block;
                     padding-left:1.6rem;
@@ -61,7 +78,7 @@
     }
     .ivu-page.mini{
         position: relative;
-        top: 0.2rem;
+        top: 0.12rem;
         left: 8rem;
         font-size: 0.12rem;
         width: 2rem;

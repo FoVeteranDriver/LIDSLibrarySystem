@@ -2,7 +2,6 @@ import axios from 'axios';
 import env from '../../build/env';
 import semver from 'semver';
 import packjson from '../../package.json';
-
 let util = {
 
 };
@@ -81,7 +80,7 @@ util.handleTitle = function (vm, item) {
 util.setCurrentPath = function (vm, name) {
     let title = '';
     let isOtherRouter = false;
-    vm.$store.state.app.routers.forEach(item => {
+    vm.$store.state.appAdmin.adminRouters.forEach(item => {
         if (item.children.length === 1) {
             if (item.children[0].name === name) {
                 title = util.handleTitle(vm, item);
@@ -101,20 +100,20 @@ util.setCurrentPath = function (vm, name) {
         }
     });
     let currentPathArr = [];
-    if (name === 'home_index') {
+    if (name === 'admin_index') {
         currentPathArr = [
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.appAdmin.adminRouters, 'admin_index')),
                 path: '',
-                name: 'home_index'
+                name: 'admin_index'
             }
         ];
-    } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
+    } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'admin_index') {
         currentPathArr = [
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
-                path: '/home',
-                name: 'home_index'
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.appAdmin.adminRouters, 'admin_index')),
+                path: '/admin',
+                name: 'admin_index'
             },
             {
                 title: title,
@@ -123,7 +122,7 @@ util.setCurrentPath = function (vm, name) {
             }
         ];
     } else {
-        let currentPathObj = vm.$store.state.app.routers.filter(item => {
+        let currentPathObj = vm.$store.state.appAdmin.adminRouters.filter(item => {
             if (item.children.length <= 1) {
                 return item.children[0].name === name;
             } else {
@@ -144,15 +143,15 @@ util.setCurrentPath = function (vm, name) {
                 {
                     title: '首页',
                     path: '',
-                    name: 'home_index'
+                    name: 'admin_index'
                 }
             ];
         } else if (currentPathObj.children.length <= 1 && currentPathObj.name !== 'home') {
             currentPathArr = [
                 {
                     title: '首页',
-                    path: '/home',
-                    name: 'home_index'
+                    path: '/admin',
+                    name: 'admin_index'
                 },
                 {
                     title: currentPathObj.title,
@@ -167,8 +166,8 @@ util.setCurrentPath = function (vm, name) {
             currentPathArr = [
                 {
                     title: '首页',
-                    path: '/home',
-                    name: 'home_index'
+                    path: '/admin',
+                    name: 'admin_index'
                 },
                 {
                     title: currentPathObj.title,
@@ -189,7 +188,7 @@ util.setCurrentPath = function (vm, name) {
 };
 
 util.openNewPage = function (vm, name, argu, query) {
-    let pageOpenedList = vm.$store.state.app.pageOpenedList;
+    let pageOpenedList = vm.$store.state.appAdmin.pageOpenedList;
     let openedPageLen = pageOpenedList.length;
     let i = 0;
     let tagHasOpened = false;
@@ -206,7 +205,7 @@ util.openNewPage = function (vm, name, argu, query) {
         i++;
     }
     if (!tagHasOpened) {
-        let tag = vm.$store.state.app.tagsList.filter((item) => {
+        let tag = vm.$store.state.appAdmin.tagsList.filter((item) => {
             if (item.children) {
                 return name === item.children[0].name;
             } else {
@@ -233,7 +232,7 @@ util.toDefaultPage = function (routers, name, route, next) {
     let i = 0;
     let notHandle = true;
     while (i < len) {
-        if (routers[i].name === name && routers[i].redirect === undefined) {
+        if (routers[i].name === name && routers[i].children && routers[i].redirect === undefined) {
             route.replace({
                 name: routers[i].children[0].name
             });
@@ -247,6 +246,7 @@ util.toDefaultPage = function (routers, name, route, next) {
         next();
     }
 };
+
 
 util.fullscreenEvent = function (vm) {
     // 权限菜单过滤相关

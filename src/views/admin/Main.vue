@@ -2,30 +2,28 @@
     @import "./main.less";
 </style>
 <template>
-    <div class="main" :class="{'main-hide-text': shrink}">
-        <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
-            <shrinkable-menu 
-                :shrink="shrink"
-                :menu-list="menuList">
+    <div class="admin-main">
+        <div class="sidebar-menu-con" :style="{width: '0.9rem', overflow: 'visible'}">
+            <sidebar-menu 
+                :menu-list="menuList"
+                :hot-tab="hotTab"
+                :key="sidebarState"
+                :current-route="currentRoute"
+                @on-menuOpen='handleMenuOpen'>
                 <div slot="top" class="logo-con">
-                    <img v-show="!shrink"  src="../../images/logo.jpg" key="max-logo" />
-                    <img v-show="shrink" src="../../images/logo-min.jpg" key="min-logo" />
+                    <img src="../../images/admin/main-component/logo.png" key="max-logo" :style="{ height: '0.55rem', paddingLeft: '0.1rem'}" />
                 </div>
-            </shrinkable-menu>
+            </sidebar-menu>
+            <div class="subMenu-con" :style="{display:isHidden?'none':'block'}"></div>
         </div>
-        <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
-            <div class="main-header">
-                <div class="navicon-con">
-                    <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
-                        <Icon type="navicon" size="32"></Icon>
-                    </Button>
-                </div>
+        <div class="admin-main-header-con" :style="{left:isHidden?'0.92rem':'2.1rem',paddingRight:isHidden?'0.9rem':'2.1rem'}">
+            <div class="admin-main-header">
                 <div class="header-avator-con">
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">
-                                    <span class="main-user-name">{{ userName }}</span>
+                                    <span class="admin-main-user-name">{{ userName }}</span>
                                     <Icon type="arrow-down-b"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
@@ -38,47 +36,115 @@
                 </div>
             </div>
         </div>
-        <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
+        <div class="tags-con"  :style="{left:isHidden?'0.92rem':'2.12rem',paddingRight:isHidden?'0.9rem':'2.1rem'}">
+            <tags-page-opened :pageTagsList="pageTagsList">
+            </tags-page-opened>
+        </div>
+        <div class="single-page-con" :style="{left:isHidden?'0.9rem':'2.1rem'}">
             <div class="single-page">
-                <router-view></router-view>
+                <keep-alive :include="cachePage">
+                    <router-view></router-view>
+                </keep-alive>
             </div>
         </div>
     </div>
 </template>
 <script>
 import Cookies from 'js-cookie';
-import shrinkableMenu from './main-components/shrinkable-menu/shrinkable-menu.vue';
-
+import sidebarMenu from './main-components/sidebar-menu/sidebarMenu.vue';
+import tagsPageOpened from './main-components/tags-page-opened.vue';
+import util from '@/libs/util.js';
+import {appRouter} from '@/router/adminRouter';
 export default {
     components: {
-        shrinkableMenu
+        sidebarMenu,
+        tagsPageOpened,
     },
     data () {
         return {
-            shrink: false,
-            userName: ''
+            userName: '',
+            isHidden:true,
+            hotTab:'-1',
+            currentRoute:'',
+            sidebarState:true
         };
     },
     computed: {
         menuList () {
-            return this.$store.state.app.menuList;
-        }
+            return this.$store.state.appAdmin.adminMenuList;
+        },
+        cachePage () {
+            return this.$store.state.appAdmin.cachePage;
+        },
+        pageTagsList () {
+            return this.$store.state.appAdmin.pageOpenedList; // 打开的页面的页面对象
+        },
+    },
+    watch: {
+        '$route' (to) {
+            this.$store.commit('setCurrentPageName', to.name);
+            let pathArr = util.setCurrentPath(this, to.name);
+            if (pathArr.length > 2) {
+               this.isHidden=false;
+               this.hotTab=pathArr[1].name;
+               this.currentRoute=pathArr[2].name;
+            }else{
+                this.isHidden=true;
+                this.hotTab='-1';
+                this.currentRoute='';
+            }
+            this.sidebarState=!this.sidebarState;
+            this.checkTag(to.name);
+            localStorage.currentPageName = to.name;
+        },
     },
     methods: {
         init () {
+            let pathArr = util.setCurrentPath(this, this.$route.name);
             this.userName = Cookies.get('user');
-        },
-        toggleClick () {
-            this.shrink = !this.shrink;
+            this.$store.commit('updateAccessList');
+            this.$store.commit('updateAdminMenulist');
+            this.checkTag(this.$route.name);
         },
         handleClickUserDropdown (name) {
             this.$router.push({
-                name: 'login'
+                name: 'admin_login'
             });
-        }
+        },
+        handleMenuOpen(name){
+            if(name!='-1'){
+                this.isHidden=false;
+            }else{
+                this.isHidden=true;
+            }
+        },
+        checkTag (name) {
+            let openpageHasTag = this.pageTagsList.some(item => {
+                if (item.name === name) {
+                    return true;
+                }
+            });
+            if (!openpageHasTag) { //  解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
+                util.openNewPage(this, name, this.$route.params || {}, this.$route.query || {});
+            }
+        },
     },
     mounted () {
         this.init();
-    }
+    },
+    created () {
+        let tagsList = [];
+        appRouter.map((item) => {
+            if (item.children.length <= 1) {
+                tagsList.push(item.children[0]);
+            } else {
+                tagsList.push(...item.children);
+            }
+        });
+        this.$store.commit('setTagsList', tagsList);
+        // 显示打开的页面的列表
+        this.$store.commit('setOpenedList');
+        this.$store.commit('initCachepage');
+    },
 };
 </script>
