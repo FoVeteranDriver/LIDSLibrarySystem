@@ -104,7 +104,6 @@
                     border-bottom: 2px solid #fbc3c3;
                     &.active {
                         th {
-
                             background-color: #f78888;
                             color: #ffffff;
                         }
@@ -125,18 +124,16 @@
                         font-size: 0.11rem;
                         cursor: default;
                         &::selection {
-                            background:#ffffff;
-                            color:#F88888;
+                            background: #ffffff;
+                            color: #F88888;
                         }
-
                         &::-moz-selection {
-                            background:#ffffff;
-                            color:#F88888;
+                            background: #ffffff;
+                            color: #F88888;
                         }
-
                         &::-webkit-selection {
-                            background:#ffffff;
-                            color:#F88888;
+                            background: #ffffff;
+                            color: #F88888;
                         }
                     }
                     td {
@@ -152,8 +149,9 @@
                         background-color: #ffffff;
                         &.past {
                             background-color: #e0dedb;
-                            &:hover{
-                                cursor: not-allowed;;
+                            &:hover {
+                                cursor: not-allowed;
+                                ;
                             }
                         }
                         cursor: pointer;
@@ -167,18 +165,16 @@
                             padding-top: 2px;
                             margin: 0;
                             &::selection {
-                                background:#ffffff;
-                                color:#797979;
+                                background: #ffffff;
+                                color: #797979;
                             }
-
                             &::-moz-selection {
-                                background:#ffffff;
-                                color:#797979;
+                                background: #ffffff;
+                                color: #797979;
                             }
-
                             &::-webkit-selection {
-                                background:#ffffff;
-                                color:#797979;
+                                background: #ffffff;
+                                color: #797979;
                             }
                         }
                     }
@@ -199,7 +195,7 @@
     opacity: 0.8;
     overflow: hidden;
     cursor: pointer;
-    span{
+    span {
         display: inline-block;
         padding-left: 3px;
         font-size: 0.1rem;
@@ -211,13 +207,24 @@
     }
 }
 
-.time-tip{
+.time-tip {
     position: absolute;
     width: auto;
     height: 20px;
+    font-size: 0.1rem;
     padding: 1px 10px 0;
     text-align: center;
     color: #ffffff;
     background-color: #F27E80;
+}
 
+.selected-box{
+    z-index: 999;
+    text-align: center;
+    background-color: #fbc3c3;
+    border: 1.5px solid transparent;
+    border-bottom: 0;
+    border-top: 0;
+    opacity: 0.8;
+    overflow: hidden;
 }
