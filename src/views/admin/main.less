@@ -3,6 +3,7 @@ html,body{
     height: 100%;
     background: #f0f0f0;
     overflow: hidden;
+    font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
 }
 .lock-screen-back{
     border-radius: 50%;
@@ -120,6 +121,10 @@ html,body{
         .navicon-con{
             margin: 6px;
             display: inline-block;
+            padding: 0.1rem 0;
+            color: #9e6c63;
+            font-size: 0.16rem;
+            font-weight: 500;
         }
         .header-middle-con{
             position: absolute;
@@ -151,11 +156,6 @@ html,body{
                     vertical-align: middle;
                 }
             }
-            .change-skin{
-                font-size: 14px;
-                font-weight: 500;
-                padding-right: 5px;
-            }
             .switch-theme{
                 height: 100%;
             }
@@ -164,18 +164,23 @@ html,body{
                     position: absolute;
                     right: 0;
                     top: 0;
-                    width: 150px;
+                    width: 2.5rem;
                     height: 100%;
-                    .main-user-name{
-                        display: inline-block;
-                        width: 80px;
-                        word-break: keep-all;
-                        white-space: nowrap;
-                        vertical-align: middle;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        text-align: right;
+                    a{
+                        font-size: 0.16rem;
+                        .admin-main-user-name{
+                            display: inline-block;
+                            width: 160px;
+                            word-break: keep-all;
+                            white-space: nowrap;
+                            color: #9e6c63;
+                            vertical-align: middle;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            text-align: right;
+                        }
                     }
+                    
                 }
                 &-innercon{
                     height: 100%;

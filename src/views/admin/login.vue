@@ -5,13 +5,13 @@
 <template>
     <div class="login" @keydown.enter="handleSubmit">
         <div class="login-con">
-            <div class="header">
-                <img src=""/>
-            </div>
             <Card :bordered="false">
                 <p slot="title">
-                    <Icon type="log-in"></Icon>
-                    欢迎登录
+                    <router-link :to="{name:'home'}">
+                        <Icon type="log-in" color='black'></Icon>
+                    </router-link>
+                    <br/>
+                    <img src="../../images/admin/login/logo.png"/>
                 </p>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
@@ -30,7 +30,7 @@
                             </Input>
                         </FormItem>
                         <FormItem>
-                            <Button @click="handleSubmit" type="primary" long>登录</Button>
+                            <Button @click="handleSubmit" long>登录</Button>
                         </FormItem>
                     </Form>
                 </div>

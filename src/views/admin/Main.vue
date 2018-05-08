@@ -18,13 +18,16 @@
         </div>
         <div class="admin-main-header-con" :style="{left:isHidden?'0.92rem':'2.1rem',paddingRight:isHidden?'0.9rem':'2.1rem'}">
             <div class="admin-main-header">
+                <div class="navicon-con">
+                    信息共享空间管理系统
+                </div>
                 <div class="header-avator-con">
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">
                                     <span class="admin-main-user-name">{{ userName }}</span>
-                                    <Icon type="arrow-down-b"></Icon>
+                                    <Icon type="arrow-down-b" color='#9e6c63'></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>

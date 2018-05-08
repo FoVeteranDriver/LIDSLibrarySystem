@@ -841,6 +841,7 @@ export default {
                             }
                         }
                     }
+                    console.log(that.rooms);
                 })
                 .catch(function(err) {
                     console.log(err);
