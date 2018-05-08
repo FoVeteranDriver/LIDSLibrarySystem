@@ -26,7 +26,7 @@
     <!--AND schedule.date = #{0}-->
     <!--ORDER BY space_id,schedule_slot.begin_time-->
     <select id="getRoomsSlot" resultType="java.util.Map">
-      SELECT space_id as spaceId,begin_time as beginTime,end_time as endTime,application
+      SELECT space_id as spaceId,begin_time as beginTime,end_time as endTime,application,user.name,application
       FROM booking_record INNER JOIN user ON booking_record.user_id = user.id
       WHERE is_room = "1"
       AND date = #{0}

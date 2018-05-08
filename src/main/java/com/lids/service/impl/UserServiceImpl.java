@@ -45,7 +45,15 @@ public class UserServiceImpl implements UserService{
     }
 
     public List<Map<String, String>> selectBookingRecordsByUser(int userId,int page) {
-        return userDao.selectThreeMonthBookingRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
+        List<Map<String, String>> result = userDao.selectThreeMonthBookingRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
+        //去除开始时间和结束时间的秒数
+        for (Map one : result){
+            String beginTime = one.get("begin_time").toString();
+            String endTime = (String)one.get("end_time").toString();
+            one.put("begin_time",beginTime.substring(0,5));
+            one.put("end_time",endTime.substring(0,5));
+        }
+        return result;
     }
 
     public List<Map<String, String>> selectAllBookingRecordsByUser(int userId) {
@@ -54,11 +62,38 @@ public class UserServiceImpl implements UserService{
 
     public List<Map<String, String>> selectCreditRecordsByUser(int userId, int page) {
         //TODO 查询用户近三个月违约记录
-        return null;
+        return userDao.selectThreeMonthCreditRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
     }
 
     public List<Map<String, String>> selectNewBookingByUser(int userId, int page) {
         //TODO 查询用户新预约记录
-        return null;
+        List<Map<String, String>> result = userDao.selectNewBookingRecords(userId,(page-1)*numPerPage,numPerPage);
+        return result;
+    }
+
+    public Map<String, String> selectUserInfo(String libraryCardNumber) {
+        return userDao.selectUserInfo(libraryCardNumber);
+    }
+
+    public String selectUserScore(String libraryCardNumber) {
+        return userDao.selectUserScore(libraryCardNumber);
+    }
+
+    public void updateUserInfo(int userId, String telephone, String email) {
+        userDao.updateUserInfo(userId,telephone,email);
+    }
+
+    public String selectTotalScore(String userTypeName) {
+        return userDao.selectTotalScore(userTypeName);
+    }
+
+    public List<Map<String,String>> selectDeductionRecord(int userId) {
+        List<Map<String,String>> result = userDao.selectDeductionRecord(userId);
+        //格式化时间
+        for (Map one : result){
+            String credit_time = one.get("credit_time").toString();
+            one.put("credit_time",credit_time.substring(0,10));
+        }
+        return result;
     }
 }

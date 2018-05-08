@@ -17,5 +17,19 @@ public interface UserDao {
 
     List<Map<String,String>> selectThreeMonthBookingRecordsByUser(int userId,int page,int numPerPage);
 
+    List<Map<String,String>> selectThreeMonthCreditRecordsByUser(int userId,int page,int numPerPage);
+
+    List<Map<String,String>> selectNewBookingRecords(int userId,int page,int numPerPage);
+
     List<Map<String,String>> selectAllThreeMonthBookingRecordsByUser(int userId);
+
+    Map<String,String> selectUserInfo(String libraryCardNumber);
+
+    String selectUserScore(String libraryCardNumber);
+
+    void updateUserInfo(int userId,String telephone,String email);
+
+    String selectTotalScore(String userTypeName);
+
+    List<Map<String,String>> selectDeductionRecord(int userId);
 }

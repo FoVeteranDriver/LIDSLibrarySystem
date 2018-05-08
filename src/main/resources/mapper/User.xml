@@ -23,6 +23,11 @@
         SELECT * FROM user WHERE library_card_number = #{0}
     </select>
 
+    <select id="selectUserInfo" resultType="java.util.Map">
+        SELECT name,library_card_number as libraryCardNumber,grade,college
+        FROM  user WHERE library_card_number = #{0}
+    </select>
+
 
     <!-- 模糊查询用户 -->
     <select id="fuzzySearch" parameterType="java.util.Map" resultType="java.util.Map">
@@ -35,24 +40,65 @@
 
     <!-- 查询用户的近三个月预定记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
     <select id="selectThreeMonthBookingRecordsByUser" resultType="java.util.Map">
-        SELECT br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
+        SELECT br.id,br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
         br.is_active,br.has_check_in,br.booking_time
         FROM booking_record_history as br
         INNER JOIN user ON  br.user_id = user.id
         WHERE user_id = #{0}
         AND br.booking_time > SUBDATE(CURDATE(),INTERVAL 3 month)
         ORDER BY booking_time
-        limit #{1},#{2}
+    </select>
+
+    <!-- 查询用户的近三个月违约记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
+    <select id="selectThreeMonthCreditRecordsByUser" resultType="java.util.Map">
+        SELECT *
+        FROM credit_record
+        WHERE user_id = #{0}
+        AND credit_time > SUBDATE(CURDATE(),INTERVAL 3 month)
+        ORDER BY credit_time
+    </select>
+
+    <!-- 查询用户的新预约记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
+    <select id="selectNewBookingRecords" resultType="java.util.Map">
+        SELECT * FROM credit_record WHERE user_id = #{0}
+        AND credit_time > SUBDATE(CURDATE(),INTERVAL 3 month)
+        ORDER BY credit_time
     </select>
 
     <select id="selectAllThreeMonthBookingRecordsByUser" resultType="java.util.Map">
-        SELECT br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
+        SELECT br.id,br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
         br.is_active,br.has_check_in,br.booking_time
         FROM booking_record_history as br
         INNER JOIN user ON  br.user_id = user.id
         WHERE user_id = #{0}
         AND br.booking_time > SUBDATE(CURDATE(),INTERVAL 3 month)
         ORDER BY booking_time
+    </select>
+
+    <select id="selectUserScore" resultType="java.lang.String">
+        SELECT credit_score as score
+        FROM user
+        WHERE library_card_number = #{0}
+    </select>
+
+    <update id="updateUserInfo">
+        UPDATE user
+        set telephone = #{1},email = #{2}
+        WHERE id = #{0}
+    </update>
+
+    <select id="selectTotalScore" resultType="java.lang.String">
+        SELECT init_score
+        FROM user_type
+        WHERE name = #{0}
+    </select>
+
+    <select id="selectDeductionRecord" resultType="java.util.Map">
+        SELECT credit_time,credit_rule_name,score_reduce,br.space_name
+        FROM credit_record INNER JOIN booking_record_history as br
+        ON credit_record.booking_record_id = br.id
+        WHERE credit_record.user_id = #{0}
+        ORDER BY credit_time
     </select>
 
 </mapper>

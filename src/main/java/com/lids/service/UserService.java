@@ -22,4 +22,14 @@ public interface UserService {
     List<Map<String,String>> selectCreditRecordsByUser(int userId,int page);
 
     List<Map<String,String>> selectNewBookingByUser(int userId,int page);
+
+    Map<String,String> selectUserInfo(String libraryCardNumber);
+
+    String selectUserScore(String libraryCardNumber);
+
+    void updateUserInfo(int userId,String telephone,String email);
+
+    String selectTotalScore(String userTypeName);
+
+    List<Map<String,String>> selectDeductionRecord(int userId);
 }

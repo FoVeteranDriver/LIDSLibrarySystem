@@ -157,8 +157,9 @@ public class UserController {
     @ResponseBody
     public CommomDTO getUserInfo(){
         User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+        Map<String,String> userInfo = userService.selectUserInfo(user.getLibraryCardNumber());
         CommomDTO commomDTO = new CommomDTO();
-        commomDTO.setInfo(ResultEnum.SUCCESS,user);
+        commomDTO.setInfo(ResultEnum.SUCCESS,userInfo);
         return commomDTO;
     }
 
@@ -269,7 +270,7 @@ public class UserController {
      */
     @RequestMapping("/userRecords")
     @ResponseBody
-    public CommomDTO getUserBookingRecords(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "new") String type){
+    public CommomDTO getUserBookingRecords(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "old") String type){
         User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
 
         //TODO 去掉权限测试
@@ -315,6 +316,56 @@ public class UserController {
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,result);
         return commomDTO;
+    }
+
+    @RequestMapping("/score")
+    @ResponseBody
+    public CommomDTO getUserScore(){
+        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+
+        //TODO 去掉权限测试
+        if (user == null){
+            user = new User();
+            user.setId(28);
+            user.setLibraryCardNumber("201430612164");
+            user.setUserTypeName("本科生");
+        }
+
+        Map<String,Object> userInfo = new HashMap<String, Object>();
+
+        String userNowScore = userService.selectUserScore(user.getLibraryCardNumber());
+        userInfo.put("userScore",userNowScore);
+        String totalScore = userService.selectTotalScore(user.getUserTypeName());
+        userInfo.put("totalScore",totalScore);
+
+        List<Map<String,String>> creditRecord = userService.selectDeductionRecord(user.getId());
+        userInfo.put("record",creditRecord);
+
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,userInfo);
+        return commomDTO;
+    }
+
+    @RequestMapping(value = "/userInfo",method = RequestMethod.PUT)
+    @ResponseBody
+    public CommomDTO updateUserInfo(@RequestBody Map<String,String> userInfo){
+        String telephone = userInfo.get("telephone");
+        String email = userInfo.get("email");
+        if (telephone == null || telephone.equals("")
+                || email == null || email.equals("")){
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+
+        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+
+        //TODO 去掉权限测试
+        if (user == null){
+            user = new User();
+            user.setId(28);
+        }
+
+        userService.updateUserInfo(user.getId(),telephone,email);
+        return new CommomDTO(ResultEnum.SUCCESS);
     }
 
 }
