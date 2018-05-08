@@ -76,15 +76,15 @@ export default {
             queryList:[
                 {
                     label:'新预约记录',
-                    value:'newRecords'
+                    value:'new'
                 },
                 {
                     label:'近三个月预约记录',
-                    value:'latestRecords'
+                    value:'old'
                 },
                 {
                     label:'近三个月违约记录',
-                    value:'latestIllegalRecords'
+                    value:'credit'
                 }
             ],
             currentQuery:'',
@@ -159,12 +159,27 @@ export default {
             let that=this;
             that.$ajax
                 .get(
-                    util.baseurl+"/user/userBookingRecords/?key="+that.currentQuery
+                    util.baseurl+"/user/userRecords/?type="+that.currentQuery
                 )
                 .then(function(response){
                     let data=response.data;
                     if(data.code==0){
-                        that.recordTableList=data.result;
+                        let records=[];
+                        for(let item of data.result){
+                            let temp={};
+                            let dateObj=util.parseTimestamp(item.booking_time);
+                            temp.orderTime=dateObj.year+'-'+dateObj.month+'-'+dateObj.day+' '+dateObj.hour+':'+dateObj.minute;
+                            temp.bookTime={};
+                            let dateArr=item.date.split('-');
+                            temp.bookTime.sTime=dateArr[1]+'-'+dateArr[2]+' '+item.begin_time;
+                            temp.bookTime.eTime=dateArr[1]+'-'+dateArr[2]+' '+item.end_time;
+                            temp.bookState={};
+                            temp.bookState.permission_status=item.permission_status;
+                            temp.bookState.is_active=item.is_active;
+                            temp.bookState.has_check_in=item.has_check_in;
+                            records.push(temp);      
+                        }
+                        that.recordTableList=records;
                         if(that.currentQuery==that.queryList[0].value){
                             that.isNewRecord=true;
                             that.recordTableState=!that.recordTableState;
@@ -179,7 +194,7 @@ export default {
         },
         handleTabChange(tab){
             this.hotTab=parseInt(this.hotTab);
-           this.tabLoad();
+            this.tabLoad();
         },
         tabLoad(){
             let that=this;
