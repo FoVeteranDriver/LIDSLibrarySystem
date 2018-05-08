@@ -5,6 +5,9 @@
 <template>
     <div class="login" @keydown.enter="handleSubmit">
         <div class="login-con">
+            <div class="header">
+                <img src=""/>
+            </div>
             <Card :bordered="false">
                 <p slot="title">
                     <Icon type="log-in"></Icon>
