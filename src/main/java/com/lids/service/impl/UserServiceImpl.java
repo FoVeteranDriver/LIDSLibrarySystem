@@ -52,6 +52,14 @@ public class UserServiceImpl implements UserService{
             String endTime = (String)one.get("end_time").toString();
             one.put("begin_time",beginTime.substring(0,5));
             one.put("end_time",endTime.substring(0,5));
+
+            if ((Boolean) one.get("is_room")){
+                List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("id")).intValue());
+                one.put("partner",partner);
+            }else {
+                one.put("partner","个人预约");
+            }
+            one.remove("is_room");
         }
         return result;
     }
@@ -61,13 +69,43 @@ public class UserServiceImpl implements UserService{
     }
 
     public List<Map<String, String>> selectCreditRecordsByUser(int userId, int page) {
-        //TODO 查询用户近三个月违约记录
-        return userDao.selectThreeMonthCreditRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
+        List<Map<String,String>> result = userDao.selectThreeMonthCreditRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
+        for (Map one : result){
+            String beginTime = one.get("begin_time").toString();
+            String endTime = (String)one.get("end_time").toString();
+            one.put("begin_time",beginTime.substring(0,5));
+            one.put("end_time",endTime.substring(0,5));
+
+            if ((Boolean) one.get("is_room")){
+                List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("bookingRecordId")).intValue());
+                one.put("partner",partner);
+            }else {
+                one.put("partner","个人预约");
+            }
+            one.remove("is_room");
+            one.remove("bookingRecordId");
+        }
+        return result;
     }
 
     public List<Map<String, String>> selectNewBookingByUser(int userId, int page) {
-        //TODO 查询用户新预约记录
+        //查询用户新预约记录
         List<Map<String, String>> result = userDao.selectNewBookingRecords(userId,(page-1)*numPerPage,numPerPage);
+        //去除开始时间和结束时间的秒数
+        for (Map one : result){
+            String beginTime = one.get("begin_time").toString();
+            String endTime = (String)one.get("end_time").toString();
+            one.put("begin_time",beginTime.substring(0,5));
+            one.put("end_time",endTime.substring(0,5));
+
+            if ((Boolean) one.get("is_room")){
+                List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("id")).intValue());
+                one.put("partner",partner);
+            }else {
+                one.put("partner","个人预约");
+            }
+            one.remove("is_room");
+        }
         return result;
     }
 
@@ -95,5 +133,9 @@ public class UserServiceImpl implements UserService{
             one.put("credit_time",credit_time.substring(0,10));
         }
         return result;
+    }
+
+    public void deleteBookingRecord(int bookingRecordId) {
+        userDao.deleteBookingRecord(bookingRecordId);
     }
 }

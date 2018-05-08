@@ -32,4 +32,8 @@ public interface UserDao {
     String selectTotalScore(String userTypeName);
 
     List<Map<String,String>> selectDeductionRecord(int userId);
+
+    List<Map> selectPartnerByRecordId(int bookingRecordId);
+
+    void deleteBookingRecord(int bookingRecordId);
 }

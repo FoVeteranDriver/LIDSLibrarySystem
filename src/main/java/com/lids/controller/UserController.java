@@ -368,4 +368,11 @@ public class UserController {
         return new CommomDTO(ResultEnum.SUCCESS);
     }
 
+    @RequestMapping(value = "/deleteBookingRecord",method = RequestMethod.DELETE)
+    @ResponseBody
+    public CommomDTO deleteBookingRecord(@RequestParam int bookingRecordId){
+        userService.deleteBookingRecord(bookingRecordId);
+        return new CommomDTO(ResultEnum.SUCCESS);
+    }
+
 }

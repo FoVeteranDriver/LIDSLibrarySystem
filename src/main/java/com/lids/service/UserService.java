@@ -32,4 +32,6 @@ public interface UserService {
     String selectTotalScore(String userTypeName);
 
     List<Map<String,String>> selectDeductionRecord(int userId);
+
+    void deleteBookingRecord(int bookingRecordId);
 }

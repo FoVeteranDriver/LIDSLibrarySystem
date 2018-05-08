@@ -39,9 +39,10 @@
     </select>
 
     <!-- 查询用户的近三个月预定记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
+    <!-- is_room用户判断是否是研习间，稍后需要删除 -->
     <select id="selectThreeMonthBookingRecordsByUser" resultType="java.util.Map">
         SELECT br.id,br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
-        br.is_active,br.has_check_in,br.booking_time
+        br.is_active,br.has_check_in,br.booking_time,br.is_room
         FROM booking_record_history as br
         INNER JOIN user ON  br.user_id = user.id
         WHERE user_id = #{0}
@@ -50,19 +51,27 @@
     </select>
 
     <!-- 查询用户的近三个月违约记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
+    <!-- is_room用户判断是否是研习间，稍后需要删除 -->
     <select id="selectThreeMonthCreditRecordsByUser" resultType="java.util.Map">
-        SELECT *
-        FROM credit_record
-        WHERE user_id = #{0}
+        select credit_record.id as creditId,br.space_name,`user`.name,br.is_room,br.id as bookingRecordId,br.begin_time,br.end_time
+        from credit_record
+        INNER JOIN user on credit_record.user_id = user.id
+        inner JOIN booking_record_history as br on credit_record.booking_record_id = br.id
+        WHERE credit_record.user_id = #{0}
         AND credit_time > SUBDATE(CURDATE(),INTERVAL 3 month)
         ORDER BY credit_time
     </select>
 
     <!-- 查询用户的新预约记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
+    <!-- is_room用户判断是否是研习间，稍后需要删除 -->
     <select id="selectNewBookingRecords" resultType="java.util.Map">
-        SELECT * FROM credit_record WHERE user_id = #{0}
-        AND credit_time > SUBDATE(CURDATE(),INTERVAL 3 month)
-        ORDER BY credit_time
+        SELECT br.id,br.space_name,user.name,br.date,br.begin_time,br.end_time,br.permission_status,
+        br.is_active,br.has_check_in,br.booking_time,br.is_room
+        FROM booking_record as br
+        INNER JOIN user ON  br.user_id = user.id
+        WHERE user_id = #{0}
+        AND (has_check_in = 0 OR has_default = 0)
+        ORDER BY booking_time
     </select>
 
     <select id="selectAllThreeMonthBookingRecordsByUser" resultType="java.util.Map">
@@ -100,5 +109,17 @@
         WHERE credit_record.user_id = #{0}
         ORDER BY credit_time
     </select>
+
+    <select id="selectPartnerByRecordId" resultType="java.util.Map">
+        SELECT user.name
+        FROM booking_log INNER JOIN
+        user on booking_log.user_id = user.id
+        WHERE booking_record_id = #{0}
+    </select>
+
+    <delete id="deleteBookingRecord">
+        DELETE FROM booking_record
+        WHERE id = #{0}
+    </delete>
 
 </mapper>
