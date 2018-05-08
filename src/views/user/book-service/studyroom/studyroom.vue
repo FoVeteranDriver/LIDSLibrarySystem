@@ -322,9 +322,9 @@ export default {
             let tip = document.getElementsByClassName("time-tip")[0];
             if (
                 tagName !== "th" &&
-                tagName !== "div" &&
                 tagName !== "tr" &&
-                tagName !== "table"
+                tagName !== "table" &&
+                !e.target.classList.contains("selected-box")
             ) {
                 tip.style.zIndex = 1000;
                 let currentTd =
@@ -715,7 +715,6 @@ export default {
                         minutes = "0" + minutes;
                     }
                     that.validTime = serverTime + ":" + minutes;
-                    console.log(that.validTime);
                     let pastTdIndex = 15;
                     for (let i = 0; i < 15; i++) {
                         if (
@@ -791,9 +790,28 @@ export default {
                         that.rooms[roomIndex].occupations.push(order);
                     }
 
+                    let sBoxes = document.getElementsByClassName(
+                        "selected-box"
+                    );
+                    let orderTable = document.getElementsByClassName(
+                        "orderTable"
+                    )[0];
+                    while (sBoxes.length > 0) {
+                        orderTable.removeChild(sBoxes[0]);
+                    }
+
                     //绘制每间研习间已预约时间
-                    let orderTable = document.getElementsByClassName("orderTable")[0];
-                    let occNum, sTimeArr, eTimeArr, sMin, eMin, offsetMin,sRatio,totalRatio,occName,occTopic,selectedBox;
+                    let occNum,
+                        sTimeArr,
+                        eTimeArr,
+                        sMin,
+                        eMin,
+                        offsetMin,
+                        sRatio,
+                        totalRatio,
+                        occName,
+                        occTopic,
+                        selectedBox;
                     for (let i = 0; i < roomNum; i++) {
                         if (that.rooms[i].occupations) {
                             let occs = that.rooms[i].occupations;
@@ -808,36 +826,45 @@ export default {
                                     Number(eTimeArr[0]) * 60 +
                                     Number(eTimeArr[1]);
                                 offsetMin = eMin - sMin;
-                                sRatio = (sMin-420)*100 + 12;
-                                totalRatio = (offsetMin/900)*100;
+                                sRatio = (sMin - 420) / 60 * 5.8 + i*0.06 + 12;
+                                totalRatio = offsetMin / 60 * 5.8;
                                 occName = occs[j].username;
-                                occTopic = occ[j].topic;
-                                selectedBox = paintSelectedBox(i,sRatio,totalRatio,occName,occTopic);
+                                occTopic = occs[j].topic;
+                                selectedBox = that.paintSelectedBox(
+                                    i,
+                                    sRatio,
+                                    totalRatio,
+                                    occName,
+                                    occTopic
+                                );
                                 orderTable.appendChild(selectedBox);
                             }
                         }
                     }
-
-                    console.log(that.rooms);
                 })
                 .catch(function(err) {
                     console.log(err);
                 });
         },
         //绘制已选择的时间段的矩形
-        paintSelectedBox(i,sRatio,totalRatio,occName,occTopic){
+        paintSelectedBox(i, sRatio, totalRatio, occName, occTopic) {
             let selectedBox = document.createElement("div");
             selectedBox.className = "selected-box";
             selectedBox.style.position = "absolute";
-            selectedBox.style.top = i*0.42 + "rem";
+            selectedBox.style.top = i * 0.42 + "rem";
             selectedBox.style.left = sRatio + "%";
-            selectedBox.style.height = "0.42rem";
+            selectedBox.style.height = "0.39rem";
             selectedBox.style.width = totalRatio + "%";
-            let p = document.createElement("p");
-            p.innerText = occName + "：" + occTopic;
-            selectedBox.appendChild(p);
+            selectedBox.innerText = occName + "：" + occTopic;
+            let table = document.getElementsByTagName("table")[0];
+            let tr = table.getElementsByTagName("tr")[i];
+            selectedBox.addEventListener("mouseenter", function(event) {
+                tr.classList.add("active");
+            });
+            selectedBox.addEventListener("mouseleave", function(event) {
+                tr.classList.remove("active");
+            });
             return selectedBox;
-
         },
         //绘制正在选择的时间段的矩形
         paintDragBox(x, y) {
@@ -869,26 +896,29 @@ export default {
                     eval(fun);
                 }
             }
+        },
+        //请求研习间的基础数据
+        getRoomsInfo() {
+            let that = this;
+            that.$ajax
+                .get("http://iyou.s1.natapp.cc/lidsLibrary/space/roomMap")
+                .then(function(response) {
+                    let resInfo = response.data;
+                    let data = resInfo.result;
+                    let length = data.length;
+                    for (let i = 0; i < length; i++) {
+                        that.rooms.push(data[i]);
+                    }
+                    that.getOrderInfoAjax.call(this, 0);
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
         }
     },
-
-    //页面加载时请求今天的数据
+    //页面加载时请求研习间数据
     created() {
-        let that = this;
-        that.$ajax
-            .get("http://iyou.s1.natapp.cc/lidsLibrary/space/roomMap")
-            .then(function(response) {
-                let resInfo = response.data;
-                let data = resInfo.result;
-                let length = data.length;
-                for (let i = 0; i < length; i++) {
-                    that.rooms.push(data[i]);
-                }
-                that.getOrderInfoAjax.call(this, 0);
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
+        this.getRoomsInfo();
     },
     mounted() {
         let firstDayBtn = document.getElementsByClassName("week-day")[0];
