@@ -1,11 +1,8 @@
 package com.lids.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.lids.po.User;
 import com.lids.service.UserService;
-import com.lids.util.HttpClientUtil;
-import com.lids.util.ProjectProperties;
 import com.lids.util.WechatUtil;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
@@ -248,8 +245,6 @@ public class UserController {
             out.close();
     }
 
-
-
     /**
      * 模糊查询用户
      * @param key 关键字
@@ -294,7 +289,6 @@ public class UserController {
         commomDTO.setInfo(ResultEnum.SUCCESS,result);
         return commomDTO;
     }
-
 
     /**
      * 返回用户近三个月的预约记录

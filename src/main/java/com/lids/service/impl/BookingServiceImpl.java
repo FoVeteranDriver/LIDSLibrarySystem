@@ -43,7 +43,7 @@ public class BookingServiceImpl implements BookingService{
         //TODO 去掉权限测试
         if (user == null){
             user = new User();
-            user.setId(9);
+            user.setId(28);
         }
 
         //获取要预定的座位，判断是座位还是研习间

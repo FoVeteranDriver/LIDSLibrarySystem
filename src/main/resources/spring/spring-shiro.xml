@@ -100,6 +100,7 @@
                 <!--/book/**=authc,roles[teacher]-->
                 <!--/book/**=authc-->
                 /user/userInfo=authc
+                <!--/booking/addNewBooking = authc-->
                 <!--/booking/addNewBooking=authc-->
                 <!--/user/userBookingRecords=authc-->
             </value>
