@@ -23,18 +23,23 @@
                 </div>
                 <div class="header-avator-con">
                     <div class="user-dropdown-menu-con">
-                        <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-                            <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+                        <div class="user-dropdown-innercon">
+                            <Dropdown transfer trigger="click" class="user-right" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">
-                                    <span class="admin-main-user-name">{{ userName }}</span>
-                                    <Icon type="arrow-down-b" color='#9e6c63'></Icon>
+                                    <img src="../../images/admin/main-component/power.png" class="power" />
                                 </a>
                                 <DropdownMenu slot="list">
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
-                            <Avatar icon="person" style="background: #619fe7;margin-left:10px;"></Avatar>
-                        </Row>
+                            <div class="user-right">
+                                <router-link :to="{name:'admin_center'}">
+                                    <img src="../../images/admin/main-component/user-avater.png" class="user-avater" />
+                                </router-link>
+                                <span>Hi</span>
+                                <span class="main-user-name">{{userName}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

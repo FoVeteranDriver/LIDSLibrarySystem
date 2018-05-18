@@ -3,8 +3,8 @@
 </style>
 
 <template>
-    <div class="login" @keydown.enter="handleSubmit">
-        <div class="login-con">
+    <div class="admin-login" @keydown.enter="handleSubmit">
+        <div class="admin-login-con">
             <Card :bordered="false">
                 <p slot="title">
                     <router-link :to="{name:'home'}">
@@ -43,6 +43,16 @@
 import Cookies from 'js-cookie';
 export default {
     data () {
+        const validPass=(rule,value,callback)=>{
+            let p=/^[0-9a-zA-Z]{6,}/;
+            if(value==''){
+                callback(new Error('密码不能为空'));
+            }
+            if(!p.test(value)){
+                callback(new Error('密码长度有误'));
+            }
+            callback();
+        };
         return {
             form: {
                 userName: '',
@@ -53,7 +63,7 @@ export default {
                     { required: true, message: '账号不能为空', trigger: 'blur' }
                 ],
                 password: [
-                    { required: true, message: '密码不能为空', trigger: 'blur' }
+                    { validator:validPass, trigger: 'blur' }
                 ]
             }
         };

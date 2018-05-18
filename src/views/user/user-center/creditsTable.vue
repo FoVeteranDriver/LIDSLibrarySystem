@@ -26,6 +26,12 @@
         props:{
             tableList:{
                 type:Array
+            },
+            currentCredits:{
+                type:Number
+            },
+            totalCredits:{
+                type:Number
             }
         },
         data(){
@@ -34,8 +40,6 @@
                 pageSize:2,
                 partialRecords:[],
                 dialogState:false,
-                totalCredits:0,
-                currentCredits:0,
                 creditsList:[],
                 creditsTable:[
                     {

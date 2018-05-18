@@ -42,7 +42,8 @@ export const otherRouter = {
     name: 'otherRouter',
     component: Main,
     children: [
-        { path: '/', title: { i18n: 'admin_index' }, name: 'admin_index', component: resolve => { require(['@/views/admin/settings/authority/index.vue'], resolve); } }
+        { path: '/admin_index', title: '首页', name: 'admin_index', component: resolve => { require(['@/views/admin/settings/authority/index.vue'], resolve); } },
+        {path: '/admin_center', title: '管理员中心', name: 'admin_center', component: resolve => { require(['@/views/admin/admin-center/admin_center.vue'], resolve); }}
     ]
 };
 

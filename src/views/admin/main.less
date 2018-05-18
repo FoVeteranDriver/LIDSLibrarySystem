@@ -96,6 +96,11 @@ html,body{
                 overflow: visible;
                 white-space: nowrap;
                 transition: left .3s ease;
+                .ivu-tag-blue.ivu-tag-dot{
+                    .ivu-tag-dot-inner{
+                        background: #9e6c63;
+                    }
+                }
             }
             .close-all-tag-con{
                 position: absolute;
@@ -109,6 +114,10 @@ html,body{
                 background: white;
                 box-shadow: -3px 0 15px 3px rgba(0, 0, 0, .1);
                 z-index: 10;
+                .ivu-btn-primary{
+                    background-color: #3f3140;
+                    border-color: #3f3140;
+                }
             }
         }
     }
@@ -123,7 +132,7 @@ html,body{
             display: inline-block;
             padding: 0.1rem 0;
             color: #9e6c63;
-            font-size: 0.16rem;
+            font-size: 0.18rem;
             font-weight: 500;
         }
         .header-middle-con{
@@ -164,27 +173,47 @@ html,body{
                     position: absolute;
                     right: 0;
                     top: 0;
-                    width: 2.5rem;
                     height: 100%;
-                    a{
-                        font-size: 0.16rem;
-                        .admin-main-user-name{
-                            display: inline-block;
-                            width: 160px;
-                            word-break: keep-all;
-                            white-space: nowrap;
-                            color: #9e6c63;
-                            vertical-align: middle;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            text-align: right;
-                        }
+                    font-size: 0.20rem;
+                    font-weight: 500;
+                    .main-user-name{
+                        display: inline-block;
+                        padding:0 0.2rem 0 0.03rem;
+                        max-width: 2.87rem;
+                        word-break: keep-all;
+                        white-space: nowrap;
+                        vertical-align: bottom;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
-                    
                 }
                 &-innercon{
                     height: 100%;
-                    padding-right: 14px;
+                    padding: 0.04rem;
+                    width: 4rem;
+                    min-width: 3.5rem;
+                    color: #825f5d;
+                    .user-right{
+                        float: right;
+                        display: inline-block;
+                        white-space:nowrap;
+                        overflow: hidden;
+                    }
+                    .ivu-dropdown{
+                        position: relative;
+                        top: 0.1rem;
+                        left: -0.08rem;
+                    }
+                    .user-avater,.power{
+                        width: 0.30rem;
+                        height: auto;
+                        position: relative;
+                        bottom: -0.06rem;
+                    }
+                    .power{
+                        width: 0.2rem;
+                      
+                    }
                 }
             }
             .full-screen-btn-con{
