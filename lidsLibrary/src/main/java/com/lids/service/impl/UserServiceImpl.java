@@ -1,5 +1,6 @@
 package com.lids.service.impl;
 
+import com.lids.common.BaseService;
 import com.lids.dao.UserDao;
 import com.lids.po.User;
 import com.lids.service.UserService;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service("UserService")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl extends BaseService implements UserService{
 
     private static final Integer numPerPage = 10;
 
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService{
                 List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("id")).intValue());
                 one.put("partner",partner);
             }else {
-                one.put("partner","个人预约");
+                one.put("partner","");
             }
             one.remove("is_room");
         }
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService{
                 List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("bookingRecordId")).intValue());
                 one.put("partner",partner);
             }else {
-                one.put("partner","个人预约");
+                one.put("partner","");
             }
             one.remove("is_room");
             one.remove("bookingRecordId");
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService{
                 List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("id")).intValue());
                 one.put("partner",partner);
             }else {
-                one.put("partner","个人预约");
+                one.put("partner","");
             }
             one.remove("is_room");
         }

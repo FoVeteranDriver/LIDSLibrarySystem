@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.lids.common.BaseController;
 import com.lids.util.TimeUtil;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class InfoController {
+public class InfoController extends BaseController {
 
     @RequestMapping("/info/login")
     @ResponseBody

@@ -1,6 +1,7 @@
 package com.lids.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lids.common.BaseController;
 import com.lids.po.User;
 import com.lids.service.UserService;
 import com.lids.util.HttpClientUtil;
@@ -22,9 +23,7 @@ import javax.servlet.http.HttpSession;
  * @description 静默登陆
  */
 @Controller
-public class WechatOAuth {
-
-    private static Logger logger = LoggerFactory.getLogger(WechatOAuth.class);
+public class WechatOAuth extends BaseController {
 
     @Resource
     private UserService userService;

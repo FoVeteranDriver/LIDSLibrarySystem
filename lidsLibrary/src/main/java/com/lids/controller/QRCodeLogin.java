@@ -2,6 +2,7 @@ package com.lids.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lids.common.BaseController;
 import com.lids.util.AccessTokenUtil;
 import com.lids.util.HttpClientUtil;
 import org.apache.http.client.ResponseHandler;
@@ -26,7 +27,7 @@ import java.util.TreeMap;
  * @description 二维码相关
  */
 @Controller
-public class QRCodeLogin {
+public class QRCodeLogin extends BaseController {
 
     // 临时二维码
     private final static String QR_SCENE = "QR_SCENE";

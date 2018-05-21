@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.lids.common.BaseController;
 import com.lids.po.Notice;
 import com.lids.service.NoticeService;
 import com.lids.vo.CommomDTO;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 
 @Controller
-public class NoticeController {
+public class NoticeController extends BaseController {
 
     @Resource
     private NoticeService noticeService;

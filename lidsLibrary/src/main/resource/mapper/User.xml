@@ -53,7 +53,7 @@
     <!-- 查询用户的近三个月违约记录，#{0}用户id,#{1}页数,#{2}每页记录数 -->
     <!-- is_room用户判断是否是研习间，稍后需要删除 -->
     <select id="selectThreeMonthCreditRecordsByUser" resultType="java.util.Map">
-        select credit_record.id as creditId,br.space_name,`user`.name,br.is_room,br.id as bookingRecordId,br.begin_time,br.end_time
+        select credit_record.id as id,br.space_name,`user`.name,br.is_room,br.id as bookingRecordId,br.begin_time,br.end_time,br.booking_time
         from credit_record
         INNER JOIN user on credit_record.user_id = user.id
         inner JOIN booking_record_history as br on credit_record.booking_record_id = br.id

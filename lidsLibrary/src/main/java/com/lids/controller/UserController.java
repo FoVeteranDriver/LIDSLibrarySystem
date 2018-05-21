@@ -1,6 +1,7 @@
 package com.lids.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.lids.common.BaseController;
 import com.lids.po.User;
 import com.lids.service.UserService;
 import com.lids.util.WechatUtil;
@@ -34,9 +35,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("user")
-public class UserController {
-
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+public class UserController extends BaseController {
 
     @Resource
     private UserService userService;

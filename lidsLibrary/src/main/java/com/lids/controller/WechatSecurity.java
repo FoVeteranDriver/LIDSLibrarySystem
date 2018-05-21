@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.lids.common.BaseController;
 import com.lids.util.SignUtil;
 import com.lids.util.WechatMessageUtil;
 import org.slf4j.Logger;
@@ -20,9 +21,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/wechat")
-public class WechatSecurity {
-
-    private static Logger logger = LoggerFactory.getLogger(WechatSecurity.class);
+public class WechatSecurity extends BaseController {
 
     @RequestMapping(value = "security",method = RequestMethod.GET)
     public void doGet(

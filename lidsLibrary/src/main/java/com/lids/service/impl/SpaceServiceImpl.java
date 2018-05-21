@@ -1,11 +1,10 @@
 package com.lids.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
+import com.lids.common.BaseService;
 import com.lids.dao.ScheduleDao;
 import com.lids.dao.SpaceDao;
 import com.lids.po.Area;
-import com.lids.po.Scheduler;
 import com.lids.po.Space;
 import com.lids.service.SpaceService;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Service("SpaceService")
-public class SpaceServiceImpl implements SpaceService{
+public class SpaceServiceImpl extends BaseService implements SpaceService{
 
     @Resource
     private SpaceDao spaceDao;

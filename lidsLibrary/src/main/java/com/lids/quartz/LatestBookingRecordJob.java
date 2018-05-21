@@ -38,7 +38,7 @@ public class LatestBookingRecordJob{
     @Resource
     private BookingDao bookingDao;
 
-    public void execute() {
+    public void execute() throws Exception{
         logger.debug("开始更新redis");
         //从数据库获取现在为止最新的预定记录
         List<Map<String,String>> result = bookingDao.getAllTodayRecords();

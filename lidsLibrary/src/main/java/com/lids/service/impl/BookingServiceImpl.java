@@ -1,6 +1,7 @@
 package com.lids.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.lids.common.BaseService;
 import com.lids.dao.BookingDao;
 import com.lids.dao.SpaceDao;
 import com.lids.po.BookingRecord;
@@ -22,9 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Service("BookingService")
-public class BookingServiceImpl implements BookingService{
-
-    private static Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
+public class BookingServiceImpl extends BaseService implements BookingService{
 
     @Resource
     private BookingDao bookingDao;
@@ -108,7 +107,12 @@ public class BookingServiceImpl implements BookingService{
 //        return bookingDao.getTodayRecords(TimeUtil.getTodayDate(),Integer.valueOf(offset));
         //初始化redis中的记录
         if (!LatestBookingRecordJob.init){
-            latestBookingRecordJob.execute();
+            try {
+                latestBookingRecordJob.execute();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             LatestBookingRecordJob.init = true;
         }
 

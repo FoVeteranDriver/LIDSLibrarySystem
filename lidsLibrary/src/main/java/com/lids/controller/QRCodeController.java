@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.lids.common.BaseController;
 import com.lids.service.impl.QuartzService;
 import com.lids.util.ProjectProperties;
 import com.lids.util.QrGenUtil;
@@ -24,9 +25,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
-public class QRCodeController {
-
-    private static Logger logger = LoggerFactory.getLogger(QRCodeController.class);
+public class QRCodeController extends BaseController {
 
     public static Cache uuidCache;
     public static Map<String,String> cache = new HashMap<String, String>();

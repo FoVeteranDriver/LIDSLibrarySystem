@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.lids.common.BaseController;
 import com.lids.po.Area;
 import com.lids.po.Scheduler;
 import com.lids.po.Space;
@@ -21,7 +22,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("space")
-public class SpaceController {
+public class SpaceController extends BaseController {
 
     @Resource
     private SpaceService spaceService;

@@ -1,5 +1,6 @@
 package com.lids.controller;
 
+import com.lids.common.BaseController;
 import com.lids.po.BookingRecord;
 import com.lids.po.User;
 import com.lids.service.BookingService;
@@ -24,9 +25,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("booking")
-public class BookingController {
-
-    private static Logger logger = LoggerFactory.getLogger(BookingController.class);
+public class BookingController extends BaseController{
 
     @Resource
     private BookingService bookingService;
@@ -44,18 +43,6 @@ public class BookingController {
     @RequestMapping(value = "/addNewBooking",method = RequestMethod.POST)
     @ResponseBody
     public CommomDTO addNewBooking(@RequestBody Map<String,String> params,HttpServletRequest request) throws Exception{
-
-        Cookie[] cookie = request.getCookies();
-        for (int i = 0; i < cookie.length; i++) {
-            Cookie cook = cookie[i];
-            System.out.println("----------------------------------------------------------------------------------------------------------------------");
-            System.out.println("----------------------------------------------------------------------------------------------------------------------");
-            System.out.println("----------------------------------------------------------------------------------------------------------------------");
-            System.out.println("----------------------------------------------------------------------------------------------------------------------");
-            System.out.println("----------------------------------------------------------------------------------------------------------------------");
-            System.out.println("cookie:" + cook.getValue().toString());
-            System.out.println("----------------------------------------------------------------------------------------------------------------------");
-        }
 
         BookingRecord bookingRecord = new BookingRecord();
         //验证输入参数
@@ -94,6 +81,11 @@ public class BookingController {
                 bookingRecord.getEndTime(),
                 bookingRecord.getSpaceId())){
             return new CommomDTO(ResultEnum.HAS_BOOKING);
+        }
+
+        //判断用户积分是否为零
+        if (false){
+            return new CommomDTO(ResultEnum.SCORE_ZERO);
         }
 
         //获取传输的伙伴名单
