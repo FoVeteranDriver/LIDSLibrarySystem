@@ -1,20 +1,17 @@
 package com.lids.controller;
 
-import com.lids.po.AdminPermission;
 import com.lids.po.AdminUser;
 import com.lids.service.AdminUserService;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +40,24 @@ public class AdminUserController {
                 SecurityUtils.getSubject().login(token);
                 Map map = new HashMap();
                 map.put("account",getUser.getAccount());
+                List accessList = adminUserService.generateMap(params.get("account"));
+                //登陆2权限也要全部变成1，前端方便处理
+                for (int i=0;i<3;i++){
+                    Map one = (Map)accessList.get(i);
+                    if ((Integer)one.get("access") == 2){
+                        one.put("access",1);
+                    }
+                    List children = (List) one.get("children");
+                    for (Object o:
+                         children) {
+                        Map child = (Map)o;
+                        if ((Integer)child.get("access") == 2){
+                            child.put("access",1);
+                        }
+                    }
+                }
 
-                map.put("accessList",adminUserService.generateMap(params.get("account")));
+                map.put("accessList",accessList);
 
                 CommomDTO commomDTO = new CommomDTO();
                 commomDTO.setInfo(ResultEnum.SUCCESS,map);
@@ -73,6 +86,11 @@ public class AdminUserController {
         return new CommomDTO(ResultEnum.SUCCESS);
     }
 
+    /**
+     * 新建管理员
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/addAdmin",method = RequestMethod.POST)
     @ResponseBody
     public CommomDTO addAdmin(@RequestBody Map params){
@@ -96,6 +114,11 @@ public class AdminUserController {
         return new CommomDTO(ResultEnum.FAILED);
     }
 
+    /**
+     * 判断管理员账号是否可用
+     * @param account
+     * @return
+     */
     @RequestMapping(value = "/isAccountExist",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO isAccountExist(@RequestParam String account){
@@ -106,6 +129,10 @@ public class AdminUserController {
         return new CommomDTO(ResultEnum.ACCOUNT_NOTUSER);
     }
 
+    /**
+     * 获取管理员列表
+     * @return
+     */
     @RequestMapping(value = "/adminList",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO adminList(){
@@ -115,6 +142,11 @@ public class AdminUserController {
         return commomDTO;
     }
 
+    /**
+     * 删除管理员
+     * @param account
+     * @return
+     */
     @RequestMapping(value = "/deleteAdmin",method = RequestMethod.DELETE)
     @ResponseBody
     public CommomDTO deleteAdmin(@RequestParam String account){
@@ -125,6 +157,11 @@ public class AdminUserController {
         return new CommomDTO(ResultEnum.SUCCESS);
     }
 
+    /**
+     * 根据关键字搜索管理员
+     * @param key 关键字
+     * @return
+     */
     @RequestMapping(value = "searchAdmin",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO searchAdmin(@RequestParam String key){

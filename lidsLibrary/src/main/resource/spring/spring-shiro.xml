@@ -97,13 +97,14 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                <!--/book/**=authc,roles[teacher]-->
-                <!--/book/**=authc-->
-                /user/userInfo=authc
                 /booking/addNewBooking = authc
+                /user/userInfo=authc
                 /user/userBookingRecords=authc
                 /user/score = authc
                 /user/deleteBookingRecord = authc
+                /user/userRecords = authc
+                /user/searchUser = authc
+                /** = anon
             </value>
         </property>
     </bean>

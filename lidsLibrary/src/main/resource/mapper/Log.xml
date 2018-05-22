@@ -1,0 +1,14 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.LogDao">
+
+    <insert id="insert" parameterType="com.lids.po.Log" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_log
+        (title,remote_addr,user_agent,request_uri,method,params,exception,user_type,user_name,user_id)
+        VALUES
+        (#{title},#{remoteAddr},#{userAgent},#{requestUri},#{method},#{params},#{exception},
+        #{userType},#{userName},#{userId})
+    </insert>
+
+</mapper>

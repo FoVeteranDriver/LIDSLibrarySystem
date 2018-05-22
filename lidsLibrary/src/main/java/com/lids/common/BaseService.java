@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author yaoyou
  */
+@Transactional
 public abstract class BaseService{
 
     /**
