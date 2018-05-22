@@ -1,6 +1,5 @@
 package com.lids.shiro;
 
-
 import com.lids.po.User;
 import com.lids.service.UserService;
 import org.apache.shiro.SecurityUtils;

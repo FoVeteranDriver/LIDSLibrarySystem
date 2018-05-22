@@ -4,6 +4,7 @@ import com.lids.dao.AdminUserDao;
 import com.lids.po.AdminPermission;
 import com.lids.po.AdminUser;
 import com.lids.service.AdminUserService;
+import com.lids.service.BaseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Service("AdminUserService")
-public class AdminUserServiceImpl implements AdminUserService{
+public class AdminUserServiceImpl extends BaseService implements AdminUserService {
 
     @Resource
     private AdminUserDao adminUserDao;
@@ -52,7 +53,6 @@ public class AdminUserServiceImpl implements AdminUserService{
 
         return permissionSet;
     }
-
 
     @Override
     @Transactional
