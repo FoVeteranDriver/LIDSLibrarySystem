@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.AdminUserDao">
+
+    <select id="selectUserByUserName" resultType="com.lids.po.AdminUser">
+        SELECT * FROM admin_user
+        WHERE account = #{0}
+        AND del_flag = 0
+    </select>
+
+    <select id="selectPermission" resultType="java.util.Map">
+        SELECT * FROM admin_permission
+        WHERE admin_user_name = #{0}
+    </select>
+    
+    <insert id="insertNewAdmin" parameterType="com.lids.po.AdminUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO admin_user
+        (account,password,name,phone,email)
+        VALUES (#{account},#{password},#{name},#{phone},#{email})
+    </insert>
+
+    <insert id="insertPermission" parameterType="com.lids.po.AdminPermission">
+        INSERT  INTO admin_permission
+        (admin_user_name,admin_user_id,admin_settings,admin_authority,admin_rules,admin_display,admin_space,admin_management,admin_mSpace,admin_credits,admin_activity,admin_data,admin_data1,admin_data2)
+        VALUES
+        (#{admin_user_name},#{admin_user_id},#{admin_settings},#{admin_authority},#{admin_rules},#{admin_display},#{admin_space},#{admin_management},#{admin_mSpace},#{admin_credits},#{admin_activity},#{admin_data},#{admin_data1},#{admin_data2})
+    </insert>
+
+    <select id="selectAllAdmin" resultType="com.lids.po.AdminUser">
+        SELECT * FROM admin_user
+        WHERE del_flag = 0
+    </select>
+
+    <select id="searchAdmin" resultType="com.lids.po.AdminUser" parameterType="java.util.Map">
+        SELECT * FROM admin_user
+        WHERE (account LIKE  '%${key}%'
+        OR name LIKE  '%${key}%')
+        AND del_flag = 0
+        ORDER  BY id
+    </select>
+
+    <update id="deleteAdmin">
+        UPDATE admin_user
+        SET del_flag = 1
+        WHERE account = #{0}
+    </update>
+
+</mapper>

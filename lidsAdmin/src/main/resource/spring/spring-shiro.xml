@@ -97,11 +97,7 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                <!--/book/**=authc,roles[teacher]-->
-                <!--/book/**=authc-->
-                <!--/user/userInfo=authc-->
-                <!--/booking/addNewBooking=authc-->
-                <!--/user/userBookingRecords=authc-->
+                /perm=authc,perms["admin-rules:read"]
             </value>
         </property>
     </bean>
@@ -109,7 +105,7 @@
     <!-- Realm实现 -->
 	<bean id="userRealm" class="com.lids.shiro.UserRealm">
         <property name="cachingEnabled" value="true"/>
-        <property name="userService" ref="UserService"/>
+        <property name="adminUserService" ref="AdminUserService"/>
         <property name="authorizationCachingEnabled" value="true"/>
         <property name="authorizationCacheName" value="authorizationCache"/>
     </bean>
