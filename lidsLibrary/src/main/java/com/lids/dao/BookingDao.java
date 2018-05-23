@@ -25,4 +25,6 @@ public interface BookingDao {
     Integer getTopId();
 
     Integer getCount();
+
+    Integer setCredit(int bookingRecordId);
 }

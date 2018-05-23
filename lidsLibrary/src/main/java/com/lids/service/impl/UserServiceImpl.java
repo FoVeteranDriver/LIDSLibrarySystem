@@ -1,6 +1,7 @@
 package com.lids.service.impl;
 
 import com.lids.common.BaseService;
+import com.lids.dao.CreditDao;
 import com.lids.dao.UserDao;
 import com.lids.po.User;
 import com.lids.service.UserService;
@@ -18,6 +19,8 @@ public class UserServiceImpl extends BaseService implements UserService{
 
     @Resource
     private UserDao userDao;
+    @Resource
+    private CreditDao creditDao;
 
     public boolean signUp(User user){
         int result =userDao.signUp(user);
@@ -138,5 +141,10 @@ public class UserServiceImpl extends BaseService implements UserService{
 
     public void deleteBookingRecord(int bookingRecordId) {
         userDao.deleteBookingRecord(bookingRecordId);
+    }
+
+    @Override
+    public Integer getBanStatus(int userId) {
+        return creditDao.getUserBan(userId);
     }
 }

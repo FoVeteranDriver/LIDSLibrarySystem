@@ -1,6 +1,7 @@
 package com.lids.service.impl;
 
 import com.lids.quartz.CreditDetectJob;
+import com.lids.quartz.LiftBanJob;
 import com.lids.quartz.QRCodeDeleteJob;
 import com.lids.util.TimeUtil;
 import org.quartz.*;
@@ -106,4 +107,30 @@ public class QuartzService {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 解除用户禁用
+     * @param userId 解禁用户id
+     * @param time 解禁时间
+     */
+    public static void addJobForLiftBan(int userId,String time){
+        UUID randomUUID = UUID.randomUUID();
+        JobDetail job = newJob(LiftBanJob.class)
+                .withIdentity(randomUUID.toString(), jobGroupName)
+                .usingJobData("userId", userId)
+                .build();
+
+        SimpleTrigger  trigger = (SimpleTrigger)newTrigger()
+                .withIdentity(randomUUID.toString(), jobGroupName)
+                .startAt(futureDate(3, DateBuilder.IntervalUnit.MINUTE))
+                .build();
+
+        try{
+            scheduler.scheduleJob(job, trigger);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
 }

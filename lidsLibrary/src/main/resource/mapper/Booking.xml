@@ -84,4 +84,10 @@
         WHERE id = #{0}
     </select>
 
+    <update id="setCredit">
+        UPDATE booking_record
+        SET has_default=1
+        WHERE id=#{0};
+    </update>
+
 </mapper>

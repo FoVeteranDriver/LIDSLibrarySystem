@@ -5,6 +5,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
                             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
+    <!--扫描quartz包下所有使用注解的类型(子包也包括)-->
+    <context:component-scan base-package="com.lids.quartz" />
+
     <!-- 获取accesstoken的任务 -->
     <bean id="AccessTokenJob" class="com.lids.quartz.AccessTokenJob"></bean>
     <bean id="AccessTokenJobDetail"

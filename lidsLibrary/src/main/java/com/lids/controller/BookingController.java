@@ -10,6 +10,7 @@ import com.lids.util.TimeUtil;
 import com.lids.util.WechatUtil;
 import com.lids.vo.CommomDTO;
 import com.lids.vo.ResultEnum;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -83,8 +84,9 @@ public class BookingController extends BaseController{
             return new CommomDTO(ResultEnum.HAS_BOOKING);
         }
 
-        //判断用户积分是否为零
-        if (false){
+        //判断用户积分是否被禁用
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
+        if (userService.getBanStatus(user.getId()) == 1){
             return new CommomDTO(ResultEnum.SCORE_ZERO);
         }
 

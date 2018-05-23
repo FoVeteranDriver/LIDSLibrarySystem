@@ -34,4 +34,6 @@ public interface UserService {
     List<Map<String,String>> selectDeductionRecord(int userId);
 
     void deleteBookingRecord(int bookingRecordId);
+
+    Integer getBanStatus(int userId);
 }

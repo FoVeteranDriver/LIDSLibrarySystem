@@ -11,4 +11,60 @@
         )}
     </insert>
 
+    <select id="getUserTypeName" resultType="java.lang.String">
+        SELECT user_type_name
+        FROM user
+        WHERE id=#{0}
+    </select>
+
+    <select id="getScoreRedule" resultType="java.lang.Integer">
+        SELECT score_reduce
+        FROM credit_rule
+        WHERE user_type_name= #{0}
+        AND credit_type=1;
+    </select>
+    
+    <select id="getCreditRuleName" resultType="java.lang.String">
+        SELECT rule_name
+        FROM credit_rule
+        WHERE user_type_name = #{0}
+        AND credit_type=1;
+    </select>
+
+    <insert id="insertCreditRecord">
+        INSERT INTO credit_record (user_id, booking_record_id, score_reduce, credit_rule_name)
+        VALUE
+        (#{0}, #{1}, #{2}, #{3});
+    </insert>
+
+    <update id="updateUserScore">
+        UPDATE user
+        SET credit_score = credit_score - #{1}
+        WHERE id = #{0}
+    </update>
+
+    <update id="updateUserBan">
+        UPDATE user
+        SET ban_duration = 1
+        WHERE id = #{0}
+    </update>
+
+    <select id="selectUserScore" resultType="java.lang.Integer">
+        SELECT credit_score
+        FROM user
+        WHERE id = #{0}
+    </select>
+
+    <update id="liftUserBan">
+        UPDATE user
+        SET ban_duration = 0
+        WHERE id = #{0}
+    </update>
+
+    <select id="getUserBan" resultType="java.lang.Integer">
+        SELECT ban_duration
+        FROM user
+        WHERE id = #{0}
+    </select>
+
 </mapper>
