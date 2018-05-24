@@ -27,7 +27,7 @@ public interface UserDao {
 
     String selectUserScore(String libraryCardNumber);
 
-    void updateUserInfo(int userId, String telephone, String email);
+    Integer updateUserInfo(int userId, String telephone, String email);
 
     String selectTotalScore(String userTypeName);
 
@@ -35,5 +35,5 @@ public interface UserDao {
 
     List<Map> selectPartnerByRecordId(int bookingRecordId);
 
-    void deleteBookingRecord(int bookingRecordId);
+    Integer deleteBookingRecord(int bookingRecordId);
 }

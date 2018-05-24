@@ -15,25 +15,15 @@ public interface UserService {
 
     List<Map<String,String>> fuzzySearch(String key);
 
-    List<Map<String,String>> selectBookingRecordsByUser(int userId, int page);
-
     List<Map<String,String>> selectAllBookingRecordsByUser(int userId);
-
-    List<Map<String,String>> selectCreditRecordsByUser(int userId, int page);
-
-    List<Map<String,String>> selectNewBookingByUser(int userId, int page);
 
     Map<String,String> selectUserInfo(String libraryCardNumber);
 
-    String selectUserScore(String libraryCardNumber);
+    boolean updateUserInfo(String telephone, String email);
 
-    void updateUserInfo(int userId, String telephone, String email);
+    boolean deleteBookingRecord(int bookingRecordId);
 
-    String selectTotalScore(String userTypeName);
+    List<Map<String,String>> getRecords(String type,int page);
 
-    List<Map<String,String>> selectDeductionRecord(int userId);
-
-    void deleteBookingRecord(int bookingRecordId);
-
-    Integer getBanStatus(int userId);
+    Map<String,Object> getScore();
 }

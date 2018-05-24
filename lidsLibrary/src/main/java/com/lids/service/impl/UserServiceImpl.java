@@ -5,6 +5,7 @@ import com.lids.dao.CreditDao;
 import com.lids.dao.UserDao;
 import com.lids.po.User;
 import com.lids.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,54 +49,27 @@ public class UserServiceImpl extends BaseService implements UserService{
         return result;
     }
 
-    public List<Map<String, String>> selectBookingRecordsByUser(int userId,int page) {
-        List<Map<String, String>> result = userDao.selectThreeMonthBookingRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
-        //去除开始时间和结束时间的秒数
-        for (Map one : result){
-            String beginTime = one.get("begin_time").toString();
-            String endTime = (String)one.get("end_time").toString();
-            one.put("begin_time",beginTime.substring(0,5));
-            one.put("end_time",endTime.substring(0,5));
-
-            if ((Boolean) one.get("is_room")){
-                List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("id")).intValue());
-                one.put("partner",partner);
-            }else {
-                one.put("partner","");
-            }
-            one.remove("is_room");
-        }
-        return result;
-    }
-
     public List<Map<String, String>> selectAllBookingRecordsByUser(int userId) {
         return userDao.selectAllThreeMonthBookingRecordsByUser(userId);
     }
 
-    public List<Map<String, String>> selectCreditRecordsByUser(int userId, int page) {
-        List<Map<String,String>> result = userDao.selectThreeMonthCreditRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
-        for (Map one : result){
-            String beginTime = one.get("begin_time").toString();
-            String endTime = (String)one.get("end_time").toString();
-            one.put("begin_time",beginTime.substring(0,5));
-            one.put("end_time",endTime.substring(0,5));
-
-            if ((Boolean) one.get("is_room")){
-                List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("bookingRecordId")).intValue());
-                one.put("partner",partner);
-            }else {
-                one.put("partner","");
+    @Override
+    public List<Map<String, String>> getRecords(String type,int page) {
+        List<Map<String,String>> result = null;
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
+        if (user != null){
+            int userId = user.getId();
+            if (type.equals("new")){
+                result = userDao.selectNewBookingRecords(userId,(page-1)*numPerPage,numPerPage);
+            }else if (type.equals("old")){
+                result = userDao.selectThreeMonthBookingRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
+            }else if (type.equals("credit")){
+                result = userDao.selectThreeMonthCreditRecordsByUser(userId,(page-1)*numPerPage,numPerPage);
+                for (Map one : result){
+                    one.remove("bookingRecordId");
+                }
             }
-            one.remove("is_room");
-            one.remove("bookingRecordId");
         }
-        return result;
-    }
-
-    public List<Map<String, String>> selectNewBookingByUser(int userId, int page) {
-        //查询用户新预约记录
-        List<Map<String, String>> result = userDao.selectNewBookingRecords(userId,(page-1)*numPerPage,numPerPage);
-        //去除开始时间和结束时间的秒数
         for (Map one : result){
             String beginTime = one.get("begin_time").toString();
             String endTime = (String)one.get("end_time").toString();
@@ -117,34 +91,40 @@ public class UserServiceImpl extends BaseService implements UserService{
         return userDao.selectUserInfo(libraryCardNumber);
     }
 
-    public String selectUserScore(String libraryCardNumber) {
-        return userDao.selectUserScore(libraryCardNumber);
-    }
-
-    public void updateUserInfo(int userId, String telephone, String email) {
-        userDao.updateUserInfo(userId,telephone,email);
-    }
-
-    public String selectTotalScore(String userTypeName) {
-        return userDao.selectTotalScore(userTypeName);
-    }
-
-    public List<Map<String,String>> selectDeductionRecord(int userId) {
-        List<Map<String,String>> result = userDao.selectDeductionRecord(userId);
-        //格式化时间
-        for (Map one : result){
-            String credit_time = one.get("credit_time").toString();
-            one.put("credit_time",credit_time.substring(0,10));
+    public boolean updateUserInfo(String telephone, String email) {
+        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+        int result = userDao.updateUserInfo(user.getId(),telephone,email);
+        if (result == 1){
+            return true;
         }
-        return result;
+        return false;
     }
 
-    public void deleteBookingRecord(int bookingRecordId) {
-        userDao.deleteBookingRecord(bookingRecordId);
+    public boolean deleteBookingRecord(int bookingRecordId) {
+        int result = userDao.deleteBookingRecord(bookingRecordId);
+        if (result == 1){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override
-    public Integer getBanStatus(int userId) {
-        return creditDao.getUserBan(userId);
+    public Map<String, Object> getScore() {
+        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+        Map<String,Object> userInfo = new HashMap<>();
+        String userNowScore = userDao.selectUserScore(user.getLibraryCardNumber());
+        userInfo.put("userScore",userNowScore);
+        String totalScore = userDao.selectTotalScore(user.getUserTypeName());
+        userInfo.put("totalScore",totalScore);
+
+        List<Map<String,String>> creditRecord = userDao.selectDeductionRecord(user.getId());
+        //格式化时间
+        for (Map one : creditRecord){
+            String credit_time = one.get("credit_time").toString();
+            one.put("credit_time",credit_time.substring(0,10));
+        }
+        userInfo.put("record",creditRecord);
+        return userInfo;
     }
 }

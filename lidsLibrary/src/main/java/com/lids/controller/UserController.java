@@ -265,25 +265,10 @@ public class UserController extends BaseController {
     @RequestMapping("/userRecords")
     @ResponseBody
     public CommomDTO getUserBookingRecords(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "old") String type){
-        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
-
-        //TODO 去掉权限测试
-        if (user == null){
-            user = new User();
-            user.setId(28);
-        }
-
-        List<Map<String,String>> result;
-        if (type.equals("new")){
-            result = userService.selectNewBookingByUser(user.getId(),page);
-        }else if (type.equals("old")){
-            result = userService.selectBookingRecordsByUser(user.getId(),page);
-        }else if (type.equals("credit")){
-            result = userService.selectCreditRecordsByUser(user.getId(),page);
-        }else {
+        if (!type.equals("old") && !type.equals("new") && !type.equals("credit")){
             return new CommomDTO(ResultEnum.PARAMS_ERROR);
         }
-
+        List<Map<String,String>> result = userService.getRecords(type,page);
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,result);
         return commomDTO;
@@ -298,12 +283,6 @@ public class UserController extends BaseController {
     public CommomDTO getUserBookingRecords(){
         User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
 
-        //TODO 去掉权限测试
-        if (user == null){
-            user = new User();
-            user.setId(28);
-        }
-
         List<Map<String,String>> result = userService.selectAllBookingRecordsByUser(user.getId());
 
         CommomDTO commomDTO = new CommomDTO();
@@ -314,26 +293,7 @@ public class UserController extends BaseController {
     @RequestMapping("/score")
     @ResponseBody
     public CommomDTO getUserScore(){
-        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
-
-        //TODO 去掉权限测试
-        if (user == null){
-            user = new User();
-            user.setId(28);
-            user.setLibraryCardNumber("201430612164");
-            user.setUserTypeName("本科生");
-        }
-
-        Map<String,Object> userInfo = new HashMap<String, Object>();
-
-        String userNowScore = userService.selectUserScore(user.getLibraryCardNumber());
-        userInfo.put("userScore",userNowScore);
-        String totalScore = userService.selectTotalScore(user.getUserTypeName());
-        userInfo.put("totalScore",totalScore);
-
-        List<Map<String,String>> creditRecord = userService.selectDeductionRecord(user.getId());
-        userInfo.put("record",creditRecord);
-
+        Map<String,Object> userInfo = userService.getScore();
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,userInfo);
         return commomDTO;
@@ -349,23 +309,21 @@ public class UserController extends BaseController {
             return new CommomDTO(ResultEnum.PARAMS_ERROR);
         }
 
-        User user = (User)SecurityUtils.getSubject().getSession().getAttribute("user");
-
-        //TODO 去掉权限测试
-        if (user == null){
-            user = new User();
-            user.setId(28);
+        if (userService.updateUserInfo(telephone,email)){
+            return new CommomDTO(ResultEnum.SUCCESS);
+        }else {
+            return new CommomDTO(ResultEnum.FAILED);
         }
-
-        userService.updateUserInfo(user.getId(),telephone,email);
-        return new CommomDTO(ResultEnum.SUCCESS);
     }
 
     @RequestMapping(value = "/deleteBookingRecord",method = RequestMethod.DELETE)
     @ResponseBody
     public CommomDTO deleteBookingRecord(@RequestParam int bookingRecordId){
-        userService.deleteBookingRecord(bookingRecordId);
-        return new CommomDTO(ResultEnum.SUCCESS);
+        if (userService.deleteBookingRecord(bookingRecordId)){
+            return new CommomDTO(ResultEnum.SUCCESS);
+        }else {
+            return new CommomDTO(ResultEnum.FAILED);
+        }
     }
 
 }

@@ -59,6 +59,7 @@ public class BookingController extends BaseController{
             logger.debug("参数有空");
             return new CommomDTO(ResultEnum.PARAMS_ERROR);
         }
+        //验证时间
         try {
             if (TimeUtil.compareDate(date) && TimeUtil.compareTime(endTime,beginTime)){
                 bookingRecord.setDate(TimeUtil.parseDate(date));
@@ -76,33 +77,35 @@ public class BookingController extends BaseController{
         bookingRecord.setSpaceId(Integer.valueOf(params.get("spaceId")));
         bookingRecord.setApplication(params.get("application"));
 
-        //判断选中的时间段是否有预约
-        if (bookingService.getBookingNowByTime(bookingRecord.getDate(),
-                bookingRecord.getBeginTime(),
-                bookingRecord.getEndTime(),
-                bookingRecord.getSpaceId())){
-            return new CommomDTO(ResultEnum.HAS_BOOKING);
-        }
-
-        //判断用户积分是否被禁用
-        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
-        if (userService.getBanStatus(user.getId()) == 1){
-            return new CommomDTO(ResultEnum.SCORE_ZERO);
-        }
-
         //获取传输的伙伴名单
         String partnersString = params.get("partners");
-        boolean result = false;
+        String result;
         if ( partnersString ==null || partnersString.equals("")){
-            result = bookingService.addNewBooking(bookingRecord);
+            result = bookingService.addNewBooking(bookingRecord,null);
         }else{
             String[] partnersId = partnersString.split(":");
             result = bookingService.addNewBooking(bookingRecord,partnersId);
         }
-        if (result){
-            return new CommomDTO(ResultEnum.SUCCESS);
+
+        CommomDTO commomDTO;
+        switch (result){
+            case "true":
+                commomDTO = new CommomDTO(ResultEnum.SUCCESS);
+                break;
+            case "false":
+                commomDTO = new CommomDTO(ResultEnum.FAILED);
+                break;
+            case "hasBooking":
+                commomDTO = new CommomDTO(ResultEnum.HAS_BOOKING);
+                break;
+            case "scoreZERO":
+                commomDTO = new CommomDTO(ResultEnum.SCORE_ZERO);
+                break;
+            default:
+                commomDTO = new CommomDTO(ResultEnum.FAILED);
         }
-        return new CommomDTO(ResultEnum.FAILED);
+        return commomDTO;
+
     }
 
     /**
