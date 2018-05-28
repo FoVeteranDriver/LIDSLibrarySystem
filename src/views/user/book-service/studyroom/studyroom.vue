@@ -5,7 +5,7 @@
     <div>
         <h1>研习间预约</h1>
         <tab :tabList="tabList" :imgUrl="imgUrl">
-            <div slot="aContent" class="orderTab">
+            <div slot="aContent" class="sOrderTab">
                 <div class="header">
                     <h2 class="time">TODAY {{time}}</h2>
                     <p class="guide">
@@ -51,7 +51,6 @@ import tab from "../../common/tab/tab.vue";
 import picShow from "../../common/picShow/picShow.vue";
 import bookModal from "./bookModal.vue";
 export default {
-    name: "page",
     components: {
         tab,
         picShow,
@@ -855,7 +854,7 @@ export default {
             selectedBox.style.left = sRatio + "%";
             selectedBox.style.height = "0.39rem";
             selectedBox.style.width = totalRatio + "%";
-            selectedBox.innerText = occName + "：" + occTopic;
+            selectedBox.innerText = occName + ":" + occTopic;
             let table = document.getElementsByTagName("table")[0];
             let tr = table.getElementsByTagName("tr")[i];
             selectedBox.addEventListener("mouseenter", function(event) {
