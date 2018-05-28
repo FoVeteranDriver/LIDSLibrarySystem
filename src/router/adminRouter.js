@@ -42,23 +42,23 @@ export const otherRouter = {
     name: 'otherRouter',
     component: Main,
     children: [
-        {path: '/admin_index', title: '首页', name: 'admin_index', component: resolve => { require(['@/views/admin/admin-home/admin-home.vue'], resolve); } },
-        {path: '/admin_center', title: '管理员中心', name: 'admin_center', component: resolve => { require(['@/views/admin/admin-center/admin_center.vue'], resolve); }},
-        {path: '/admin_edit', title: '管理员编辑', name: 'admin_edit', component: resolve => { require(['@/views/admin/settings/authority/editAdmin.vue'], resolve); }},
+        { path: '/admin_index', title: '首页', name: 'admin_index', component: resolve => { require(['@/views/admin/admin-home/admin-home.vue'], resolve); } },
+        { path: '/admin_center', title: '管理员中心', name: 'admin_center', component: resolve => { require(['@/views/admin/admin-center/admin_center.vue'], resolve); } },
+        { path: '/admin_edit', title: '管理员编辑', name: 'admin_edit', component: resolve => { require(['@/views/admin/settings/authority/editAdmin.vue'], resolve); } },
+        { path: '/open_rule', title: '开放规则', name: 'open_rule', component: resolve => { require(['@/views/admin/settings/rules/openRule.vue'], resolve); } },
+        { path: '/close_rule', title: '开放规则', name: 'close_rule', component: resolve => { require(['@/views/admin/settings/rules/closeRule.vue'], resolve); } },
     ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
-export const appRouter = [ 
-    {
+export const appRouter = [{
         path: '/admin-settings',
         icon: 'ios-gear-outline',
         name: 'admin-settings',
         title: '设置',
-        access:1,
+        access: 1,
         component: Main,
-        children: [
-            {
+        children: [{
                 path: 'admin-authority',
                 name: 'admin-authority',
                 icon: 'locked',
@@ -99,8 +99,7 @@ export const appRouter = [
         title: '管理',
         access: 1,
         component: Main,
-        children: [
-            {
+        children: [{
                 path: 'admin-mSpace',
                 name: 'admin-mSpace',
                 icon: 'cube',
@@ -133,8 +132,7 @@ export const appRouter = [
         title: '数据',
         access: 1,
         component: Main,
-        children: [
-            {
+        children: [{
                 path: 'data1',
                 name: 'data1',
                 icon: 'ios-analytics',
