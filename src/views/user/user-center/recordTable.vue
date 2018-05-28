@@ -116,7 +116,7 @@
                             let hElem=[];
                             for(let item in bookState){
                                 switch(item){
-                                    case 'has_check_in':
+                                    case 'is_active':
                                         if(bookState[item]){
                                             hElem.push(h('span',{
                                                 style:''
@@ -142,7 +142,7 @@
                                             },'审核未通过,'));;
                                         }
                                         break;
-                                     case 'is_active':
+                                     case 'has_check_in':
                                         if(bookState[item]){
                                             hElem.push(h('span',{
                                                 style:{
@@ -182,7 +182,6 @@
                     }
                 ]
             }
-         
         },
         methods:{
             handlePageChange(currentPage){
@@ -191,7 +190,6 @@
                 this.partialRecords=this.recordList.slice(index,index+this.pageSize);
             },
             removeBookRecord(recordID,index){
-                console.log(index);
                 this.dialogState=true;
                 this.newRecordID=recordID;
                 this.recordIndex=index+this.pageSize*(this.currentPage-1);
@@ -199,35 +197,28 @@
             deleteRecord(){
                 if(this.newRecordID!=-1){
                     let that=this;
-                    // that.$ajax
-                    //     .get(
-                    //         util.baseurl+"/user/deleteBookingRecords/?key="+that.newRecordID
-                    //     )
-                    //     .then(function(response){
-                    //         let data=response.data;
-                    //         if(data.code==0){
-                    //             that.recordList=that.recordList.splice(that.recordIndex,1);
-                    //             that.dialogState=false;
-                    //             let index=(that.currentPage-1)*that.pageSize;
-                    //             that.partialRecords=that.recordList.slice(index,index+that.pageSize);
-                    //             that.totolSize=that.recordList.length;
-                    //             that.$Message.success('预约已经取消');
-                    //         }else{
-                    //             that.$Modal.remove();
-                    //             that.$Message.error('预约无法取消');
-                    //         }
-                    //     })
-                    //     .catch(function(err){
-                    //         console.log(err);
-                    //     });
-                    //that.newRecordID=-1;
-                    that.newRecordID=-1;
-                    that.recordList.splice(3,1);
-                    that.dialogState=false;
-                    let index=(that.currentPage-1)*that.pageSize;
-                    that.partialRecords=that.recordList.slice(index,index+that.pageSize);
-                    that.totolSize=that.recordList.length;
-                    that.$Message.success('预约已经取消');
+                    that.$ajax
+                        .delete(
+                            util.baseurl+"/user/deleteBookingRecord/?bookingRecordId="+that.newRecordID
+                        )
+                        .then(function(response){
+                            let data=response.data;
+                            if(data.code==0){
+                                that.recordList.splice(that.recordIndex,1);
+                                that.dialogState=false;
+                                let index=(that.currentPage-1)*that.pageSize;
+                                that.partialRecords=that.recordList.slice(index,index+that.pageSize);
+                                that.totolSize=that.recordList.length;
+                                that.$Message.success('预约已经取消');
+                            }else{
+                                that.$Modal.remove();
+                                that.$Message.error('预约无法取消');
+                            }
+                            that.newRecordID=-1;
+                        })
+                        .catch(function(err){
+                            console.log(err);
+                        });
                 }
             },
             handleDeleteCancel(){

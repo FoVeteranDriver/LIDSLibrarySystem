@@ -4,7 +4,7 @@ const appUser = {
     state: {
         userMenuList: [],
         userRouters: [
-            ...otherRouter,
+            otherRouter,
             ...appRouter
         ]
     },

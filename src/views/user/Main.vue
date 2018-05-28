@@ -35,8 +35,7 @@
                                 <router-link :to="{name:'admin_login'}">
                                     【管理端】<img src="../../images/user/home/admin.png">
                                 </router-link>
-                            </div>
-                            
+                            </div> 
                         </div>
                         <div class="user-dropdown-menu-con" v-show="logged">
                             <div class="user-dropdown-innercon">
@@ -54,7 +53,6 @@
                                     <span class="main-user-name">{{userName}}</span>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

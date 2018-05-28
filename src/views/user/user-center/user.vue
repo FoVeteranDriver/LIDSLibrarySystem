@@ -32,18 +32,18 @@
                <div class="userInfo">
                    <div class="userItem">
                         <label for="phoneNumber">手机</label>
-                        <Input v-model="phoneNumber"></Input>
+                        <input v-model="phoneNumber" class="phoneNumber" autofocus @blur='validatePhone'/>
                     </div>
                     <div class="userItem">
                     <label for="mailBox">邮箱</label>
-                    <Input v-model="mailBox"></Input>
+                    <input v-model="mailBox" @blur='validateMail' class="mailBox"/>
                     </div>
                     <Checkbox v-model="checkMessage" size="large">短信提醒</Checkbox>
-                    <Button>保存</Button>
+                    <Button @click.once="handleInfoUpload">保存</Button>
                 </div>
             </TabPane>
             <TabPane label="积分管理">
-                <creditsTable :tableList='creditsTableList' :key="creditsTableState"></creditsTable>
+                <creditsTable :tableList='creditsTableList' :currentCredits='currentCredits' :totalCredits='totalCredits' :key="creditsTableState"></creditsTable>
             </TabPane>
         </Tabs> 
     </div>
@@ -66,9 +66,9 @@ export default {
         return {
             //userName:'',
             currentState:true,
-            userNumber:'201730712386',
-            instituteName:'软件学院',
-            userIdentity:'2014级学生',
+            userNumber:'',
+            instituteName:'',
+            userIdentity:'',
             phoneNumber:'',
             mailBox:'',
             checkMessage:true,
@@ -91,59 +91,35 @@ export default {
             isNewRecord:true,
             recordTableState:true,
             creditsTableState:true,
-            recordTableList:[
-                //{
-            //     recordID:0,
-            //     orderTime:'2018-04-23 17:39',
-            //     orderSpace:'研究空间RED(紫金港信息空间)',
-            //     members:'卓文君1',
-            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
+            recordTableList:[],
+            activityTableList:[
+                // {
+                //     recordID:1,
+                //     activityName:'大学城高校图书馆共享会',
+                //     sponsor:'华南理工大学教工办',
+                //     contacts:'高于钦',
+                //     activitySite:'华工图书馆二楼',
+                //     activityTime:'2018-04-23 14:00-17:00',
+                //     actionState:'已结束',
+                // }
+            ],
+            currentCredits:0,
+            totalCredits:0,
+            creditsTableList:[
+            //     {
+            //     recordID:1,
+            //     violateTime:'2018-04-25 14:00-15:00',
+            //     violateState:'预约未签到',
+            //     spaceName:'研习间1',
+            //     deductedCredits:'100'
             // },{
             //     recordID:1,
-            //     orderTime:'2018-04-23 17:39',
-            //     orderSpace:'研究空间RED(紫金港信息空间)',
-            //     members:'卓文君2',
-            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
-            // },{
-            //     recordID:2,
-            //     orderTime:'2018-04-23 17:39',
-            //     orderSpace:'研究空间RED(紫金港信息空间)',
-            //     members:'卓文君3',
-            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
-            // },{
-            //     recordID:3,
-            //     orderTime:'2018-04-23 17:39',
-            //     orderSpace:'研究空间RED(紫金港信息空间)',
-            //     members:'刘润华',
-            //     bookTime:{sTime:'04-24 14:00',eTime:'04-24 16:00'},
-            //     bookState:{'has_check_in':true,'is_active':false,'permission_status':true},
-            //}
-            ],
-            activityTableList:[{
-                recordID:1,
-                activityName:'大学城高校图书馆共享会',
-                sponsor:'华南理工大学教工办',
-                contacts:'高于钦',
-                activitySite:'华工图书馆二楼',
-                activityTime:'2018-04-23 14:00-17:00',
-                actionState:'已结束',
-            }],
-            creditsTableList:[{
-                recordID:1,
-                violateTime:'2018-04-25 14:00-15:00',
-                violateState:'预约未签到',
-                spaceName:'研习间1',
-                deductedCredits:'100'
-            },{
-                recordID:1,
-                violateTime:'2018-04-25 14:00-15:00',
-                violateState:'预约未签到',
-                spaceName:'研习间1',
-                deductedCredits:'100'
-            }]
+            //     violateTime:'2018-04-25 14:00-15:00',
+            //     violateState:'预约未签到',
+            //     spaceName:'研习间1',
+            //     deductedCredits:'100'
+            // }
+            ]
         }
     },
     mounted(){
@@ -152,6 +128,8 @@ export default {
     beforeUpdate(){
         if(!this.userName){
             this.$emit("needLogin");
+        }else{
+           this.fetchUserInfo();
         }
     },
     methods:{
@@ -167,8 +145,10 @@ export default {
                         let records=[];
                         for(let item of data.result){
                             let temp={};
+                            temp.recordID=item.id;
                             let dateObj=util.parseTimestamp(item.booking_time);
                             temp.orderTime=dateObj.year+'-'+dateObj.month+'-'+dateObj.day+' '+dateObj.hour+':'+dateObj.minute;
+                            temp.orderSpace=item.space_name;
                             temp.bookTime={};
                             let dateArr=item.date.split('-');
                             temp.bookTime.sTime=dateArr[1]+'-'+dateArr[2]+' '+item.begin_time;
@@ -177,6 +157,14 @@ export default {
                             temp.bookState.permission_status=item.permission_status;
                             temp.bookState.is_active=item.is_active;
                             temp.bookState.has_check_in=item.has_check_in;
+                            let members=[];
+                            members.push(item.name);
+                            if(item.partner instanceof Array){
+                                for(let m of item.partner){
+                                    members.push(m.name);
+                                }
+                            }
+                            temp.members=members.join(';');
                             records.push(temp);      
                         }
                         that.recordTableList=records;
@@ -185,7 +173,10 @@ export default {
                             that.recordTableState=!that.recordTableState;
                         }else{
                             that.isNewRecord=false;
+                            that.recordTableState=!that.recordTableState;
                         }
+                    }else if(data.code==5){
+                        that.$store.commit("logout");
                     }
                 })
                 .catch(function(err){
@@ -220,23 +211,115 @@ export default {
                 case 2:
                     break;
                 case 3:
-                    // that.$ajax
-                    //     .get(
-                    //         util.baseurl+"/user/creditsRecords/"
-                    //     )
-                    //     .then(function(response){
-                    //         let data=response.data;
-                    //         if(data.code==0){
-                    //             that.creditsTableList=data.result;
-                    //         }
-                    //     })
-                    //     .catch(function(err){
-                    //         console.log(err);
-                    //     });
+                    that.$ajax
+                        .get(
+                            util.baseurl+"/user/score/"
+                        )
+                        .then(function(response){
+                            let data=response.data;
+                            if(data.code==0){
+                                let records=[];
+                                for(let item of data.result.record){
+                                    let temp={};
+                                    temp.violateTime=item.credit_time;
+                                    temp.violateState=item.credit_rule_name;
+                                    temp.deductedCredits=item.score_reduce;
+                                    temp.spaceName=item.space_name;
+                                    records.push(temp);
+                                }
+                                that.creditsTableList=records;
+                                that.totalCredits=parseInt(data.result.totalScore);
+                                that.currentCredits=parseInt(data.result.userScore);
+                            }else if(data.code==5){
+                                that.$store.commit("logout");
+                            }
+                        })
+                        .catch(function(err){
+                            console.log(err);
+                        });
                     break;
                 default:
                     break;
             }
+        },
+        validatePhone(){
+            let p=/^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
+            let phone=$('.userInfo .phoneNumber').eq(0);
+            if(!p.test(phone.val())){
+                phone.css('border-color','red');
+                return false;
+            }else{
+                phone.css('border-color','#fff2ec');
+                return true;
+            }
+        },
+        validateMail(){
+            let p=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            let mail=$('.userInfo .mailBox').eq(0);
+            if(!p.test(mail.val())){
+                mail.css('border-color','red');
+                return false;
+            }else{
+                 mail.css('border-color','#fff2ec');
+                 return true;
+            }
+        },
+        handleInfoUpload(){
+            let phone=$('.userInfo .phoneNumber').eq(0);
+            let mail=$('.userInfo .mailBox').eq(0);
+            if(this.validatePhone()&&this.validateMail()){
+                let data={};
+                data.telephone=phone.val();
+                data.email=mail.val();
+                let that=this;
+                that.$ajax
+                    .put(
+                        util.baseurl+"/user/userInfo/",
+                        JSON.stringify(data),
+                        {
+                            headers: {"Content-Type": "application/json;charset=utf-8"}
+                        }
+                    )
+                    .then(function(response){
+                        let data=response.data; 
+                        if(data.code==0){
+                            that.$Message.success({
+                                content: '保存成功'
+                            });
+                            phone.val('');
+                            mail.val('');
+                        }else if(data.code==5){
+                            that.$store.commit("logout");
+                        }else if(data.code==400){
+                            that.$Message.error({
+                                content: '参数有误'
+                            });
+                        }
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+            }
+        },
+        fetchUserInfo(){
+            let that=this;
+            that.$ajax
+                .get(
+                    util.baseurl+"/user/userInfo/"
+                )
+                .then(function(response){
+                    let data=response.data; 
+                    if(data.code==0){
+                        that.instituteName=data.result.college;
+                        that.userNumber=data.result.libraryCardNumber;
+                        that.userIdentity=data.result.grade;
+                    }else if(data.code==5){ //用户没有登录或者禁用cookie
+                        that.$store.commit("logout");
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         }
     },
     computed:{
@@ -251,6 +334,9 @@ export default {
                 this.hotTab=0;
                 this.tabLoad();
             }else{
+                this.userNumber='';
+                this.userIdentity='';
+                this.instituteName='';
                 this.recordTableList=[];
                 this.activityTableList=[];
                 this.creditsTableList=[];

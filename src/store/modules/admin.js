@@ -17,9 +17,10 @@ const appAdmin = {
         accessList:[],
         limits:[],
         adminRouters: [
-            ...otherRouter,
+            otherRouter,
             ...appRouter
         ],
+        adminAccount:'',
         pageOpenedList: [
             {
                 title: '首页',
@@ -32,6 +33,9 @@ const appAdmin = {
         dontCache: [] // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
     },
     mutations: {
+        setAdminAccount(state){
+            state.adminAccount=sessionStorage.getItem('adminAccount');
+        },
         setTagsList (state, list) {
             state.tagsList.push(...list);
         },

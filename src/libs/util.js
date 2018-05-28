@@ -284,4 +284,5 @@ util.parseTimestamp=function(time){
     return dateObj;
 };
 util.baseurl='http://iyou.s1.natapp.cc/lidsLibrary';
+util.adminUrl='http://iyou.s1.natapp.cc/lidsAdmin';
 export default util;

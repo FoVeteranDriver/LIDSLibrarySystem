@@ -64,39 +64,39 @@ export default {
                 { label: "相册展示", state: "cContent" },
                 { label: "硬件配置", state: "dContent" }
             ],
-            imgUrl: "./src/images/user/common/tab/example.png",
+            imgUrl: "./static/images/user/common/tab/example.png",
             imageList: [
                 {
                     title: "pic1",
-                    url: "./src/images/user/common/picShow/pic1.jpg"
+                    url: "./static/images/user/common/picShow/pic1.jpg"
                 },
                 {
                     title: "pic2",
-                    url: "./src/images/user/common/picShow/pic2.jpg"
+                    url: "./static/images/user/common/picShow/pic2.jpg"
                 },
                 {
                     title: "pic3",
-                    url: "./src/images/user/common/picShow/pic3.jpg"
+                    url: "./static/images/user/common/picShow/pic3.jpg"
                 },
                 {
                     title: "pic4",
-                    url: "./src/images/user/common/picShow/pic4.jpg"
+                    url: "./static/images/user/common/picShow/pic4.jpg"
                 },
                 {
                     title: "pic5",
-                    url: "./src/images/user/common/picShow/pic5.jpg"
+                    url: "./static/images/user/common/picShow/pic5.jpg"
                 },
                 {
                     title: "pic6",
-                    url: "./src/images/user/common/picShow/pic6.jpg"
+                    url: "./static/images/user/common/picShow/pic6.jpg"
                 },
                 {
                     title: "pic7",
-                    url: "./src/images/user/common/picShow/pic7.jpg"
+                    url: "./static/images/user/common/picShow/pic7.jpg"
                 },
                 {
                     title: "pic8",
-                    url: "./src/images/user/common/picShow/pic8.jpg"
+                    url: "./static/images/user/common/picShow/pic8.jpg"
                 }
             ],
             showBookModal: false,
@@ -840,6 +840,7 @@ export default {
                             }
                         }
                     }
+                    console.log(that.rooms);
                 })
                 .catch(function(err) {
                     console.log(err);

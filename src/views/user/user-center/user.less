@@ -140,17 +140,40 @@
                     .userItem{
                         margin-bottom: 0.3rem;
                         font-size: 0.14rem;
-                        div{
-                            padding-left: 0.1rem;
-                            width: 2rem;
-                            .ivu-input{
-                                outline: none;
-                                box-shadow:none;
-                                transition: none;
-                            }
-                            .ivu-input:hover,.ivu-input:focus{
-                                border-color: #fff2ec; 
-                            }
+
+                        // div{
+                        //     padding-left: 0.1rem;
+                        //     width: 2rem;
+                        //     .ivu-input{
+                        //         outline: none;
+                        //         box-shadow:none;
+                        //         transition: none;
+                        //     }
+                        //     .ivu-input:hover,.ivu-input:focus{
+                        //         border-color: #fff2ec; 
+                        //     }
+                        // }
+
+                        input{
+                            display: inline-block;
+                            width: 2.2rem;;
+                            height: 32px;
+                            line-height: 1.5;
+                            padding: 4px 7px;
+                            margin-left: 0.2rem;
+                            font-size: 12px;
+                            border: 1px solid #dddee1;
+                            border-radius: 4px;
+                            color: #495060;
+                            background-color: #fff;
+                            background-image: none;
+                            position: relative;
+                            cursor: text;
+                            transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out;
+                        }
+                        input:hover,input:focus{
+                            border-color: #fff2ec; 
+                            outline: none;
                         }
                     }
                     .ivu-checkbox-wrapper{

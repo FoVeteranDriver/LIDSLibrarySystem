@@ -3,15 +3,15 @@
 </style>
 
 <template>
-    <div class="login" @keydown.enter="handleSubmit">
-        <div class="login-con">
-            <div class="header">
-                <img src=""/>
-            </div>
+    <div class="admin-login" @keydown.enter="handleSubmit">
+        <div class="admin-login-con">
             <Card :bordered="false">
                 <p slot="title">
-                    <Icon type="log-in"></Icon>
-                    欢迎登录
+                    <router-link :to="{name:'home'}">
+                        <Icon type="log-in" color='black'></Icon>
+                    </router-link>
+                    <br/>
+                    <img src="../../images/admin/login/logo.png"/>
                 </p>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
@@ -30,7 +30,7 @@
                             </Input>
                         </FormItem>
                         <FormItem>
-                            <Button @click="handleSubmit" type="primary" long>登录</Button>
+                            <Button @click="handleSubmit" long>登录</Button>
                         </FormItem>
                     </Form>
                 </div>
@@ -41,8 +41,19 @@
 
 <script>
 import Cookies from 'js-cookie';
+import util from '../../libs/util.js';
 export default {
     data () {
+        const validPass=(rule,value,callback)=>{
+            let p=/^[0-9a-zA-Z]{6,}/;
+            if(value==''){
+                callback(new Error('密码不能为空'));
+            }
+            if(!p.test(value)){
+                callback(new Error('密码长度或格式有误'));
+            }
+            callback();
+        };
         return {
             form: {
                 userName: '',
@@ -53,7 +64,7 @@ export default {
                     { required: true, message: '账号不能为空', trigger: 'blur' }
                 ],
                 password: [
-                    { required: true, message: '密码不能为空', trigger: 'blur' }
+                    { validator:validPass, trigger: 'blur' }
                 ]
             }
         };
@@ -62,77 +73,132 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    Cookies.set('user', this.form.userName);
-                    let accessList=[{
-                        name:'admin-settings',
-                        access:1,
-                        children:[
+                    let that=this;
+                    let postData={};
+                    postData.account=this.form.userName;
+                    postData.password=this.form.password;
+                    that.$ajax
+                        .post(
+                            util.adminUrl+"/user/login/",
+                            JSON.stringify(postData),
                             {
-                                name:'admin-authority',
-                                access:1
-                            },
-                             {
-                                name:'admin-rules',
-                                access:1
-                            },
-                            {
-                                name:'admin-display',
-                                access:1,
-                            },
-                              {
-                                name:'admin-space',
-                                access:1,
+                                headers: {"Content-Type": "application/json;charset=utf-8"}
                             }
-                        ]
-                    },{
-                        name:'admin-management',
-                        access:1,
-                        children:[
-                            {
-                                name:'admin-mSpace',
-                                access:1
-                            },
-                             {
-                                name:'admin-credits',
-                                access:1
-                            },
-                            {
-                                name:'admin-activity',
-                                access:1
+                        )
+                        .then(function(response){
+                            let data=response.data;
+                            if(data.code==1){
+                                that.$Message.error({
+                                    content: '账号不存在'
+                                });
+                                return;
+                            }else if(data.code==2){
+                                that.$Message.error({
+                                    content: '密码错误'
+                                });
+                                return;
+                            }else if(data.code==0){
+                                sessionStorage.setItem('adminAccount',data.result.account);
+                                sessionStorage.setItem('accessList',JSON.stringify(data.result.accessList));
+                                let accessList=data.result.accessList;
+                                let limits=[];
+                                accessList.forEach(item=>{
+                                    if(item.access==0){
+                                        limits.push(item.name);
+                                    }
+                                    if(item.children&&item.children.length){
+                                        item.children.forEach(i=>{
+                                            if(i.access==0){
+                                                limits.push(i.name);
+                                            }
+                                        })
+                                    }
+                                });
+                                sessionStorage.setItem('limits',JSON.stringify(limits));
+                                that.$router.push({
+                                    name: 'admin_index'
+                                });
+                            }else{
+                                that.$Message.error({
+                                    content: '登录失败，请稍后重试'
+                                });
+                                return;
+                                // sessionStorage.setItem('adminName','hhh');
+                                // let accessList=[{
+                                //     name:'admin-settings',
+                                //     access:1,
+                                //     children:[
+                                //         {
+                                //             name:'admin-authority',
+                                //             access:1
+                                //         },
+                                //          {
+                                //             name:'admin-rules',
+                                //             access:1
+                                //         },
+                                //         {
+                                //             name:'admin-display',
+                                //             access:1,
+                                //         },
+                                //           {
+                                //             name:'admin-space',
+                                //             access:1,
+                                //         }
+                                //     ]
+                                // },{
+                                //     name:'admin-management',
+                                //     access:1,
+                                //     children:[
+                                //         {
+                                //             name:'admin-mSpace',
+                                //             access:1
+                                //         },
+                                //          {
+                                //             name:'admin-credits',
+                                //             access:1
+                                //         },
+                                //         {
+                                //             name:'admin-activity',
+                                //             access:1
+                                //         }
+                                //     ]
+                                // },{
+                                //     name:'admin-data',
+                                //     access:1,
+                                //     children:[
+                                //         {
+                                //             name:'data1',
+                                //             access:1
+                                //         },
+                                //          {
+                                //             name:'data2',
+                                //             access:1
+                                //         }
+                                //     ]
+                                // }];
+                                // let limits=[];
+                                // accessList.forEach(item=>{
+                                //     if(item.access==0){
+                                //         limits.push(item.name);
+                                //     }
+                                //     if(item.children&&item.children.length){
+                                //         item.children.forEach(i=>{
+                                //             if(i.access==0){
+                                //                 limits.push(i.name);
+                                //             }
+                                //         })
+                                //     }
+                                // });
+                                // sessionStorage.setItem('accessList',JSON.stringify(accessList));
+                                // sessionStorage.setItem('limits',JSON.stringify(limits));
+                                // that.$router.push({
+                                //     name: 'admin_index'
+                                // });
                             }
-                        ]
-                    },{
-                        name:'admin-data',
-                        access:1,
-                        children:[
-                            {
-                                name:'data1',
-                                access:1
-                            },
-                             {
-                                name:'data2',
-                                access:1
-                            }
-                        ]
-                    }];
-                    let limits=[];
-                    accessList.forEach(item=>{
-                        if(item.access==0){
-                            limits.push(item.name);
-                        }
-                        if(item.children&&item.children.length){
-                            item.children.forEach(i=>{
-                                if(i.access==0){
-                                    limits.push(i.name);
-                                }
-                            })
-                        }
-                    });
-                    sessionStorage.setItem('accessList',JSON.stringify(accessList));
-                    sessionStorage.setItem('limits',JSON.stringify(limits));
-                    this.$router.push({
-                        name: 'admin_index'
-                    });
+                        })
+                        .catch(function(err){
+                            console.log(err);
+                        });
                 }
             });
         }

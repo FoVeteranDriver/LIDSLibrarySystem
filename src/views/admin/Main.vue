@@ -18,20 +18,28 @@
         </div>
         <div class="admin-main-header-con" :style="{left:isHidden?'0.92rem':'2.1rem',paddingRight:isHidden?'0.9rem':'2.1rem'}">
             <div class="admin-main-header">
+                <div class="navicon-con">
+                    信息共享空间管理系统
+                </div>
                 <div class="header-avator-con">
                     <div class="user-dropdown-menu-con">
-                        <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-                            <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+                        <div class="user-dropdown-innercon">
+                            <Dropdown transfer trigger="click" class="user-right" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">
-                                    <span class="admin-main-user-name">{{ userName }}</span>
-                                    <Icon type="arrow-down-b"></Icon>
+                                    <img src="../../images/admin/main-component/power.png" class="power" />
                                 </a>
                                 <DropdownMenu slot="list">
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
-                            <Avatar icon="person" style="background: #619fe7;margin-left:10px;"></Avatar>
-                        </Row>
+                            <div class="user-right">
+                                <router-link :to="{name:'admin_center'}">
+                                    <img src="../../images/admin/main-component/user-avater.png" class="user-avater" />
+                                </router-link>
+                                <span>Hi</span>
+                                <span class="main-user-name">{{userName}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,9 +109,9 @@ export default {
     methods: {
         init () {
             let pathArr = util.setCurrentPath(this, this.$route.name);
-            this.userName = Cookies.get('user');
             this.$store.commit('updateAccessList');
             this.$store.commit('updateAdminMenulist');
+            this.userName =this.$store.state.appAdmin.adminAccount;
             this.checkTag(this.$route.name);
         },
         handleClickUserDropdown (name) {
@@ -141,6 +149,7 @@ export default {
                 tagsList.push(...item.children);
             }
         });
+        this.$store.commit('setAdminAccount');
         this.$store.commit('setTagsList', tagsList);
         // 显示打开的页面的列表
         this.$store.commit('setOpenedList');
