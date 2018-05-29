@@ -155,7 +155,7 @@ public class BookingServiceImpl extends BaseService implements BookingService{
         String time = TimeUtil.formatDate(bookingRecord.getDate().getTime())
                 +" "
                 +TimeUtil.formatTime(bookingRecord.getEndTime().getTime());
-        QuartzService.addJob(time, CreditDetectJob.class,recordId+"");
+        QuartzService.addCreditJob(time,recordId+"");
 
 
         //根据是否有同伴决定是否预定研习间

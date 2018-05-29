@@ -8,6 +8,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,7 +100,8 @@ public class AdminUserController {
                 ||params.get("name")==null
                 ||params.get("email")==null
                 ||params.get("phone")==null
-                ||params.get("accessList")==null){
+                ||params.get("accessList")==null
+                ||!accessListVerification(params.get("accessList"))){
             return new CommomDTO(ResultEnum.PARAMS_ERROR);
         }
 
@@ -115,7 +117,27 @@ public class AdminUserController {
     }
 
     /**
-     * 判断管理员账号是否可用
+     * 修改管理员
+     * @return
+     */
+    @RequestMapping(value = "/editAdmin",method = RequestMethod.PUT)
+    @ResponseBody
+    public CommomDTO editAdmin(@RequestBody Map params,@RequestParam int id){
+        if (params.get("name")==null
+                ||params.get("email")==null
+                ||params.get("phone")==null
+                ||params.get("accessList")==null
+                ||!accessListVerification(params.get("accessList"))){
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+        if (adminUserService.editAdminUser(params,id)){
+            return new CommomDTO(ResultEnum.SUCCESS);
+        }
+        return new CommomDTO(ResultEnum.FAILED);
+    }
+
+    /**
+     * 判断管理员账号是否存在
      * @param account
      * @return
      */
@@ -124,9 +146,9 @@ public class AdminUserController {
     public CommomDTO isAccountExist(@RequestParam String account){
         AdminUser user = adminUserService.selectAdminUserByUserName(account);
         if (user != null){
-            return new CommomDTO(ResultEnum.ACCOUNT_USE);
+            return new CommomDTO(ResultEnum.ACCOUNT_NOTUSER);
         }
-        return new CommomDTO(ResultEnum.ACCOUNT_NOTUSER);
+        return new CommomDTO(ResultEnum.ACCOUNT_USE);
     }
 
     /**
@@ -171,4 +193,32 @@ public class AdminUserController {
         return commomDTO;
     }
 
+    //验证accesslist json正确与否
+    private boolean accessListVerification(Object param){
+        try{
+            List accessList = (List)param;
+            if (accessList.size() != 3){
+                return false;
+            }
+            for (int i=0;i<3;i++){
+                Map a = (HashMap)accessList.get(i);
+                int access = (Integer)a.get("access");
+                if (access != 0 && access !=1 && access !=2){
+                    return false;
+                }
+                List children = (List) a.get("children");
+                for(Object z:children) {
+                    Map x = (Map)z;
+                    int access2 = (Integer) x.get("access");
+                    if(access2 !=0 && access2 !=1 && access2 != 2){
+                        return false;
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

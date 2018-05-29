@@ -77,7 +77,13 @@ public class UserServiceImpl extends BaseService implements UserService{
             one.put("end_time",endTime.substring(0,5));
 
             if ((Boolean) one.get("is_room")){
-                List<Map> partner = userDao.selectPartnerByRecordId(((Long)one.get("id")).intValue());
+                int recordId;
+                if (one.get("id") instanceof Integer){
+                    recordId = ((Integer) one.get("id")).intValue();
+                }else {
+                    recordId = ((Long) one.get("id")).intValue();
+                }
+                List<Map> partner = userDao.selectPartnerByRecordId(recordId);
                 one.put("partner",partner);
             }else {
                 one.put("partner","");

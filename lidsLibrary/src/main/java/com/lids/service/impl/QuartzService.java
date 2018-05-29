@@ -48,10 +48,9 @@ public class QuartzService {
     /**
      * 添加信用分减少的job
      * @param time 执行时间 yyyy-mm-dd hh:mm:ss
-     * @param jobClass
      * @param bookingRecordId
      */
-    public static void addJob(String time,Class<? extends Job> jobClass, String bookingRecordId){
+    public static void addCreditJob(String time,String bookingRecordId){
         UUID randomUUID = UUID.randomUUID();
         JobDetail job = newJob(CreditDetectJob.class)
                 .withIdentity(randomUUID.toString(), jobGroupName)

@@ -66,7 +66,7 @@ public class CreditDetectJob implements Job{
                 int score = creditDao.selectUserScore(bookingRecord.getUserId());
                 if (score <= 0){
                     int banResult = creditDao.updateUserBan(bookingRecord.getUserId());
-                    //TODO 添加解禁任务
+                    //添加解禁任务
                     QuartzService.addJobForLiftBan(bookingRecord.getUserId(),"time");
                     logger.debug("禁用用户:"+bookingRecord.getUserId());
                 }

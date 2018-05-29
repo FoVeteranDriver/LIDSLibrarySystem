@@ -21,4 +21,8 @@ public interface AdminUserDao{
     List<AdminUser> searchAdmin(Map map);
 
     Integer deleteAdmin(String account);
+
+    Integer editAdmin(AdminUser adminUser);
+
+    Integer deletePerm(int id);
 }

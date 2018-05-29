@@ -141,7 +141,7 @@ public class AdminPermission {
                 List childrens = (ArrayList)map.get("children");
                 for (int i=0;i<4;i++){
                     Map child = (Map)childrens.get(i);
-                    if (child.get("name").equals("admin-uthority")){
+                    if (child.get("name").equals("admin-authority")){
                         admin_authority = (Integer)child.get("access");
                     }else if (child.get("name").equals("admin-rules")){
                         admin_rules = (Integer)child.get("access");

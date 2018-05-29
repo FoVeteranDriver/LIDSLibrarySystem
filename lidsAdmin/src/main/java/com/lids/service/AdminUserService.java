@@ -23,4 +23,6 @@ public interface AdminUserService {
     boolean deleteAdmin(String account);
 
     List<AdminUser> searchAdmin(String key);
+
+    boolean editAdminUser(Map params,int id);
 }

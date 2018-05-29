@@ -46,4 +46,25 @@
         WHERE account = #{0}
     </update>
 
+    <update id="editAdmin">
+        UPDATE admin_user
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="phone != null">
+                phone = #{phone}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deletePerm">
+        DELETE FROM admin_permission
+        WHERE admin_user_id = #{0}
+    </delete>
+
 </mapper>

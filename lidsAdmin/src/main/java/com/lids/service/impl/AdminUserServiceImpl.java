@@ -85,6 +85,31 @@ public class AdminUserServiceImpl extends BaseService implements AdminUserServic
     }
 
     @Override
+    public boolean editAdminUser(Map params,int id) {
+        AdminUser newUser = new AdminUser();
+        newUser.setEmail((String)params.get("email"));
+        newUser.setPhone((String)params.get("phone"));
+        newUser.setName((String)params.get("name"));
+        newUser.setId(id);
+        int result = adminUserDao.editAdmin(newUser);
+        if (result == 1){
+            int deleteResult = adminUserDao.deletePerm(id);
+            if (deleteResult == 1){
+                AdminPermission adminPermission = new AdminPermission();
+                List permissionList = (ArrayList)params.get("accessList");
+                adminPermission.setdata(permissionList);
+                adminPermission.setAdmin_user_name("");
+                adminPermission.setAdmin_user_id(newUser.getId());
+                int addResult = adminUserDao.insertPermission(adminPermission);
+                if (addResult == 1){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
     public List<AdminUser> selectAdminList() {
         List<AdminUser> adminList = adminUserDao.selectAllAdmin();
         for (AdminUser user:

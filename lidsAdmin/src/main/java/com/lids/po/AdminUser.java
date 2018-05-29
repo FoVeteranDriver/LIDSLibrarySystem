@@ -14,6 +14,16 @@ public class AdminUser implements Serializable{
     private String name;
     private String phone;
     private String email;
+    private String libraryCardNumber;
+
+    public String getLibraryCardNumber() {
+        return libraryCardNumber;
+    }
+
+    public void setLibraryCardNumber(String libraryCardNumber) {
+        this.libraryCardNumber = libraryCardNumber;
+    }
+
     //权限json
     private List accessList;
 
