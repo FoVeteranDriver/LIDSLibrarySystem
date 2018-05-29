@@ -18,7 +18,7 @@ export const otherRouter = {
 export const appRouter = [
     {
         path: '/home',
-        icon: './src/images/user/main-component/home.png',
+        icon: './static/images/user/main-component/home.png',
         title: '主页',
         name: 'home',
         component: Main,
@@ -34,7 +34,7 @@ export const appRouter = [
     },
     {
         path: '/systemService',
-        icon: './src/images/user/main-component/sys-service.png',
+        icon: './static/images/user/main-component/sys-service.png',
         name: 'systemService',
         title: '系统服务',
         component: Main,
@@ -64,7 +64,7 @@ export const appRouter = [
     },
     {
         path: '/book',
-        icon: './src/images/user/main-component/book.png',
+        icon: './static/images/user/main-component/book.png',
         name: 'book',
         title: '预约服务',
         component: Main,
@@ -76,9 +76,9 @@ export const appRouter = [
                 component: resolve => { require(['@/views/user/book-service/studyroom/studyroom.vue'], resolve); }
             },
             {
-                path: 'page3',
+                path: 'learningroom',
                 icon: 'ios-pie-outline',
-                name: 'page3',
+                name: 'learningroom',
                 title: '学习间预约',
                 component: resolve => { require(['@/views/user/book-service/learningroom/learningroom.vue'], resolve); }
             }
@@ -86,7 +86,7 @@ export const appRouter = [
     },
     {
         path: '/user',
-        icon: './src/images/user/main-component/user-center.png',
+        icon: './static/images/user/main-component/user-center.png',
         title: '个人中心',
         name: 'user',
         component: Main,

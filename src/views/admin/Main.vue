@@ -109,9 +109,9 @@ export default {
     methods: {
         init () {
             let pathArr = util.setCurrentPath(this, this.$route.name);
-            this.userName = Cookies.get('user');
             this.$store.commit('updateAccessList');
             this.$store.commit('updateAdminMenulist');
+            this.userName =this.$store.state.appAdmin.adminAccount;
             this.checkTag(this.$route.name);
         },
         handleClickUserDropdown (name) {
@@ -149,6 +149,7 @@ export default {
                 tagsList.push(...item.children);
             }
         });
+        this.$store.commit('setAdminAccount');
         this.$store.commit('setTagsList', tagsList);
         // 显示打开的页面的列表
         this.$store.commit('setOpenedList');

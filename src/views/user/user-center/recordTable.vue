@@ -182,7 +182,6 @@
                     }
                 ]
             }
-         
         },
         methods:{
             handlePageChange(currentPage){

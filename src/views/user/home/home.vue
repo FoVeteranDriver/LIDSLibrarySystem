@@ -18,7 +18,7 @@
                             读者在享受最新的阅读体验的同时可以对空间进行多信息的交互和共享。
                         </div>
                     </Col>
-                    <Col :xs="{span:10,offset:1}" :sm="{span:6,offset:1}" :md="{span:6,offset:1}" :lg="{span:6,offset:1}"class="right">
+                    <Col :xs="{span:10,offset:1}" :sm="{span:6,offset:1}" :md="{span:6,offset:1}" :lg="{span:6,offset:1}" class="right">
                         <div class="logo">
                             <img src="../../../images/user/home/logo.png"/>
                         </div>

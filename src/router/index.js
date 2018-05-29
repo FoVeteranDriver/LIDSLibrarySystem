@@ -13,7 +13,7 @@ Vue.use(VueRouter);
 
 // 路由配置
 const RouterConfig = {
-    // mode: 'history',
+    //mode: 'history',
     routes: routers
 };
 
@@ -22,11 +22,11 @@ router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
     if(to.name.indexOf('admin')>-1){
-        if (!Cookies.get('user')&& to.name!=='admin_login') { // 判断是否已经登录且前往的页面不是登录页
+        if (!sessionStorage.getItem('adminAccount')&& to.name!=='admin_login') { // 判断是否已经登录且前往的页面不是登录页
             next({
                 name: 'admin_login'
             });
-        }else if (Cookies.get('user') && to.name === 'admin_login') { // 判断是否已经登录且前往的是登录页
+        }else if (sessionStorage.getItem('adminAccount')&& to.name === 'admin_login') { // 判断是否已经登录且前往的是登录页
             Util.title();
             next({
                 name:'admin_index'
