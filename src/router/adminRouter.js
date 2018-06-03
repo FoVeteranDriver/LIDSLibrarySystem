@@ -45,6 +45,7 @@ export const otherRouter = {
         {path: '/admin_index', title: '首页', name: 'admin_index', component: resolve => { require(['@/views/admin/admin-home/admin-home.vue'], resolve); } },
         {path: '/admin_center', title: '管理员中心', name: 'admin_center', component: resolve => { require(['@/views/admin/admin-center/admin_center.vue'], resolve); }},
         {path: '/admin_edit', title: '管理员编辑', name: 'admin_edit', component: resolve => { require(['@/views/admin/settings/authority/editAdmin.vue'], resolve); }},
+        {path: '/admin_spaceState', title: '空间状况', name: 'admin_spaceState', component: resolve => { require(['@/views/admin/management/mSpace/spaceState.vue'], resolve); }},
     ]
 };
 
@@ -106,7 +107,7 @@ export const appRouter = [
                 icon: 'cube',
                 title: '空间区域',
                 access: 1,
-                component: resolve => { require(['@/views/admin/management/space/space.vue'], resolve); }
+                component: resolve => { require(['@/views/admin/management/mSpace/mSpace.vue'], resolve); }
             },
             {
                 path: 'admin-credits',
@@ -135,17 +136,31 @@ export const appRouter = [
         component: Main,
         children: [
             {
-                path: 'data1',
-                name: 'data1',
+                path: 'admin-usage',
+                name: 'admin-usage',
                 icon: 'ios-analytics',
-                title: '数据整合',
+                title: '使用统计',
                 component: resolve => { require(['@/views/admin/data/page1/page1.vue'], resolve); }
             },
             {
-                path: 'data2',
-                name: 'data2',
-                icon: 'ios-alarm-outline',
-                title: '数据统计',
+                path: 'admin-mCredits',
+                name: 'admin-mCredits',
+                icon: 'thumbsdown',
+                title: '违约统计',
+                component: resolve => { require(['@/views/admin/data/page2/page2.vue'], resolve); }
+            },
+            {
+                path: 'admin-bookSheet',
+                name: 'admin-bookSheet',
+                icon: 'ios-recording',
+                title: '预约统计',
+                component: resolve => { require(['@/views/admin/data/page2/page2.vue'], resolve); }
+            },
+            {
+                path: 'admin-userInfo',
+                name: 'admin-userInfo',
+                icon: 'android-contact',
+                title: '用户统计',
                 component: resolve => { require(['@/views/admin/data/page2/page2.vue'], resolve); }
             },
         ]

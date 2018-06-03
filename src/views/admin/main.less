@@ -269,3 +269,41 @@ html,body{
 .taglist-moving-animation-move{
     transition: transform .3s;
 }
+.confirmDialog2{
+    .ivu-modal{
+        height: 130px;
+        .ivu-modal-content{
+            height: 100%;
+            .ivu-modal-body{
+                height: 60%;
+                font-size: 16px;
+                padding: 0 16px;
+                p{
+                    line-height: 1;
+                    padding-top: 30px;
+                }
+            }
+            .ivu-modal-footer{
+                background: transparent;
+                border: none;
+                padding: 0 18px 18px;
+                .ivu-btn-primary,.ivu-btn-ghost:active,.ivu-btn-ghost:hover{
+                    background-color: #fab5b5;
+                    border-color: #fab5b5;
+                    outline: none;
+                    transition: none;
+                }
+                .ivu-btn-ghost:active,.ivu-btn-ghost:hover{
+                    background: transparent;
+                    color: #c6c6c6;
+                    border-color: #fff2ec;
+                }
+                .ivu-btn-text:hover {
+                    color: #fab5b5;
+                    background-color: transparent;
+                    border-color: transparent;
+                }
+            }
+        }
+    }
+}
