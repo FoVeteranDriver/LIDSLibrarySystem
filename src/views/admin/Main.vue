@@ -4,7 +4,7 @@
 <template>
     <div class="admin-main">
         <div class="sidebar-menu-con" :style="{width: '0.9rem', overflow: 'visible'}">
-            <sidebar-menu 
+            <sidebar-menu
                 :menu-list="menuList"
                 :hot-tab="hotTab"
                 :key="sidebarState"

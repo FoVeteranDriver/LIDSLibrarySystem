@@ -103,7 +103,6 @@ export default {
             modalState: false,
             title: "welcome",
             hours: [
-                "7:00",
                 "8:00",
                 "9:00",
                 "10:00",
