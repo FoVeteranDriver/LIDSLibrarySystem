@@ -1,0 +1,23 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.OpenRuleDao">
+
+    <insert id="insert" parameterType="com.lids.po.OpenRule" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO open_rule_plan
+        (name,for_staff,for_student,for_teacher,plan_one_id,plan_two_id,application_plan)
+        VALUES
+        (#{name},#{forStaff},#{forStudent},#{forTeacher},#{planOneId},#{planTwoId},#{applicationPlan})
+    </insert>
+
+    <select id="selectById" resultType="com.lids.po.OpenRule">
+        SELECT * FROM open_rule_plan
+        WHERE id = #{0}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM open_rule_plan
+        WHERE id = #{0}
+    </delete>
+
+</mapper>

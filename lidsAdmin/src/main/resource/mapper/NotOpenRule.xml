@@ -1,0 +1,23 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.NotOpenRuleDao">
+
+    <insert id="insert" parameterType="com.lids.po.NotOpenRulePlan" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO not_open_rule_plan
+        (name,for_staff,for_student,for_teacher,priority)
+        VALUES
+        (#{name},#{forStaff},#{forStudent},#{forTeacher},#{priority})
+    </insert>
+
+    <select id="selectById" resultType="com.lids.po.NotOpenRulePlan">
+        SELECT * FROM not_open_rule_plan
+        WHERE id = #{0}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM not_open_rule_plan
+        WHERE id = #{0}
+    </delete>
+
+</mapper>

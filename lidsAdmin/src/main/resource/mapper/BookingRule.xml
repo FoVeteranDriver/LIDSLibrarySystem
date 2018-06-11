@@ -1,0 +1,32 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.BookingRuleDao">
+
+    <sql id="columnList">
+        booking_rule_name,allow_student,allow_teacher,allow_staff,type,priority,need_permission,today_credit_allow,
+        need_check_in,need_check_out,is_reserve,can_repeat,min_duration,max_duration,min_advance,
+        max_advance,max_late,min_late,max_end_book,min_end_book,begin_notice,end_notice,min_allow_people,max_allow_people
+    </sql>
+    
+    <insert id="insert" parameterType="com.lids.po.BookingRule" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO booking_rule_detail
+        (<include refid="columnList"></include>)
+        VALUES
+        (#{bookingRuleName},#{allowStudent},#{allowTeacher},#{allowStaff},#{type},#{priority},#{needPermission},
+        #{todayCreditAllow},#{needCheckIn},#{needCheckOut},#{isReserve},#{canRepeat},#{minDuration},#{maxDuration},
+        #{minAdvance},#{maxAdvance},#{maxLate},#{minLate},#{maxEndBook},#{minEndBook},#{beginNotice},#{endNotice},
+        #{minAllowPeople},#{maxAllowPeople})
+    </insert>
+
+    <select id="selectById" resultType="com.lids.po.BookingRule">
+        SELECT * FROM booking_rule_detail
+        WHERE id = #{0}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM booking_rule_detail
+        WHERE id = #{0}
+    </delete>
+
+</mapper>

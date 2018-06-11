@@ -63,6 +63,12 @@ public class AdminUserServiceImpl extends BaseService implements AdminUserServic
         newUser.setEmail((String)params.get("email"));
         newUser.setPhone((String)params.get("phone"));
         newUser.setName((String)params.get("name"));
+        String libraryCardNumber = (String) params.get("library_card_number");
+        if (libraryCardNumber != null && !libraryCardNumber.equals("")){
+            newUser.setLibraryCardNumber(libraryCardNumber);
+        }else {
+            newUser.setLibraryCardNumber("");
+        }
         int result = adminUserDao.insertNewAdmin(newUser);
 
         if (result == 1){
@@ -91,6 +97,8 @@ public class AdminUserServiceImpl extends BaseService implements AdminUserServic
         newUser.setPhone((String)params.get("phone"));
         newUser.setName((String)params.get("name"));
         newUser.setId(id);
+        String libraryCardNumber = (String) params.get("library_card_number");
+        newUser.setLibraryCardNumber(libraryCardNumber);
         int result = adminUserDao.editAdmin(newUser);
         if (result == 1){
             int deleteResult = adminUserDao.deletePerm(id);
@@ -208,13 +216,21 @@ public class AdminUserServiceImpl extends BaseService implements AdminUserServic
         List dataChildren = new ArrayList();
 
         Map admin_data1 = new HashMap();
-        admin_data1.put("name","admin-data1");
-        admin_data1.put("access",permission.get("admin_data1"));
+        admin_data1.put("name","admin-usage");
+        admin_data1.put("access",permission.get("admin_usage"));
         dataChildren.add(admin_data1);
         Map admin_data2 = new HashMap();
-        admin_data2.put("name","admin-data2");
-        admin_data2.put("access",permission.get("admin_data2"));
+        admin_data2.put("name","admin-mCredits");
+        admin_data2.put("access",permission.get("admin_mCredits"));
         dataChildren.add(admin_data2);
+        Map admin_data3 = new HashMap();
+        admin_data3.put("name","admin-bookSheet");
+        admin_data3.put("access",permission.get("admin_bookSheet"));
+        dataChildren.add(admin_data3);
+        Map admin_data4 = new HashMap();
+        admin_data4.put("name","admin-userInfo");
+        admin_data4.put("access",permission.get("admin_userInfo"));
+        dataChildren.add(admin_data4);
 
         admin_data.put("children",dataChildren);
         result.add(admin_data);

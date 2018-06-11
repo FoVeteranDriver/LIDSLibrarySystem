@@ -16,15 +16,15 @@
     
     <insert id="insertNewAdmin" parameterType="com.lids.po.AdminUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO admin_user
-        (account,password,name,phone,email)
-        VALUES (#{account},#{password},#{name},#{phone},#{email})
+        (account,password,name,phone,email,library_card_number)
+        VALUES (#{account},#{password},#{name},#{phone},#{email},#{libraryCardNumber})
     </insert>
 
     <insert id="insertPermission" parameterType="com.lids.po.AdminPermission">
         INSERT  INTO admin_permission
-        (admin_user_name,admin_user_id,admin_settings,admin_authority,admin_rules,admin_display,admin_space,admin_management,admin_mSpace,admin_credits,admin_activity,admin_data,admin_data1,admin_data2)
+        (admin_user_name,admin_user_id,admin_settings,admin_authority,admin_rules,admin_display,admin_space,admin_management,admin_mSpace,admin_credits,admin_activity,admin_data,admin_usage,admin_mCredits,admin_bookSheet,admin_userInfo)
         VALUES
-        (#{admin_user_name},#{admin_user_id},#{admin_settings},#{admin_authority},#{admin_rules},#{admin_display},#{admin_space},#{admin_management},#{admin_mSpace},#{admin_credits},#{admin_activity},#{admin_data},#{admin_data1},#{admin_data2})
+        (#{admin_user_name},#{admin_user_id},#{admin_settings},#{admin_authority},#{admin_rules},#{admin_display},#{admin_space},#{admin_management},#{admin_mSpace},#{admin_credits},#{admin_activity},#{admin_data},#{admin_usage},#{admin_mCredits},#{admin_bookSheet},#{admin_userInfo})
     </insert>
 
     <select id="selectAllAdmin" resultType="com.lids.po.AdminUser">
@@ -54,6 +54,9 @@
             </if>
             <if test="email != null">
                 email = #{email},
+            </if>
+            <if test="libraryCardNumber != null">
+                library_card_number = #{libraryCardNumber},
             </if>
             <if test="phone != null">
                 phone = #{phone}

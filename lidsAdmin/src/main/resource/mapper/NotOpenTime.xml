@@ -1,0 +1,28 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.NotOpenTimeDao">
+
+    <insert id="insert" parameterType="com.lids.po.NotOpenTime" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO not_open_time
+        (plan_id,date,begin_time,end_time)
+        VALUES
+        (#{planId},#{date},#{beginTime},#{endTime})
+    </insert>
+
+    <select id="selectById" resultType="com.lids.po.NotOpenTime">
+        SELECT * FROM not_open_time
+        WHERE id = #{0}
+    </select>
+    
+    <select id="selectList" resultType="com.lids.po.NotOpenTime">
+        SELECT * FROM not_open_time
+        WHERE plan_id = #{0}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM not_open_time
+        WHERE plan_id = #{0}
+    </delete>
+
+</mapper>

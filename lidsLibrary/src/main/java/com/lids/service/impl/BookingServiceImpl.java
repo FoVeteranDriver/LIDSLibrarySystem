@@ -7,6 +7,7 @@ import com.lids.dao.CreditDao;
 import com.lids.dao.SpaceDao;
 import com.lids.dao.UserDao;
 import com.lids.po.BookingRecord;
+import com.lids.po.BookingRule;
 import com.lids.po.Space;
 import com.lids.po.User;
 import com.lids.quartz.CreditDetectJob;
@@ -128,11 +129,24 @@ public class BookingServiceImpl extends BaseService implements BookingService{
             return "hasBooking";
         }
 
+        //判断选中的时间段中用户是否已存在预约
+        List<Integer> userBookingId = bookingDao.getBookingByUserId(bookingRecord.getDate(),bookingRecord.getBeginTime(),bookingRecord.getEndTime(),bookingRecord.getUserId());
+        if (userBookingId != null && !userBookingId.isEmpty()){
+            return "userHasBooking";
+        }
+
         //判断用户是否被禁用
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
         int banStatus = creditDao.getUserBan(user.getId());
         if (banStatus == 1){
             return "scoreZERO";
+        }
+
+        //验证预约规则
+        Space space = spaceDao.getSeatById(bookingRecord.getSpaceId());
+        BookingRule bookingRule = bookingDao.getBookingRule(user.getUserTypeName(),space.getSpaceTypeName());
+        if (!ruleCmparison(bookingRecord,bookingRule)){
+            return "ruleError";
         }
 
         //获取要预定的座位，判断是座位还是研习间
@@ -176,5 +190,10 @@ public class BookingServiceImpl extends BaseService implements BookingService{
             }
         }
         return "true";
+    }
+
+    //规则比对函数，返回true表示符合预约规则，false表示不符合预约规则
+    private boolean ruleCmparison(BookingRecord bookingRecord,BookingRule bookingRule){
+        return true;
     }
 }

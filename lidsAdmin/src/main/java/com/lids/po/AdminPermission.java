@@ -18,8 +18,10 @@ public class AdminPermission {
     private int admin_credits;
     private int admin_activity;
     private int admin_data;
-    private int admin_data1;
-    private int admin_data2;
+    private int admin_usage;
+    private int admin_mCredits;
+    private int admin_bookSheet;
+    private int admin_userInfo;
 
     public String getAdmin_user_name() {
         return admin_user_name;
@@ -117,20 +119,36 @@ public class AdminPermission {
         this.admin_data = admin_data;
     }
 
-    public int getAdmin_data1() {
-        return admin_data1;
+    public int getAdmin_usage() {
+        return admin_usage;
     }
 
-    public void setAdmin_data1(int admin_data1) {
-        this.admin_data1 = admin_data1;
+    public void setAdmin_usage(int admin_usage) {
+        this.admin_usage = admin_usage;
     }
 
-    public int getAdmin_data2() {
-        return admin_data2;
+    public int getAdmin_mCredits() {
+        return admin_mCredits;
     }
 
-    public void setAdmin_data2(int admin_data2) {
-        this.admin_data2 = admin_data2;
+    public void setAdmin_mCredits(int admin_mCredits) {
+        this.admin_mCredits = admin_mCredits;
+    }
+
+    public int getAdmin_bookSheet() {
+        return admin_bookSheet;
+    }
+
+    public void setAdmin_bookSheet(int admin_bookSheet) {
+        this.admin_bookSheet = admin_bookSheet;
+    }
+
+    public int getAdmin_userInfo() {
+        return admin_userInfo;
+    }
+
+    public void setAdmin_userInfo(int admin_userInfo) {
+        this.admin_userInfo = admin_userInfo;
     }
 
     public void setdata(List param){
@@ -169,10 +187,14 @@ public class AdminPermission {
                 List childrens = (ArrayList)map.get("children");
                 for (int i=0;i<2;i++){
                     Map child = (Map)childrens.get(i);
-                    if (child.get("name").equals("admin-data1")){
-                        admin_data1 = (Integer)child.get("access");
-                    }else if (child.get("name").equals("admin-data2")){
-                        admin_data2 = (Integer)child.get("access");
+                    if (child.get("name").equals("admin-usage")){
+                        admin_usage = (Integer)child.get("access");
+                    }else if (child.get("name").equals("admin-mCredits")){
+                        admin_mCredits = (Integer)child.get("access");
+                    }else if (child.get("name").equals("admin-bookSheet")){
+                        admin_bookSheet = (Integer)child.get("access");
+                    }else if (child.get("name").equals("admin-userInfo")){
+                        admin_userInfo = (Integer)child.get("access");
                     }
                 }
             }

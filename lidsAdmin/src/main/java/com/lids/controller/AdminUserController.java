@@ -175,8 +175,10 @@ public class AdminUserController {
         if (account==null || account.equals("")){
             return new CommomDTO(ResultEnum.PARAMS_ERROR);
         }
-        adminUserService.deleteAdmin(account);
-        return new CommomDTO(ResultEnum.SUCCESS);
+        if (adminUserService.deleteAdmin(account)){
+            return new CommomDTO(ResultEnum.SUCCESS);
+        }
+        return new CommomDTO(ResultEnum.FAILED);
     }
 
     /**

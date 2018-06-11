@@ -1,0 +1,29 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.OpenTimeDao">
+
+    <sql id="columnList">
+        monday_begin,monday_end,tuesday_begin,tuesday_end,wednesday_begin,wednesday_end,thursday_begin,thursday_end,friday_begin,friday_end,
+        saturday_begin,saturday_end,sunday_begin,sunday_end
+    </sql>
+    
+    <insert id="insert" parameterType="com.lids.po.OpenTime" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO open_time
+        (<include refid="columnList"></include>)
+        VALUES
+        (#{mondayBegin},#{mondayEnd},#{tuesdayBegin},#{tuesdayEnd},#{wednesdayBegin},#{wednesdayEnd},#{thursdayBegin},#{thursdayEnd},#{fridayBegin},
+        #{fridayEnd},#{saturdayBegin},#{saturdayEnd},#{sundayBegin},#{sundayEnd})
+    </insert>
+
+    <select id="selectById" resultType="com.lids.po.OpenTime">
+        SELECT * FROM open_time
+        WHERE id=#{0}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM open_time
+        WHERE id=#{0}
+    </delete>
+
+</mapper>

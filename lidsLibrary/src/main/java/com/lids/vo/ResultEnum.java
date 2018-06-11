@@ -24,7 +24,9 @@ public enum ResultEnum {
     HAS_BOOKING(107,"当前时段已被预约"),
     NOT_BOOKING(108,"不开放预约"),
     SCORE_ZERO(109,"积分不足，无法预订"),
-    PARAMS_ERROR(400,"参数有误");
+    PARAMS_ERROR(400,"参数有误"),
+    USER_HAS_BOOKING(401,"该时间段用户已存在预约"),
+    RULE_ERROR(402,"不符合预约规则");
 
     private int code;
     private String msg;

@@ -78,6 +78,19 @@
         )
     </select>
 
+    <!-- 获取当前时间段用户是否有预约 #{0}当前日期date，#{1}开始时间beginTime，#{2}结束时间endTIme,#{3}userId -->
+    <select id="getBookingByUserId" resultType="com.lids.po.BookingRecord">
+        SELECT id FROM booking_record
+        WHERE user_id = #{3} AND date = #{0}
+        AND
+        (
+        (begin_time &lt;= #{1}AND end_time &gt;= #{2})
+        OR (begin_time &gt;= #{1} AND end_time &lt;= #{2})
+        OR (end_time &gt; #{1} AND end_time &lt; #{2})
+        OR (begin_time &gt; #{1} AND begin_time &lt; #{2})
+        )
+    </select>
+
     <!-- 根据Id获取预定记录，#{0}id -->
     <select id="getBookingRecordById" resultType="com.lids.po.BookingRecord">
         SELECT * FROM booking_record

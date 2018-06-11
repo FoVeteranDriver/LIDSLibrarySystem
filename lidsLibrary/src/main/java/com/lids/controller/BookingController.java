@@ -101,6 +101,12 @@ public class BookingController extends BaseController{
             case "scoreZERO":
                 commomDTO = new CommomDTO(ResultEnum.SCORE_ZERO);
                 break;
+            case "userHasBooking":
+                commomDTO = new CommomDTO(ResultEnum.USER_HAS_BOOKING);
+                break;
+            case "ruleError":
+                commomDTO = new CommomDTO(ResultEnum.RULE_ERROR);
+                break;
             default:
                 commomDTO = new CommomDTO(ResultEnum.FAILED);
         }
