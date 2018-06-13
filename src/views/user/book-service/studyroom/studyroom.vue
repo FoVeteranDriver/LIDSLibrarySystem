@@ -3,7 +3,6 @@
 </style>
 <template>
     <div>
-        <h1>研习间预约</h1>
         <tab :tabList="tabList" :imgUrl="imgUrl">
             <div slot="aContent" class="orderTab">
                 <div class="header">

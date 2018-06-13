@@ -2,7 +2,7 @@
     @import "./spaceState.less";
 </style>
 <template>
-    <div id="mSpace" class="admin-SpaceState">
+    <div id="mSpace" class="admin-spaceState">
         <div class="header">
             <div class="selectItem">
                 <p>查询类型</p>

@@ -46,6 +46,8 @@ export const otherRouter = {
         {path: '/admin_center', title: '管理员中心', name: 'admin_center', component: resolve => { require(['@/views/admin/admin-center/admin_center.vue'], resolve); }},
         {path: '/admin_edit', title: '管理员编辑', name: 'admin_edit', component: resolve => { require(['@/views/admin/settings/authority/editAdmin.vue'], resolve); }},
         {path: '/admin_spaceState', title: '空间状况', name: 'admin_spaceState', component: resolve => { require(['@/views/admin/management/mSpace/spaceState.vue'], resolve); }},
+        {path: '/admin_notice', title: '通知', name: 'admin_notice', component: resolve => { require(['@/views/admin/settings/display/notice.vue'], resolve); }},
+        {path: '/admin_noticeEdit', title: '添加通知', name: 'admin_noticeEdit', component: resolve => { require(['@/views/admin/settings/display/editNotice.vue'], resolve); }},
     ]
 };
 

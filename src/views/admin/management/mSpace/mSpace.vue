@@ -7,7 +7,7 @@
             <Input v-model="searchKey" placeholder="请输入区域名称" @on-change='handleSearchChange' size='large'>
                 <Button slot="append" icon="ios-search" @click="handleSearch"></Button>
             </Input>
-            <Button type="ghost" class="spaceState" @click="handleBtnClick">空间状况</Button>
+            <Button  class="spaceState custom-btn" @click="handleBtnClick">空间状况</Button>
         </div>
         <div class="main">
             <Table :columns="columns" :data="spaceList"></Table>

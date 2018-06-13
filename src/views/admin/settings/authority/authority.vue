@@ -6,7 +6,7 @@
         <Input v-model="searchKey" placeholder="账号/姓名/学工号搜索" @on-change='handleSearchChange' size='large'>
             <Button slot="append" icon="ios-search" @click="handleSearch"></Button>
         </Input>
-            <Button type="ghost" class="editAdmin" @click="handleAdd">新建管理员</Button>
+        <Button type="ghost" class="editAdmin custom-btn" @click="handleAdd">新建管理员</Button>
         <Table :columns="columns" stripe :data="adminList"></Table>
         <Modal
             class="confirmDialog2"
