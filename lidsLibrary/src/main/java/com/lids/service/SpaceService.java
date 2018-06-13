@@ -29,4 +29,6 @@ public interface SpaceService {
 
     List<HashMap<String,String>> getSeatNameAndId();
 
+    List<Space> getSpacesStatusByTime(Date date,Date beginTime,Date endTime);
+
 }

@@ -13,6 +13,8 @@ public interface ScheduleDao {
 
     List<Map<String,String>> getRoomSchedulers(Date date);
 
+    List<Integer> getAllSeatSchedulers(Date date,Date beginTime,Date endTime);
+
     List<Map<String,String>> getSeatSchedulers(int spaceId);
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -50,7 +51,7 @@ public class SpaceController extends BaseController {
      * 获取所有的座位当前状态
      * @return
      */
-    @RequestMapping("/spaceStatus")
+    @RequestMapping("/seatStatusTime")
     @ResponseBody
     public CommomDTO getSpaceByArea(){
         List<Space> spaces = spaceService.getSpacesStatus();
@@ -58,6 +59,32 @@ public class SpaceController extends BaseController {
         commomDTO.setInfo(ResultEnum.SUCCESS,spaces);
         return commomDTO;
     }
+
+    /**
+     * 根据时间获取座位状态
+     * @return
+     */
+    @RequestMapping("/spacesStatus")
+    @ResponseBody
+    public CommomDTO getSpaceByTime(@RequestParam String date,@RequestParam String beginTime,@RequestParam String endTime){
+        Date dateO = null;
+        Date beginTimeO = null;
+        Date endTimeO = null;
+        try {
+            dateO = TimeUtil.parseDate(date);
+            beginTimeO = TimeUtil.parseTime(beginTime);
+            endTimeO =TimeUtil.parseTime(endTime);
+        }catch (ParseException e){
+            e.printStackTrace();
+            logger.debug("时间转换失败");
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+        List<Space> result = spaceService.getSpacesStatusByTime(dateO,beginTimeO,endTimeO);
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
+        return commomDTO;
+    }
+
 
     /**
      * 获取指定座位的可预约时间

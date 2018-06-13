@@ -78,6 +78,18 @@
         )
     </select>
 
+    <select id="getSeatBookingRecordByTime" resultType="java.lang.Integer">
+        SELECT space_id FROM booking_record
+        WHERE date = #{0} AND is_room = 0
+        AND
+        (
+            (begin_time &lt;= #{1}AND end_time &gt;= #{2})
+            OR (begin_time &gt;= #{1} AND end_time &lt;= #{2})
+            OR (end_time &gt; #{1} AND end_time &lt; #{2})
+            OR (begin_time &gt; #{1} AND begin_time &lt; #{2})
+        )
+    </select>
+
     <!-- 获取当前时间段用户是否有预约 #{0}当前日期date，#{1}开始时间beginTime，#{2}结束时间endTIme,#{3}userId -->
     <select id="getBookingByUserId" resultType="com.lids.po.BookingRecord">
         SELECT id FROM booking_record

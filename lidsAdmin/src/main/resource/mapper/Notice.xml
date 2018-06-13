@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lids.dao.NoticeDao">
+
+    <insert id="insert" parameterType="com.lids.po.Notice" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO notice
+        (notice_title,notice_text,publisher,imageFile)
+        VALUES
+        (#{noticeTitle},#{noticeText},#{publisher},#{imageFile})
+    </insert>
+
+    <insert id="insertFile" parameterType="com.lids.po.File"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO file
+        (fileName,fileLink,notice_id)
+        VALUES
+        (#{fileName},#{fileLink},#{noticeId})
+    </insert>
+
+    <select id="selectNoticeListAdmin" resultType="java.util.Map">
+        SELECT id,notice_title AS noticeTitle,create_time AS createTime
+        FROM notice
+        ORDER BY createTime
+    </select>
+
+    <delete id="delete">
+        DELETE FROM notice
+        WHERE id = #{0}
+    </delete>
+
+    <select id="selectById" resultType="com.lids.po.Notice">
+        SELECT * FROM notice
+        WHERE id = #{0}
+    </select>
+
+    <select id="selectFileByNoticeId" resultType="com.lids.po.File">
+        SELECT * FROM file
+        WHERE notice_id = #{0}
+    </select>
+
+    <select id="searchNoticeList" resultType="java.util.Map">
+        SELECT id,notice_title AS noticeTitle,create_time AS createTime
+        FROM notice
+        WHERE notice_title LIKE  '%${key}%'
+        OR notice_text LIKE  '%${key}%'
+        ORDER BY createTime
+    </select>
+
+</mapper>

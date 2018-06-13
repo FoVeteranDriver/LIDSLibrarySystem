@@ -26,4 +26,12 @@
         order by date
     </select>
 
+    <select id="getAllSeatSchedulers" resultType="java.lang.Integer">
+        SELECT space_id FROM
+        schedule INNER JOIN space
+        ON schedule.space_id = space.id
+        WHERE space_type_name = "标准座位"
+        AND date = #{0} AND begin_time &lt;= #{1}AND end_time &gt;= #{2}
+    </select>
+
 </mapper>

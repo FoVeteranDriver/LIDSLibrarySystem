@@ -12,6 +12,7 @@
         <module>lidsAdmin</module>
         <module>lidsLibrary</module>
         <module>wx</module>
+        <module>file</module>
     </modules>
 
     <properties>

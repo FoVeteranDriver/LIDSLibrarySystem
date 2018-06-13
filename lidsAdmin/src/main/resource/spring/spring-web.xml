@@ -47,4 +47,20 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <!-- 文件上传 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置上传文件的最大尺寸为5MB -->
+        <property name="maxUploadSize">
+            <value>5242880</value>
+        </property>
+        <!-- 这里设置默认的文件编码为UTF-8，必须与用户JSP的默认编码一致   -->
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+        <!-- 文件上传临时目录，上传完成后，就会将临时文件删除   -->
+        <property name="uploadTempDir">
+            <value>upload/temp</value>
+        </property>
+    </bean>
 </beans>

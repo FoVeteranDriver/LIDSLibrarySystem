@@ -2,11 +2,14 @@ package com.lids.service.impl;
 
 
 import com.lids.common.BaseService;
+import com.lids.dao.BookingDao;
 import com.lids.dao.ScheduleDao;
 import com.lids.dao.SpaceDao;
 import com.lids.po.Area;
+import com.lids.po.BookingRecord;
 import com.lids.po.Space;
 import com.lids.service.SpaceService;
+import com.lids.util.TimeUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +23,9 @@ public class SpaceServiceImpl extends BaseService implements SpaceService{
 
     @Resource
     private ScheduleDao scheduleDao;
+
+    @Resource
+    private BookingDao bookingDao;
 
     public List<Space> getSpacesByArea(String areaName){
         List<Space> spaces = spaceDao.selectSpacesByArea(areaName);
@@ -80,5 +86,46 @@ public class SpaceServiceImpl extends BaseService implements SpaceService{
 
     public List<HashMap<String, String>> getSeatNameAndId() {
         return spaceDao.getSeatNameAndId();
+    }
+
+    @Override
+    public List<Space> getSpacesStatusByTime(Date date, Date beginTime, Date endTime){
+        List<Space> spaces = spaceDao.getSpacesStatus();
+        List<Integer> bookingRecords = bookingDao.getSeatBookingRecordByTime(date,beginTime,endTime);
+        List<Integer> schedules = scheduleDao.getAllSeatSchedulers(date,beginTime,endTime);
+
+        //判断是否开放
+        for (Space space:spaces){
+            int id = space.getId();
+            boolean isOpen = false;
+            for (Integer i:schedules){
+                if (id == i){
+                    isOpen = true;
+                }
+            }
+            if (isOpen){
+                space.setIsOpen(1);
+            }else {
+                space.setIsOpen(0);
+            }
+        }
+
+        //判断是否有预定
+        for (Space space:spaces){
+            int id = space.getId();
+            boolean isBooking = false;
+            for (Integer i:bookingRecords){
+                if (id == i){
+                    isBooking = true;
+                }
+            }
+            if (isBooking && space.getIsOpen() == 1){
+                space.setIsOccupied(1);
+            }else {
+                space.setIsOccupied(0);
+            }
+        }
+
+        return spaces;
     }
 }
