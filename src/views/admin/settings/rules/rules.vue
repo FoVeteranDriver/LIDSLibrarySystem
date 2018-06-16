@@ -8,8 +8,9 @@
         <Button slot="append" icon="ios-search" @click="searchHandler"></Button>
         </Input>
 
-        <Button type="ghost" class="open-rule" @click="addOpenRule">开放规则</Button>
-        <Button type="ghost" class="close-rule" @click="addCloseRule">不开放规则</Button>
+        <Button type="ghost" class="general-rules" @click="generalRules">总体规则</Button>
+        <Button type="ghost" class="booking-rules" @click="bookingRules">预约规则</Button>
+        <Button type="ghost" class="points-rules" @click="pointsRules">积分规则</Button>
 
         <Table :columns="columns" :data="rules"></Table>
     </div>
@@ -21,51 +22,105 @@ import util from "../../../../libs/util.js";
 export default {
     data() {
         return {
-            columns:[
-                    {
-                        title: '规则名称',
-                        key: 'name',
-                    },
-                    {
-                        title: '类型',
-                        key: 'type'
-                    },
-                    {
-                        title: '备注',
-                        key: 'note'
-                    },
-                    {
-                        title:'操作',
-                        key: 'action'
+            columns: [
+                {
+                    title: "name",
+                    key: "name"
+                },
+                {
+                    title: "type",
+                    key: "type"
+                },
+                {
+                    title: "note",
+                    key: "note"
+                },
+                {
+                    title: "action",
+                    key: "action",
+                    align:'center',
+                    render:(h,params)=>{
+                        let hElem=[];
+                        hElem.push( h('span',{
+                            style: {
+                                color:'#3f3140',
+                                cursor:'pointer',
+                                padding:'10px',
+                            },
+                            on: {
+                                click: () => {
+                                    this.handleEdit(params.row,params.index)
+                                }
+                            }
+                        },'编辑'));
+                        hElem.push( h('span',{
+                            style: {
+                                color:'#f78888',
+                                cursor:'pointer',
+                                padding:'10px',
+                            },
+                            on: {
+                                click: () => {
+                                }
+                            }
+                        },'删除'));
+                        return hElem;
                     }
-                ],
-            rules:[],
+                }
+            ],
+            rules: [],
 
             searchKey: ""
         };
     },
     methods: {
-        searchChangeHandler() {
+        searchChangeHandler(){
             if (this.searchKey.trim === "") {
-                this.displayRules();
+                this.loadRuleList();
             }
         },
-        searchHandler() {
-            
+        searchHandler(){
+
         },
-        addOpenRule(){
+        generalRules() {
             this.$router.push({
-                name: 'open_rule'
+                name: "general_rules"
             });
         },
-        addCloseRule(){
+        bookingRules() {
             this.$router.push({
-                name: 'close_rule'
+                name: "booking_rules"
             });
+        },
+        pointsRules(){
+            this.$router.push({
+                name: "points_rules"
+            });
+        },
+        loadRuleList(){
+            let that = this;
+                that.$ajax
+                .get(
+                    util.adminUrl+"/user/adminList/"
+                )
+                .then(function(response){
+                    let data=response.data;
+                    if(data.code==0){
+                        that.displayRules(data.result);
+                    }else if(data.code==5){ //用户没有登录或者禁用cookie
+
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        },
+        displayRules(data){
+
         },
     },
-    created(){
-
+    created() {
+        this.loadRuleList();
     }
 };
 </script>

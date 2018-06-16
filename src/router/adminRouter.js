@@ -45,8 +45,14 @@ export const otherRouter = {
         { path: '/admin_index', title: '首页', name: 'admin_index', component: resolve => { require(['@/views/admin/admin-home/admin-home.vue'], resolve); } },
         { path: '/admin_center', title: '管理员中心', name: 'admin_center', component: resolve => { require(['@/views/admin/admin-center/admin_center.vue'], resolve); } },
         { path: '/admin_edit', title: '管理员编辑', name: 'admin_edit', component: resolve => { require(['@/views/admin/settings/authority/editAdmin.vue'], resolve); } },
-        { path: '/open_rule', title: '开放规则', name: 'open_rule', component: resolve => { require(['@/views/admin/settings/rules/openRule.vue'], resolve); } },
-        { path: '/close_rule', title: '开放规则', name: 'close_rule', component: resolve => { require(['@/views/admin/settings/rules/closeRule.vue'], resolve); } },
+        { path: '/general_rules', title: '总体规则', name: 'general_rules', component: resolve => { require(['@/views/admin/settings/rules/general-rules/generalRules.vue'], resolve); } },
+        { path: '/open_rules', title: '新建开放规则', name: 'open_rules', component: resolve => { require(['@/views/admin/settings/rules/general-rules/openRules.vue'], resolve); } },
+        { path: '/close_rules', title: '新建不开放规则', name: 'close_rules', component: resolve => { require(['@/views/admin/settings/rules/general-rules/closeRules.vue'], resolve); } },
+        { path: '/booking_rules', title: '预约规则', name: 'booking_rules', component: resolve => { require(['@/views/admin/settings/rules/booking-rules/bookingRules.vue'], resolve); } },
+        { path: '/edit_booking_rule', title: '新建预约规则', name: 'edit_booking_rule', component: resolve => { require(['@/views/admin/settings/rules/booking-rules/editBookingRule.vue'], resolve); } },
+        { path: '/points_rules', title: '积分规则', name: 'points_rules', component: resolve => { require(['@/views/admin/settings/rules/points-rules/pointsRules.vue'], resolve); } },
+        { path: '/edit_points_rule', title: '新建积分规则', name: 'edit_points_rule', component: resolve => { require(['@/views/admin/settings/rules/points-rules/editPointsRule.vue'], resolve); } },
+
     ]
 };
 
