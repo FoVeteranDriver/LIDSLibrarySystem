@@ -20,4 +20,9 @@
         WHERE id = #{0}
     </delete>
 
+    <select id="getAllRule" resultType="java.util.Map">
+        SELECT id,name
+        FROM not_open_rule_plan
+    </select>
+
 </mapper>

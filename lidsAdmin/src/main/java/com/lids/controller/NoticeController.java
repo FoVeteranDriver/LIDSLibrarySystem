@@ -3,6 +3,7 @@ package com.lids.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lids.po.Notice;
+import com.lids.po.SystemParam;
 import com.lids.service.NoticeService;
 import com.lids.util.fileUtil;
 import com.lids.vo.CommomDTO;
@@ -22,12 +23,14 @@ public class NoticeController {
     @Resource
     private NoticeService noticeService;
 
-    @RequestMapping(value = "/homePage",method = RequestMethod.POST)
+    @RequestMapping(value = "/homePage",method = RequestMethod.PUT)
     @ResponseBody
-    public CommomDTO uploadHomePage(@RequestParam("file") MultipartFile mainPic,@RequestParam String info){
+    public CommomDTO uploadHomePage(@RequestParam("mainPic") MultipartFile mainPic,
+                                    @RequestParam String mainInfo,
+                                    @RequestParam String menu){
         String fileUrl = fileUtil.saveFile(mainPic);
-        JSON json = JSON.parseObject(info);
-        JSONObject jsonObject = JSON.parseObject(info);
+        JSONObject jsonObject = JSON.parseObject(menu);
+        jsonObject.put("mainInfo",mainInfo);
         if (noticeService.saveHomePage(fileUrl,jsonObject)){
             return new CommomDTO(ResultEnum.SUCCESS);
         }else {
@@ -44,12 +47,14 @@ public class NoticeController {
         return  commomDTO;
     }
 
-    @RequestMapping(value = "/usinghelp",method = RequestMethod.POST)
+    @RequestMapping(value = "/usinghelp",method = RequestMethod.PUT)
     @ResponseBody
-    public CommomDTO uploadusinghelp(@RequestParam("file") MultipartFile mainPic,@RequestParam String info){
+    public CommomDTO uploadusinghelp(@RequestParam("mainPic") MultipartFile mainPic,
+                                     @RequestParam String prolusion,
+                                     @RequestParam String tips){
         String fileUrl = fileUtil.saveFile(mainPic);
-        JSON json = JSON.parseObject(info);
-        JSONObject jsonObject = JSON.parseObject(info);
+        JSONObject jsonObject = JSON.parseObject(tips);
+        jsonObject.put("prolusion",prolusion);
         if (noticeService.saveUsingHelp(fileUrl,jsonObject)){
             return new CommomDTO(ResultEnum.SUCCESS);
         }else {
@@ -114,6 +119,38 @@ public class NoticeController {
     @ResponseBody
     public CommomDTO searchNotice(@RequestParam String key){
         List<Map> result = noticeService.searchNoticeList(key);
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,result);
+        return commomDTO;
+    }
+
+    @RequestMapping(value = "/spaceNotice",method = RequestMethod.POST)
+    @ResponseBody
+    public CommomDTO addSpaceNotice(@RequestParam(value = "notice") String notice,
+                                    @RequestParam(value = "introduce") String introduce,
+                                    @RequestParam(value = "albumFiles",required = false) List<MultipartFile> albumFiles,
+                                    @RequestParam(value = "deployFiles",required = false) List<MultipartFile> deployFiles,
+                                    @RequestParam(value = "type") String type){
+        JSONObject jsonObject = JSON.parseObject(notice);
+        jsonObject.put("introduce",introduce);
+        noticeService.addSpaceNotice(jsonObject,albumFiles,deployFiles,type);
+
+        CommomDTO commomDTO = new CommomDTO();
+        commomDTO.setInfo(ResultEnum.SUCCESS,null);
+        return commomDTO;
+    }
+
+    @RequestMapping(value = "/spaceNotice",method = RequestMethod.GET)
+    @ResponseBody
+    public CommomDTO getSpaceNotice(@RequestParam String type){
+        if (type == null || type.equals("")){
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+        if (!type.equals("studyRoom")&&!type.equals("seat")){
+            return new CommomDTO(ResultEnum.PARAMS_ERROR);
+        }
+        JSONObject result = noticeService.getSpaceNotice(type);
+
         CommomDTO commomDTO = new CommomDTO();
         commomDTO.setInfo(ResultEnum.SUCCESS,result);
         return commomDTO;

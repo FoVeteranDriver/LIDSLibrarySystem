@@ -26,4 +26,10 @@ public interface NoticeService {
     Notice get(int id);
 
     List<Map> searchNoticeList(String key);
+
+    boolean addSpaceNotice(JSONObject jsonObject,
+                           List<MultipartFile> albumFiles,
+                           List<MultipartFile> deployFiles,String type);
+
+    JSONObject getSpaceNotice(String type);
 }

@@ -6,6 +6,7 @@ import com.lids.dao.NoticeDao;
 import com.lids.dao.SystemParamDao;
 import com.lids.po.File;
 import com.lids.po.Notice;
+import com.lids.po.SpaceNoticeFile;
 import com.lids.po.SystemParam;
 import com.lids.service.BaseService;
 import com.lids.service.NoticeService;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,5 +138,123 @@ public class NoticeServiceImpl extends BaseService implements NoticeService{
         Map search = new HashMap();
         search.put("key",key);
         return noticeDao.searchNoticeList(search);
+    }
+
+
+    @Override
+    public boolean addSpaceNotice(JSONObject jsonObject, List<MultipartFile> albumFiles, List<MultipartFile> deployFiles, String type) {
+        String maxType = null;
+        String nextType = null;
+        String fileUrl = null;
+        String fileName = null;
+        SystemParam systemParam = new SystemParam();
+        SpaceNoticeFile spaceNoticeFile = new SpaceNoticeFile();
+        int result = 0;
+        switch (type){
+            case "seat":
+//                try {
+                    maxType = systemParamDao.MaxTypeByGroup("seat");
+//                }catch (Exception e){
+//                    maxType = "0";
+//                }
+
+                nextType = Integer.valueOf(maxType)+1+"";
+                systemParam.setParamGroupp("seat");
+                systemParam.setParamName("jsonString");
+                systemParam.setParamValue(jsonObject.toString());
+                systemParam.setParamType(nextType);
+                result = systemParamDao.insert(systemParam);
+                //TODO 添加照片和附件
+
+                for (MultipartFile file:
+                     albumFiles) {
+                    fileUrl = fileUtil.saveFile(file);
+                    fileName = file.getOriginalFilename();
+                    spaceNoticeFile.setFileLink(fileUrl);
+                    spaceNoticeFile.setFileName(fileName);
+                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
+                    spaceNoticeFile.setType("image");
+                    systemParamDao.insertFile(spaceNoticeFile);
+                }
+                for (MultipartFile file:
+                        deployFiles){
+                    fileUrl = fileUtil.saveFile(file);
+                    fileName = file.getOriginalFilename();
+                    spaceNoticeFile.setFileLink(fileUrl);
+                    spaceNoticeFile.setFileName(fileName);
+                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
+                    spaceNoticeFile.setType("deploy");
+                    systemParamDao.insertFile(spaceNoticeFile);
+                }
+                return true;
+            case "studyRoom":
+                try {
+                    maxType = systemParamDao.MaxTypeByGroup("studyRoom");
+                }catch (Exception e){
+                    maxType = "0";
+                }
+
+                nextType = Integer.valueOf(maxType)+1+"";
+                systemParam.setParamGroupp("studyRoom");
+                systemParam.setParamName("jsonString");
+                systemParam.setParamValue(jsonObject.toString());
+                systemParam.setParamType(nextType);
+                result = systemParamDao.insert(systemParam);
+
+                for (MultipartFile file:
+                        albumFiles) {
+                    fileUrl = fileUtil.saveFile(file);
+                    fileName = file.getOriginalFilename();
+                    spaceNoticeFile.setFileLink(fileUrl);
+                    spaceNoticeFile.setFileName(fileName);
+                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
+                    spaceNoticeFile.setType("image");
+                    systemParamDao.insertFile(spaceNoticeFile);
+                }
+                for (MultipartFile file:
+                        deployFiles){
+                    fileUrl = fileUtil.saveFile(file);
+                    fileName = file.getOriginalFilename();
+                    spaceNoticeFile.setFileLink(fileUrl);
+                    spaceNoticeFile.setFileName(fileName);
+                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
+                    spaceNoticeFile.setType("deploy");
+                    systemParamDao.insertFile(spaceNoticeFile);
+                }
+
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+    @Override
+    public JSONObject getSpaceNotice(String type) {
+        if (type.equals("seat")){
+            String maxType = systemParamDao.MaxTypeByGroup("seat");
+            List<SystemParam> systemParam = systemParamDao.selectByGroup("seat",maxType);
+            SystemParam result = systemParam.get(0);
+            JSONObject jsonObject = JSON.parseObject(result.getParamValue());
+
+            List<SpaceNoticeFile> album = systemParamDao.getFiles("image",result.getId());
+            List<SpaceNoticeFile> deploy = systemParamDao.getFiles("deploy",result.getId());
+            jsonObject.put("albumFiles",JSON.toJSONString(album));
+            jsonObject.put("deployFiles",JSON.toJSONString(deploy));
+
+            return jsonObject;
+        }else {
+            String maxType = systemParamDao.MaxTypeByGroup("studyRoom");
+            List<SystemParam> systemParam = systemParamDao.selectByGroup("studyRoom",maxType);
+            SystemParam result = systemParam.get(0);
+            JSONObject jsonObject = JSON.parseObject(result.getParamValue());
+
+            List<SpaceNoticeFile> album = systemParamDao.getFiles("image",result.getId());
+            List<SpaceNoticeFile> deploy = systemParamDao.getFiles("deploy",result.getId());
+            jsonObject.put("albumFiles",JSON.toJSONString(album));
+            jsonObject.put("deployFiles",JSON.toJSONString(deploy));
+
+            return jsonObject;
+        }
     }
 }

@@ -29,4 +29,9 @@
         WHERE id = #{0}
     </delete>
 
+    <select id="getAllRule" resultType="java.util.Map">
+        SELECT id,booking_rule_name AS name
+        FROM booking_rule_detail
+    </select>
+
 </mapper>

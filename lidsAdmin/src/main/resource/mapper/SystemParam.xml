@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lids.dao.SystemParamDao">
 
-    <insert id="insert" parameterType="com.lids.po.SystemParam">
+    <insert id="insert" parameterType="com.lids.po.SystemParam" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO system_param
         (param_group,param_name,param_value,param_type,param_decription)
         VALUES (#{paramGroupp},#{paramName},#{paramValue},#{paramType},#{paramDescription})
@@ -18,9 +18,21 @@
     <select id="MaxTypeByGroup" resultType="java.lang.String">
         SELECT param_type FROM system_param
         WHERE param_group = #{0}
-        ORDER BY credit_time
+        ORDER BY create_time DESC
         LIMIT 0,1
     </select>
 
+
+    <insert id="insertFile" parameterType="com.lids.po.SpaceNoticeFile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO space_notice_file
+        (type,fileName,fileLink,space_notice_id)
+        VALUES (#{type},#{fileName},#{fileLink},#{spaceNoticeId})
+    </insert>
+
+    <select id="getFiles" resultType="com.lids.po.SpaceNoticeFile">
+        SELECT id,fileName,fileLink
+        FROM space_notice_file
+        WHERE type = #{0} and space_notice_id = #{1}
+    </select>
 
 </mapper>

@@ -20,7 +20,9 @@ public class fileUtil {
 //                String name=contentType.substring(contentType.indexOf("/")+1);
 //                String fileName = uuid.toString() + "." + name;
 
-                String filePath = "I:\\other\\nginx-1.13.0\\html\\jpg\\"+fileName;
+//                String filePath = "I:\\other\\nginx-1.13.0\\html\\jpg\\"+fileName;
+
+                String filePath = "C:\\nginx-1.13.0\\html\\jpg\\"+fileName;
                 // 转存文件
                 file.transferTo(new File(filePath));
 
