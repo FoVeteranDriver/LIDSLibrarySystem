@@ -160,6 +160,7 @@ export default {
                             let members=[];
                             members.push(item.name);
                             if(item.partner instanceof Array){
+                                members=[];
                                 for(let m of item.partner){
                                     members.push(m.name);
                                 }

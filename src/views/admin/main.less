@@ -17,7 +17,7 @@ html,body{
 }
 .admin-main{
     position: absolute;
-    width: 100%;
+    width: 99%;
     height: 100%;
     .unlock-con{
         width: 0px;
@@ -243,6 +243,7 @@ html,body{
         top: 1.02rem;
         right: 0;
         bottom: 0;
+        width: 98%;
         overflow: auto;
         background-color: #F0F0F0;
         z-index: 11;
@@ -265,7 +266,68 @@ html,body{
             width: auto;
         }
     }
+    //自定义公共样式
+    .custom-btn,.custom-btn:hover{
+        color: #fff;
+        background-color: #3f3140;
+        border-color: #3f3140;
+    }
+    .ivu-input-group{
+        width: 2rem;
+        .ivu-input{
+            height: 0.32rem;
+        }
+        .ivu-input:hover,.ivu-input:focus{
+            border-color: #eee;
+        }
+        &-append{
+            background-color: #3f3140;
+            border: 1px solid #3f3140;
+            color: #fff;
+        }
+    }
+    .ivu-input-group-large>.ivu-input-group-append{
+        height: 0.32rem;
+    }
 }
 .taglist-moving-animation-move{
     transition: transform .3s;
+}
+.confirmDialog2{      //弹框公共样式
+    .ivu-modal{
+        height: 130px;
+        .ivu-modal-content{
+            height: 100%;
+            .ivu-modal-body{
+                height: 60%;
+                font-size: 16px;
+                padding: 0 16px;
+                p{
+                    line-height: 1;
+                    padding-top: 30px;
+                }
+            }
+            .ivu-modal-footer{
+                background: transparent;
+                border: none;
+                padding: 0 18px 18px;
+                .ivu-btn-primary,.ivu-btn-ghost:active,.ivu-btn-ghost:hover{
+                    background-color: #fab5b5;
+                    border-color: #fab5b5;
+                    outline: none;
+                    transition: none;
+                }
+                .ivu-btn-ghost:active,.ivu-btn-ghost:hover{
+                    background: transparent;
+                    color: #c6c6c6;
+                    border-color: #fff2ec;
+                }
+                .ivu-btn-text:hover {
+                    color: #fab5b5;
+                    background-color: transparent;
+                    border-color: transparent;
+                }
+            }
+        }
+    }
 }

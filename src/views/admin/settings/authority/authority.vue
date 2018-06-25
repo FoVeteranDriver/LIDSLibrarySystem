@@ -6,10 +6,20 @@
         <Input v-model="searchKey" placeholder="账号/姓名/学工号搜索" @on-change='handleSearchChange' size='large'>
             <Button slot="append" icon="ios-search" @click="handleSearch"></Button>
         </Input>
-       
-            <Button type="ghost" class="editAdmin" @click="handleAdd">新建管理员</Button>
-      
-        <Table :columns="columns" :data="adminList"></Table>
+        <Button type="ghost" class="editAdmin custom-btn" @click="handleAdd">新建管理员</Button>
+        <Table :columns="columns" stripe :data="adminList"></Table>
+        <Modal
+            class="confirmDialog2"
+            v-model="dialogState"
+            width="400"
+            :loading=true
+            @on-ok="deleteAdmin"
+            @on-cancel='handleDeleteCancel'>
+            <p>
+                <Icon type="help-circled" color='#ff9900' size=32></Icon>
+                <span>你确定要删除该管理员？</span>
+            </p>
+        </Modal>
     </div>
 </template>
 
@@ -19,6 +29,8 @@ export default {
     name: 'authority',
     data () {
         return {
+            dialogState:false,
+            willDelete:'',
             searchKey:'',
             columns:[
                 {
@@ -59,7 +71,7 @@ export default {
                             },
                             on: {
                                 click: () => {
-                                    //this.removeBookRecord(params.row.recordID,params.index)
+                                    this.hanleRemoveClick(params.row,params.index);
                                 }
                             }
                         },'删除'));
@@ -112,7 +124,7 @@ export default {
             for(let item of data){
                 let temp={};
                 temp.id=item.id;
-                temp.library_card_number=item.library_card_number;
+                temp.library_card_number=item.libraryCardNumber;
                 temp.name=item.name;
                 temp.account=item.account;
                 temp.email=item.email;
@@ -130,16 +142,24 @@ export default {
                             for(let c of children){
                                 switch(c.name){
                                     case 'admin-authority':
-                                        subItem.push('权限管理');
+                                        if(c.access!==0){
+                                            subItem.push('权限管理');
+                                        }      
                                         break;
                                     case 'admin-rules':
-                                        subItem.push('系统规则');
+                                        if(c.access!==0){
+                                            subItem.push('系统规则');
+                                        }
                                         break;
                                     case 'admin-display':
-                                        subItem.push('通知展示');
+                                        if(c.access!==0){
+                                            subItem.push('通知展示');
+                                        }
                                         break;
                                     case 'admin-space':
-                                        subItem.push('空间区域');
+                                        if(c.access!==0){
+                                            subItem.push('空间区域');
+                                        }
                                         break;
                                 }
                             }
@@ -153,13 +173,19 @@ export default {
                             for(let c of children){
                                 switch(c.name){
                                     case 'admin-mSpace':
-                                        subItem.push('空间区域');
+                                        if(c.access!==0){
+                                            subItem.push('空间区域');
+                                        }
                                         break;
                                     case 'admin-credits':
-                                        subItem.push('积分管理');
+                                        if(c.access!==0){
+                                            subItem.push('积分管理');
+                                        }
                                         break;
                                     case 'admin-activity':
-                                        subItem.push('活动安排');
+                                        if(c.access!==0){
+                                            subItem.push('活动安排');
+                                        }
                                         break;
                                 }
                             }
@@ -172,11 +198,25 @@ export default {
                             subItem=[];
                             for(let c of children){
                                 switch(c.name){
-                                    case 'admin-data1':
-                                        subItem.push('数据展示1');
+                                    case 'admin-usage':
+                                        if(c.access!==0){
+                                            subItem.push('使用统计');
+                                        }
                                         break;
-                                    case 'admin-data2':
-                                        subItem.push('数据展示2');
+                                    case 'admin-mCredits':
+                                        if(c.access!==0){
+                                            subItem.push('违约统计');
+                                        }
+                                        break;
+                                    case 'admin-bookSheet':
+                                        if(c.access!==0){
+                                            subItem.push('预约统计');
+                                        }
+                                        break;
+                                    case 'admin-userInfo':
+                                        if(c.access!==0){
+                                            subItem.push('用户统计');
+                                        }
                                         break;
                                 }
                             }
@@ -208,6 +248,44 @@ export default {
                 .catch(function(err){
                     console.log(err);
                 });
+        },
+        hanleRemoveClick(row,index){
+            this.dialogState=true;
+            this.willDelete=row.account;
+        },
+        deleteAdmin(){
+            if(this.willDelete!==''){
+                let that=this;
+                that.$ajax
+                    .delete(
+                        util.adminUrl+"/user/deleteAdmin/?account="+this.willDelete
+                    )
+                    .then(function(response){
+                        that.willDelete='';
+                        that.dialogState=false;
+                        let data=response.data; 
+                        if(data.code==0){
+                            that.$Message.success('删除成功');
+                            that.loadAdminList();
+                        }else if(data.code==400){ 
+                            that.$Message.error('该账号不存在');
+                            that.loadAdminList();
+                        }else if(data.code==403){
+                            that.$router.push({name:'error-403'});
+                        }else if(data.code==5){
+                            that.$Message.error('您尚未登录');
+                            that.$store.commit('removeAdminAccount');
+                            that.$router.push({name:'admin_login'});
+                        }
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+            }
+        },
+        handleDeleteCancel(){
+            this.dialogState=false;
+            this.willDelete='';
         }
     },
     created(){

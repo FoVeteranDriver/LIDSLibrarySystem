@@ -282,7 +282,7 @@ export default {
                 });
             }
         },
-        generateBeginTime(){
+        generateBeginTime(){       //生成开始时间下拉框
             let sPoint;
             let ePoint;
             if(this.isSameDay){
@@ -311,7 +311,7 @@ export default {
                     this.beginTime.splice(sIndex,eIndex-sIndex);
             }
         },
-        generateEndTime(){
+        generateEndTime(){       //生成结束时间下拉框
             this.endTime=[];
             let sSplit=this.timeObject.selectTime[0].sTime.split(':');
             let sRange=[];

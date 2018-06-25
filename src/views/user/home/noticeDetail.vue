@@ -55,7 +55,6 @@
                 this.noticeTitle=notice.noticeTitle;
                 this.noticeText=notice.noticeText;
                 this.publishTime=notice.publishTime;
-                console.log(this.noticeTitle,this.noticeText,this.publishTime)
            }
         }
     }
