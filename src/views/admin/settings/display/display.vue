@@ -150,7 +150,7 @@
                this.$router.push({name:'admin_notice'});
            },
            handleItemsOpen(){
-
+               this.$router.push({name:'admin_infoEdit'});
            }
         },
     };

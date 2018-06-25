@@ -7,7 +7,7 @@
             <Button slot="append" class="custom-btn" icon="ios-search" @click="handleSearch"></Button>
         </Input>
         <Button class="custom-btn addNotice"  @click="handleAdd">发布通知</Button>
-        <Table :columns="columns" stripe :data="noticeList" highlight-row @on-current-change='handleRowChange'></Table>
+        <Table :columns="columns" stripe :data="noticeList" highlight-row></Table>
         <Modal
             class="confirmDialog2"
             v-model="dialogState"
@@ -35,6 +35,24 @@ export default {
                 {
                     key: 'noticeTitle',
                     title: '通知名称',
+                    render:(h,params)=>{
+                        return  h('span',{
+                            style: {
+                                textDecoration:'underline',
+                                cursor:'pointer',
+                                padding:'10px',
+                                fontSize:'0.14rem',
+                            },
+                            on: {
+                                click: () => {
+                                    this.hanleDetailOpen(params.row.id);
+                                }
+                            }
+                        },params.row.noticeTitle);
+                    }
+                },{
+                    key: 'createTime',
+                    title: '发布日期',
                 },{
                     title:'操作',
                     key:'action',
@@ -46,7 +64,8 @@ export default {
                                 color:'#f78888',
                                 cursor:'pointer',
                                 padding:'10px',
-                                fontSize:'0.14rem'
+                                fontSize:'0.14rem',
+                                zIndex:'999'
                             },
                             on: {
                                 click: () => {
@@ -57,13 +76,7 @@ export default {
                     }
                 }
             ],
-            noticeList:[{
-                id:'1',
-                noticeTitle:'关于调整开放时间的通知'
-            },{
-                id:'2',
-                noticeTitle:'关于调整开放时间的通知'
-            }],
+            noticeList:[],
         };
     },
     methods:{
@@ -82,7 +95,7 @@ export default {
             let that=this;
             that.$ajax
                 .get(
-                    util.adminUrl+"/user/searchAdmin/?key="+this.searchKey
+                    util.adminUrl+"/searchNotice/?key="+this.searchKey
                 )
                 .then(function(response){
                     let data=response.data; 
@@ -100,19 +113,16 @@ export default {
                 this.loadNoticeList();
             }
         },
-        handleEdit(row,index){
-            this.$router.push({name:'notice_edit',params:{admin:row}});
-        },
         loadNoticeList(){
             let that=this;
             that.$ajax
                 .get(
-                    util.adminUrl+"/user/adminList/"
+                    util.adminUrl+"/noticeList/"
                 )
                 .then(function(response){
                     let data=response.data; 
                     if(data.code==0){
-                        that.adminList=data.result;
+                        that.disposeData(data.result);
                     }else if(data.code==5){ //用户没有登录或者禁用cookie
                         
                     }
@@ -120,6 +130,13 @@ export default {
                 .catch(function(err){
                     console.log(err);
                 });
+        },
+        disposeData(data){
+            for(let item of data){
+                let time=util.parseTimestamp(item.createTime);
+                item.createTime=time.year+'.'+time.month+'.'+time.day;
+            }
+            this.noticeList=data;
         },
         hanleRemoveClick(row,index){
             this.dialogState=true;
@@ -130,7 +147,7 @@ export default {
                 let that=this;
                 that.$ajax
                     .delete(
-                        util.adminUrl+"/user/deleteAdmin/?account="+this.willDelete
+                        util.adminUrl+"/deleteNotice/?id="+this.willDelete
                     )
                     .then(function(response){
                         that.willDelete='';
@@ -138,10 +155,10 @@ export default {
                         let data=response.data; 
                         if(data.code==0){
                             that.$Message.success('删除成功');
-                            that.loadAdminList();
+                            that.loadNoticeList();
                         }else if(data.code==400){ 
-                            that.$Message.error('该账号不存在');
-                            that.loadAdminList();
+                            that.$Message.error('该通知不存在');
+                            that.loadNoticeList();
                         }else if(data.code==403){
                             that.$router.push({name:'error-403'});
                         }else if(data.code==5){
@@ -159,8 +176,12 @@ export default {
             this.dialogState=false;
             this.willDelete='';
         },
-        handleRowChange(newVal,oldVal){
-            console.log(newVal,oldVal);
+        hanleDetailOpen(id){
+            let argu = { notice_id: id };
+            this.$router.push({
+                name: 'admin_noticeDetail',
+                params: argu
+            });
         }
     },
     created(){

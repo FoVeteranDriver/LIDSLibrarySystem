@@ -1,5 +1,7 @@
 import Main from '@/views/admin/Main.vue';
 
+//所有管理员端的路由必须添加前缀admin_
+
 // 不作为Main组件的子页面展示的页面单独写，如下
 export const loginRouter = {
     path: '/admin_login',
@@ -48,6 +50,8 @@ export const otherRouter = {
         {path: '/admin_spaceState', title: '空间状况', name: 'admin_spaceState', component: resolve => { require(['@/views/admin/management/mSpace/spaceState.vue'], resolve); }},
         {path: '/admin_notice', title: '通知', name: 'admin_notice', component: resolve => { require(['@/views/admin/settings/display/notice.vue'], resolve); }},
         {path: '/admin_noticeEdit', title: '添加通知', name: 'admin_noticeEdit', component: resolve => { require(['@/views/admin/settings/display/editNotice.vue'], resolve); }},
+        { path: '/admin_noticeDetail/:notice_id', title: '通知详情', name: 'admin_noticeDetail', component: resolve => { require(['@/views/admin/settings/display/noticeDetail.vue'], resolve); }},
+        {path: '/admin_infoEdit', title: '修改信息', name: 'admin_infoEdit', component: resolve => { require(['@/views/admin/settings/display/editInfo.vue'], resolve); }},
     ]
 };
 

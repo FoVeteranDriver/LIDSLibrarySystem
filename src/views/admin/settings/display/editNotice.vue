@@ -29,7 +29,7 @@
                     </Row>
                 </Card>
                 <Card class="attach">
-                    <Upload action="/"  :before-upload="handleUpload">
+                    <Upload action="/" :format="['jpg','jpeg','png']" :before-upload="handleUpload">
                         <span>附件上传&nbsp;&nbsp;</span>
                         <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
                     </Upload>
@@ -144,11 +144,15 @@ export default {
                         form.append('imageFile',imgFile,this.option.imgName+'.png');      
                     }
                     if(this.files.length){
-                        form.append('affixFiles',this.files);   
+                        for(let file of this.files){
+                            form.append('affixFiles',file);  
+                        }
+                         
                     }  
+                    console.log(form);
                     that.$ajax
                         .post(
-                            util.adminUrl+"/user/addNotice/",
+                            util.adminUrl+"/addNotice/",
                             form,
                         ).then(function(response){
                             console.log(response.code);
