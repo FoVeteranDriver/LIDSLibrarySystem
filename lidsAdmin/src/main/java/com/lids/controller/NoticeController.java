@@ -16,13 +16,23 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @author yaoyou
+ * 通知展示相关控制器
+ */
 @Controller
 public class NoticeController {
 
     @Resource
     private NoticeService noticeService;
 
+    /**
+     * 上传主页展示
+     * @param mainPic 主页展示图片文件
+     * @param mainInfo 空间简介
+     * @param menu
+     * @return
+     */
     @RequestMapping(value = "/homePage",method = RequestMethod.PUT)
     @ResponseBody
     public CommomDTO uploadHomePage(@RequestParam("mainPic") MultipartFile mainPic,
@@ -38,6 +48,10 @@ public class NoticeController {
         }
     }
 
+    /**
+     * 获取主页展示
+     * @return
+     */
     @RequestMapping(value = "/homePage",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO getHomePage(){
@@ -47,6 +61,13 @@ public class NoticeController {
         return  commomDTO;
     }
 
+    /**
+     * 上传使用帮助
+     * @param mainPic 图片文件
+     * @param prolusion 前言
+     * @param tips
+     * @return
+     */
     @RequestMapping(value = "/usinghelp",method = RequestMethod.PUT)
     @ResponseBody
     public CommomDTO uploadusinghelp(@RequestParam("mainPic") MultipartFile mainPic,
@@ -62,7 +83,10 @@ public class NoticeController {
         }
     }
 
-
+    /**
+     * 获取使用帮助
+     * @return
+     */
     @RequestMapping(value = "/usinghelp",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO getusinghelp(){
@@ -72,6 +96,15 @@ public class NoticeController {
         return  commomDTO;
     }
 
+    /**
+     * 发布通知
+     * @param noticeTitle 通知名称
+     * @param noticeText 通知正文
+     * @param publisher 发布者
+     * @param imageFile 图片文件
+     * @param affixFiles 附件文件
+     * @return
+     */
     @RequestMapping(value = "/addNotice",method = RequestMethod.POST)
     @ResponseBody
     public CommomDTO addNotice(@RequestParam(value = "noticeTitle") String noticeTitle,
@@ -90,6 +123,10 @@ public class NoticeController {
         return new CommomDTO(ResultEnum.FAILED);
     }
 
+    /**
+     * 获取通知列表
+     * @return
+     */
     @RequestMapping(value = "/noticeList",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO getNoticeList(){
@@ -99,6 +136,11 @@ public class NoticeController {
         return commomDTO;
     }
 
+    /**
+     * 删除历史通知
+     * @param id 通知ID
+     * @return
+     */
     @RequestMapping(value = "/deleteNotice",method = RequestMethod.DELETE)
     @ResponseBody
     public CommomDTO deleteNotice(@RequestParam int id){
@@ -106,6 +148,11 @@ public class NoticeController {
         return new CommomDTO(ResultEnum.SUCCESS);
     }
 
+    /**
+     * 获取通知详情
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/notice",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO getNotice(@RequestParam int id){
@@ -115,6 +162,11 @@ public class NoticeController {
         return commomDTO;
     }
 
+    /**
+     * 根据关键字搜索通知
+     * @param key
+     * @return
+     */
     @RequestMapping(value = "/searchNotice",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO searchNotice(@RequestParam String key){
@@ -124,6 +176,15 @@ public class NoticeController {
         return commomDTO;
     }
 
+    /**
+     * 上传空间配置
+     * @param notice 预约须知
+     * @param introduce 空间介绍
+     * @param albumFiles 相册展示
+     * @param deployFiles 硬件配置文件
+     * @param type 空间类型
+     * @return
+     */
     @RequestMapping(value = "/spaceNotice",method = RequestMethod.POST)
     @ResponseBody
     public CommomDTO addSpaceNotice(@RequestParam(value = "notice") String notice,
@@ -140,6 +201,11 @@ public class NoticeController {
         return commomDTO;
     }
 
+    /**
+     * 获取空间使用须知
+     * @param type 空间类型 studyRoom代表研习间，seat代表学习间
+     * @return
+     */
     @RequestMapping(value = "/spaceNotice",method = RequestMethod.GET)
     @ResponseBody
     public CommomDTO getSpaceNotice(@RequestParam String type){

@@ -10,6 +10,15 @@ public class Notice {
     private String publisher;
     private String imageFile;
     private List<File> affixFiles;
+    private String createTime;
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
     public int getId() {
         return id;
