@@ -13,6 +13,8 @@ local.properties
 .idea/
 target/
 lidsLibrary.iml
+lidsAdmin.iml
+wx.iml
 *.properties
 .project
 # Compiled class file
