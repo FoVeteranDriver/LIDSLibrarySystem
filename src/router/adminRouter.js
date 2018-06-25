@@ -1,5 +1,7 @@
 import Main from '@/views/admin/Main.vue';
 
+//所有管理员端的路由必须添加前缀admin_
+
 // 不作为Main组件的子页面展示的页面单独写，如下
 export const loginRouter = {
     path: '/admin_login',
@@ -52,7 +54,11 @@ export const otherRouter = {
         { path: '/edit_booking_rule', title: '新建预约规则', name: 'edit_booking_rule', component: resolve => { require(['@/views/admin/settings/rules/booking-rules/editBookingRule.vue'], resolve); } },
         { path: '/points_rules', title: '积分规则', name: 'points_rules', component: resolve => { require(['@/views/admin/settings/rules/points-rules/pointsRules.vue'], resolve); } },
         { path: '/edit_points_rule', title: '新建积分规则', name: 'edit_points_rule', component: resolve => { require(['@/views/admin/settings/rules/points-rules/editPointsRule.vue'], resolve); } },
-
+        {path: '/admin_spaceState', title: '空间状况', name: 'admin_spaceState', component: resolve => { require(['@/views/admin/management/mSpace/spaceState.vue'], resolve); }},
+        {path: '/admin_notice', title: '通知', name: 'admin_notice', component: resolve => { require(['@/views/admin/settings/display/notice.vue'], resolve); }},
+        {path: '/admin_noticeEdit', title: '添加通知', name: 'admin_noticeEdit', component: resolve => { require(['@/views/admin/settings/display/editNotice.vue'], resolve); }},
+        { path: '/admin_noticeDetail/:notice_id', title: '通知详情', name: 'admin_noticeDetail', component: resolve => { require(['@/views/admin/settings/display/noticeDetail.vue'], resolve); }},
+        {path: '/admin_infoEdit', title: '修改信息', name: 'admin_infoEdit', component: resolve => { require(['@/views/admin/settings/display/editInfo.vue'], resolve); }},
     ]
 };
 
@@ -111,7 +117,7 @@ export const appRouter = [{
                 icon: 'cube',
                 title: '空间区域',
                 access: 1,
-                component: resolve => { require(['@/views/admin/management/space/space.vue'], resolve); }
+                component: resolve => { require(['@/views/admin/management/mSpace/mSpace.vue'], resolve); }
             },
             {
                 path: 'admin-credits',
@@ -138,18 +144,33 @@ export const appRouter = [{
         title: '数据',
         access: 1,
         component: Main,
-        children: [{
-                path: 'data1',
-                name: 'data1',
+        children: [
+            {
+                path: 'admin-usage',
+                name: 'admin-usage',
                 icon: 'ios-analytics',
-                title: '数据整合',
+                title: '使用统计',
                 component: resolve => { require(['@/views/admin/data/page1/page1.vue'], resolve); }
             },
             {
-                path: 'data2',
-                name: 'data2',
-                icon: 'ios-alarm-outline',
-                title: '数据统计',
+                path: 'admin-mCredits',
+                name: 'admin-mCredits',
+                icon: 'thumbsdown',
+                title: '违约统计',
+                component: resolve => { require(['@/views/admin/data/page2/page2.vue'], resolve); }
+            },
+            {
+                path: 'admin-bookSheet',
+                name: 'admin-bookSheet',
+                icon: 'ios-recording',
+                title: '预约统计',
+                component: resolve => { require(['@/views/admin/data/page2/page2.vue'], resolve); }
+            },
+            {
+                path: 'admin-userInfo',
+                name: 'admin-userInfo',
+                icon: 'android-contact',
+                title: '用户统计',
                 component: resolve => { require(['@/views/admin/data/page2/page2.vue'], resolve); }
             },
         ]

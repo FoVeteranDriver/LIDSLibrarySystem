@@ -123,82 +123,90 @@ export default {
                                     content: '登录失败，请稍后重试'
                                 });
                                 return;
-                                // sessionStorage.setItem('adminName','hhh');
-                                // let accessList=[{
-                                //     name:'admin-settings',
-                                //     access:1,
-                                //     children:[
-                                //         {
-                                //             name:'admin-authority',
-                                //             access:1
-                                //         },
-                                //          {
-                                //             name:'admin-rules',
-                                //             access:1
-                                //         },
-                                //         {
-                                //             name:'admin-display',
-                                //             access:1,
-                                //         },
-                                //           {
-                                //             name:'admin-space',
-                                //             access:1,
-                                //         }
-                                //     ]
-                                // },{
-                                //     name:'admin-management',
-                                //     access:1,
-                                //     children:[
-                                //         {
-                                //             name:'admin-mSpace',
-                                //             access:1
-                                //         },
-                                //          {
-                                //             name:'admin-credits',
-                                //             access:1
-                                //         },
-                                //         {
-                                //             name:'admin-activity',
-                                //             access:1
-                                //         }
-                                //     ]
-                                // },{
-                                //     name:'admin-data',
-                                //     access:1,
-                                //     children:[
-                                //         {
-                                //             name:'data1',
-                                //             access:1
-                                //         },
-                                //          {
-                                //             name:'data2',
-                                //             access:1
-                                //         }
-                                //     ]
-                                // }];
-                                // let limits=[];
-                                // accessList.forEach(item=>{
-                                //     if(item.access==0){
-                                //         limits.push(item.name);
-                                //     }
-                                //     if(item.children&&item.children.length){
-                                //         item.children.forEach(i=>{
-                                //             if(i.access==0){
-                                //                 limits.push(i.name);
-                                //             }
-                                //         })
-                                //     }
-                                // });
-                                // sessionStorage.setItem('accessList',JSON.stringify(accessList));
-                                // sessionStorage.setItem('limits',JSON.stringify(limits));
-                                // that.$router.push({
-                                //     name: 'admin_index'
-                                // });
                             }
                         })
                         .catch(function(err){
                             console.log(err);
                         });
+                        // sessionStorage.setItem('adminName','hhh');
+                        // let accessList=[{
+                        //     name:'admin-settings',
+                        //     access:1,
+                        //     children:[
+                        //         {
+                        //             name:'admin-authority',
+                        //             access:1
+                        //         },
+                        //             {
+                        //             name:'admin-rules',
+                        //             access:1
+                        //         },
+                        //         {
+                        //             name:'admin-display',
+                        //             access:1,
+                        //         },
+                        //             {
+                        //             name:'admin-space',
+                        //             access:1,
+                        //         }
+                        //     ]
+                        // },{
+                        //     name:'admin-management',
+                        //     access:1,
+                        //     children:[
+                        //         {
+                        //             name:'admin-mSpace',
+                        //             access:1
+                        //         },
+                        //             {
+                        //             name:'admin-credits',
+                        //             access:1
+                        //         },
+                        //         {
+                        //             name:'admin-activity',
+                        //             access:1
+                        //         }
+                        //     ]
+                        // },{
+                        //     name:'admin-data',
+                        //     access:1,
+                        //     children:[
+                        //         {
+                        //             name:'admin-usage',
+                        //             access:1
+                        //         },
+                        //         {
+                        //             name:'admin-mCredits',
+                        //             access:1
+                        //         },
+                        //         {
+                        //             name:'admin-bookSheet',
+                        //             access:1
+                        //         },
+                        //          {
+                        //             name:'admin-userInfo',
+                        //             access:1
+                        //         }
+                        //     ]
+                        // }];
+                        // let limits=[];
+                        // accessList.forEach(item=>{
+                        //     if(item.access==0){
+                        //         limits.push(item.name);
+                        //     }
+                        //     if(item.children&&item.children.length){
+                        //         item.children.forEach(i=>{
+                        //             if(i.access==0){
+                        //                 limits.push(i.name);
+                        //             }
+                        //         })
+                        //     }
+                        // });
+                        // sessionStorage.setItem('accessList',JSON.stringify(accessList));
+                        // sessionStorage.setItem('limits',JSON.stringify(limits));
+                        // this.$router.push({
+                        //     name: 'admin_index'
+                        // });
                 }
             });
         }

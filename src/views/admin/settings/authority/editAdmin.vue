@@ -1,135 +1,166 @@
+<style lang="less">
+    @import "./editAdmin.less";
+</style>
 <template>
     <div class="editAdmin">
        <Row :gutter="32">
         <Col span="12">
-        <h3>权限管理</h3>
-        <div class="rights-wrapper">
-            <div class="rights-item">
-                <Checkbox v-model="settings" size='large' @on-change="handleSettingsToggle">设置</Checkbox>
-                <div  v-show="settings">
-                        <Checkbox v-model="settingsGroup.authority" @on-change='handleAuthorityClick'>
-                            <span>权限管理</span>
-                            <CheckboxGroup v-model="rwGroup.authority" @on-change='handleRWClick1'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
+            <div class="left">
+                <h3>权限管理</h3>
+                
+                <div class="rights-wrapper">
+                    <div class="rights-item">
+                        <Checkbox v-model="settings" size='large' @on-change="handleSettingsToggle">设置</Checkbox>
+                        <div  v-show="settings">
+                                <Checkbox v-model="settingsGroup.authority" size='large' @on-change='handleAuthorityClick'>
+                                    <span>权限管理</span>
+                                    <CheckboxGroup v-model="rwGroup.authority" @on-change='handleRWClick1'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                                <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
+                                <Checkbox v-model="settingsGroup.rules" size='large' @on-change='handleRulesClick'>
+                                    <span>系统规则</span>
+                                    <CheckboxGroup v-model="rwGroup.rules" @on-change='handleRWClick2'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                        <Checkbox v-model="settingsGroup.rules" @on-change='handleRulesClick'>
-                            <span>系统规则</span>
-                            <CheckboxGroup v-model="rwGroup.rules" @on-change='handleRWClick2'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
+                                <Checkbox v-model="settingsGroup.display" size='large' @on-change='handleDisplayClick'>
+                                    <span>通知展示</span>
+                                    <CheckboxGroup v-model="rwGroup.display" @on-change='handleRWClick3'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                                 <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
+                                <Checkbox v-model="settingsGroup.space" size='large' @on-change='handleSpaceClick'>
+                                    <span>空间区域</span>
+                                    <CheckboxGroup v-model="rwGroup.space" @on-change='handleRWClick4'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                        <Checkbox v-model="settingsGroup.display" @on-change='handleDisplayClick'>
-                            <span>通知展示</span>
-                            <CheckboxGroup v-model="rwGroup.display" @on-change='handleRWClick3'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
+                        </div>
+                    </div>
+                    <div class="rights-item">
+                        <Checkbox v-model="management" size='large'  @on-change="handleManagementToggle">管理</Checkbox>
+                        <div  v-show="management">
+                                <Checkbox v-model="managementGroup.mSpace" size='large' @on-change="handlemSpaceClick">
+                                    <span>空间区域</span>
+                                    <CheckboxGroup v-model="rwGroup.mSpace" @on-change='handleRWClick5'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                                 <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
+                                <Checkbox v-model="managementGroup.credits" size='large' @on-change="handleCreditsClick">
+                                    <span>积分处罚</span>
+                                    <CheckboxGroup v-model="rwGroup.credits" @on-change='handleRWClick6'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                        <Checkbox v-model="settingsGroup.space" @on-change='handleSpaceClick'>
-                            <span>空间区域</span>
-                            <CheckboxGroup v-model="rwGroup.space" @on-change='handleRWClick4'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
+                                <Checkbox v-model="managementGroup.activity" size='large' @on-change="handleActivityClick">
+                                    <span>活动安排</span>
+                                    <CheckboxGroup v-model="rwGroup.activity" @on-change='handleRWClick7'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                                 <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
+                        </div>
+                    </div>
+                    <div class="rights-item">
+                        <Checkbox v-model="data" size='large' @on-change="handleDataToggle">数据</Checkbox>
+                        <div v-show="data">
+                                <Checkbox v-model="dataGroup.usage" size='large' @on-change='handleUsageClick'>
+                                    <span>使用统计</span>
+                                    <CheckboxGroup v-model="rwGroup.usage" @on-change='handleRWClick8'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
+                                <Checkbox v-model="dataGroup.mCredits" size='large' @on-change='handlemCreditsClick'>
+                                    <span>违约统计</span>
+                                    <CheckboxGroup v-model="rwGroup.mCredits" @on-change='handleRWClick9'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
+                                </Checkbox>
+                                <Checkbox v-model="dataGroup.bookSheet" size='large' @on-change='handleBookSheetClick'>
+                                    <span>预约统计</span>
+                                    <CheckboxGroup v-model="rwGroup.bookSheet" @on-change='handleRWClick10'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
+                                </Checkbox>
+                                <Checkbox v-model="dataGroup.userInfo" size='large' @on-change='handleUserInfoClick'>
+                                    <span>用户统计</span>
+                                    <CheckboxGroup v-model="rwGroup.userInfo" @on-change='handleRWClick11'>
+                                        <Checkbox label="read">
+                                            <span>可读</span>
+                                        </Checkbox>
+                                        <br/>
+                                        <Checkbox label="write">
+                                            <span>可写</span>
+                                        </Checkbox>
+                                    </CheckboxGroup>
+                                </Checkbox>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="rights-item">
-                <Checkbox v-model="management" size='large' @on-change="handleManagementToggle">管理</Checkbox>
-                 <div  v-show="management">
-                        <Checkbox v-model="managementGroup.mSpace" @on-change="handlemSpaceClick">
-                            <span>空间区域</span>
-                            <CheckboxGroup v-model="rwGroup.mSpace" @on-change='handleRWClick5'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
-                                </Checkbox>
-                                <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
-                                </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                        <Checkbox v-model="managementGroup.credits" @on-change="handleCreditsClick">
-                            <span>积分处罚</span>
-                            <CheckboxGroup v-model="rwGroup.credits" @on-change='handleRWClick6'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
-                                </Checkbox>
-                                 <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
-                                </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                        <Checkbox v-model="managementGroup.activity" @on-change="handleActivityClick">
-                            <span>活动安排</span>
-                            <CheckboxGroup v-model="rwGroup.activity" @on-change='handleRWClick7'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
-                                </Checkbox>
-                                 <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
-                                </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                </div>
-            </div>
-            <div class="rights-item">
-                <Checkbox v-model="data" size='large' @on-change="handleDataToggle">数据</Checkbox>
-                <div v-show="data">
-                        <Checkbox v-model="dataGroup.data1" @on-change='handleData1Click'>
-                            <span>数据展示1</span>
-                            <CheckboxGroup v-model="rwGroup.data1" @on-change='handleRWClick8'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
-                                </Checkbox>
-                                <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
-                                </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                        <Checkbox v-model="dataGroup.data2" @on-change='handleData2Click'>
-                            <span>数据展示2</span>
-                            <CheckboxGroup v-model="rwGroup.data2" @on-change='handleRWClick9'>
-                                <Checkbox label="read">
-                                    <span>可读</span>
-                                </Checkbox>
-                                 <br/>
-                                <Checkbox label="write">
-                                    <span>可写</span>
-                                </Checkbox>
-                            </CheckboxGroup>
-                        </Checkbox>
-                </div>
-            </div>
-        </div>
         </Col>
         <Col span="12">
+            <h3>个人信息</h3>
             <Form ref="formCustom" label-position="right" :model='form' :rules="ruleCustom" :label-width="80">
                 <FormItem label="学工号" prop="library_card_number">
                     <Input type="text" v-model="form.library_card_number"></Input>
@@ -153,13 +184,14 @@
                     <Input type="text" v-model="form.phone"></Input>
                 </FormItem>
             </Form>
-            <Button type="ghost" @click="handleSubmit('formCustom')">Submit</Button>
+            <Button type="ghost" class="submit" @click="handleSubmit('formCustom')">提交</Button>
         </Col>
     </Row>
     </div>
 </template>
 
 <script>
+import util from '../../../../libs/util.js';
 export default {
     name: 'editAdmin',
     data(){
@@ -174,15 +206,41 @@ export default {
             callback();
         };
         const validateAccount=(rule, value, callback) => {
-            let p=/^[\da-zA-Z][\da-zA-Z_]{3,}$/;
-            if(!p.test(value)){
-                callback(new Error('请输入4位以上由字母、数字或下划线组成的账号'));
+            if(this.isNew){
+                let p=/^[\da-zA-Z][\da-zA-Z_]{3,}$/;
+                if(!p.test(value)){
+                    callback(new Error('请输入4位以上由字母、数字或下划线组成的账号'));
+                }
+                let that=this;
+                that.$ajax
+                    .get(
+                        util.adminUrl+"/user/isAccountExist/?account="+value
+                    )
+                    .then(function(response){
+                        let data=response.data; 
+                        if(data.code==8){
+                            callback();
+                        }else if(data.code==9){ 
+                            callback(new Error('该账号已存在'));
+                        }else if(data.code==403){
+                            that.$router.push({name:'error-403'});
+                        }else if(data.code==5){
+                            that.$Message.error('您尚未登录');
+                            that.$store.commit('removeAdminAccount');
+                            that.$router.push({name:'admin_login'});
+                        }
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+            }else{
+                callback();
             }
-            callback();
+         
         };
         const validatePassword=(rule, value, callback) => {
             let p=/^[0-9a-zA-Z]{6,}/;
-                if(this.isNew){
+            if(this.isNew){
                 if(value==''){
                     callback(new Error('密码不能为空'));
                 }
@@ -236,10 +294,10 @@ export default {
         };
         return{
             isNew:true,
+            adminID:'',
             settings:false,
             management:false,
             data:false,
-            accessList:[],
             settingsGroup:{
                 authority:false,
                 rules:false,
@@ -252,8 +310,10 @@ export default {
                 activity:false
             },
             dataGroup:{
-                data1:false,
-                data2:false
+                usage:false,
+                mCredits:false,
+                bookSheet:false,
+                userInfo:false
             },
             rwGroup:{
                 authority:[],
@@ -263,8 +323,10 @@ export default {
                 mSpace:[],
                 credits:[],
                 activity:[],
-                data1:[],
-                data2:[]
+                usage:[],
+                mCredits:[],
+                bookSheet:[],
+                userInfo:[]
             },
             form:{
                 library_card_number:'',
@@ -380,18 +442,32 @@ export default {
                 this.rwGroup.activity=[];
             }
         },
-        handleData1Click(check){
+        handleUsageClick(check){
             if(check){
-                this.rwGroup.data1.push('read','write');
+                this.rwGroup.usage.push('read','write');
             }else{
-                this.rwGroup.data1=[];
+                this.rwGroup.usage=[];
             }
         },
-        handleData2Click(check){
+        handlemCreditsClick(check){
             if(check){
-                this.rwGroup.data2.push('read','write');
+                this.rwGroup.mCredits.push('read','write');
             }else{
-                this.rwGroup.data2=[];
+                this.rwGroup.mCredits=[];
+            }
+        },
+        handleBookSheetClick(check){
+            if(check){
+                this.rwGroup.bookSheet.push('read','write');
+            }else{
+                this.rwGroup.bookSheet=[];
+            }
+        },
+        handleUserInfoClick(check){
+            if(check){
+                this.rwGroup.userInfo.push('read','write');
+            }else{
+                this.rwGroup.userInfo=[];
             }
         },
         handleRWClick1(data){
@@ -564,49 +640,97 @@ export default {
         },
         handleRWClick8(data){
             if(data.length==0){
-                this.dataGroup.data1=false;
+                this.dataGroup.usage=false;
             }else if(data.length==1){
                 if(data[0]=='write'){
-                    if(this.dataGroup.data1==true){
-                        this.rwGroup.data1=[];
-                        this.dataGroup.data1=false;
+                    if(this.dataGroup.usage==true){
+                        this.rwGroup.usage=[];
+                        this.dataGroup.usage=false;
                     }else{
-                        this.dataGroup.data1=true;
-                        this.rwGroup.data1=['read','write'];
+                        this.dataGroup.usage=true;
+                        this.rwGroup.usage=['read','write'];
                     }
                    
                 }else{
-                    if(!this.dataGroup.data1){
-                        this.dataGroup.data1=true;
+                    if(!this.dataGroup.usage){
+                        this.dataGroup.usage=true;
                     }
                 }       
             }else if(data.length==2){
-                if(!this.dataGroup.data1){
-                    this.dataGroup.data1=true;
+                if(!this.dataGroup.usage){
+                    this.dataGroup.usage=true;
                 }
             }
         },
         handleRWClick9(data){
             if(data.length==0){
-                this.dataGroup.data2=false;
+                this.dataGroup.mCredits=false;
             }else if(data.length==1){
                 if(data[0]=='write'){
-                    if(this.dataGroup.data2==true){
-                        this.rwGroup.data2=[];
-                        this.dataGroup.data2=false;
+                    if(this.dataGroup.mCredits==true){
+                        this.rwGroup.mCredits=[];
+                        this.dataGroup.mCredits=false;
                     }else{
-                        this.dataGroup.data2=true;
-                        this.rwGroup.data2=['read','write'];
+                        this.dataGroup.mCredits=true;
+                        this.rwGroup.mCredits=['read','write'];
                     }
                    
                 }else{
-                    if(!this.dataGroup.data2){
-                        this.dataGroup.data2=true;
+                    if(!this.dataGroup.mCredits){
+                        this.dataGroup.mCredits=true;
                     }
                 }       
             }else if(data.length==2){
-                if(!this.dataGroup.data2){
-                    this.dataGroup.data2=true;
+                if(!this.dataGroup.mCredits){
+                    this.dataGroup.mCredits=true;
+                }
+            }
+        },
+        handleRWClick10(data){
+            if(data.length==0){
+                this.dataGroup.bookSheet=false;
+            }else if(data.length==1){
+                if(data[0]=='write'){
+                    if(this.dataGroup.bookSheet==true){
+                        this.rwGroup.bookSheet=[];
+                        this.dataGroup.bookSheet=false;
+                    }else{
+                        this.dataGroup.bookSheet=true;
+                        this.rwGroup.bookSheet=['read','write'];
+                    }
+                   
+                }else{
+                    if(!this.dataGroup.bookSheet){
+                        this.dataGroup.bookSheet=true;
+                    }
+                }       
+            }else if(data.length==2){
+                if(!this.dataGroup.bookSheet){
+                    this.dataGroup.bookSheet=true;
+                }
+            }
+        },
+        handleRWClick11(data){
+            if(data.length==0){
+                this.dataGroup.userInfo=false;
+            }else if(data.length==1){
+                if(data[0]=='write'){
+                    if(this.dataGroup.userInfo==true){
+                        this.rwGroup.userInfo=[];
+                        this.dataGroup.userInfo=false;
+                    }else{
+                        this.dataGroup.userInfo=true;
+                        this.rwGroup.userInfo=['read','write'];
+                    }
+                   
+                }else{
+                    if(!this.dataGroup.userInfo){
+                        this.dataGroup.userInfo=true;
+                    }
+                }       
+            }else if(data.length==2){
+                if(!this.dataGroup.userInfo){
+                    this.dataGroup.userInfo=true;
                 }
             }
         },
@@ -615,17 +739,201 @@ export default {
                 this.rwGroup[name]=['read','write'];
             }else if(access==1){
                 this.rwGroup[name]=['read'];
+            }else{
+                this.rwGroup[name]=[];
             }
         },
         handleSubmit(name){
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    let accessList=[];
+                    let temp;
+                    let child;
+                    let flag=false;
                     if(this.settings){
-                        
+                        temp={};
+                        temp.name='admin-settings';
+                        temp.children=[];
+                        temp.access=0;
+                        for(let item in this.settingsGroup){
+                            child={};
+                            child.name='admin-'+item;
+                            if(this.settingsGroup[item]==true){
+                                child.access=this.rwGroup[item].length==2?2:1;
+                                flag=true;
+                                temp.access=2;
+                            }else{
+                                child.access=0;
+                            }
+                            temp.children.push(child);
+                        }
+                    }else{
+                        temp={
+                            name:'admin-settings',
+                            access:0,
+                            children:[{
+                                name:'admin-authority',
+                                access:0
+                            },{
+                                name:'admin-rules',
+                                access:0
+                            },{
+                                name:'admin-display',
+                                access:0
+                            },{
+                                name:'admin-space',
+                                access:0
+                            }]
+                        }
                     }
-                    this.$Message.success('Success!');
+                    accessList.push(temp);
+
+                    if(this.management){
+                        temp={};
+                        temp.name='admin-management';
+                        temp.children=[];
+                        temp.access=0;
+                        for(let item in this.managementGroup){
+                            child={};
+                            child.name='admin-'+item;
+                            if(this.managementGroup[item]==true){
+                                child.access=this.rwGroup[item].length==2?2:1;
+                                flag=true;
+                                temp.access=2;
+                            }else{
+                                child.access=0;
+                            }
+                            temp.children.push(child);
+                        }
+                    }else{
+                        temp={
+                            name:'admin-management',
+                            access:0,
+                            children:[{
+                                name:'admin-mSpace',
+                                access:0
+                            },{
+                                name:'admin-credits',
+                                access:0
+                            },{
+                                name:'admin-activity',
+                                access:0
+                            }]
+                        }
+                    }
+                    accessList.push(temp);
+
+                    if(this.data){
+                        temp={};
+                        temp.name='admin-data';
+                        temp.children=[];
+                        temp.access=0;
+                        for(let item in this.dataGroup){
+                            child={};
+                            child.name='admin-'+item;
+                            if(this.dataGroup[item]==true){
+                                child.access=this.rwGroup[item].length==2?2:1;
+                                flag=true;
+                                temp.access=2;
+                            }else{
+                                child.access=0;
+                            }
+                            temp.children.push(child);
+                        }
+                    }else{
+                        temp={
+                            name:'admin-data',
+                            access:0,
+                            children:[{
+                                name:'admin-usage',
+                                access:0
+                            },{
+                                name:'admin-mCredits',
+                                access:0
+                            },{
+                                name:'admin-bookSheet',
+                                access:0
+                            },{
+                                name:'admin-userInfo',
+                                access:0
+                            }]
+                        }
+                    }
+                    accessList.push(temp);
+                    if(flag){
+                        let that=this;
+                        let postData={};
+                        if(this.isNew){
+                            postData.account=this.form.account;
+                            postData.library_card_number=this.form.library_card_number;
+                            postData.name=this.form.name;
+                            postData.password=this.form.password;
+                            postData.email=this.form.email;
+                            postData.phone=this.form.phone;
+                            postData.accessList=accessList;
+                            that.$ajax
+                                .post(
+                                    util.adminUrl+"/user/addAdmin/",
+                                    JSON.stringify(postData),
+                                    {
+                                        headers: {"Content-Type": "application/json;charset=utf-8"}
+                                    }
+                                ).then(function(response){
+                                    let data=response.data;
+                                    if(data.code==0){
+                                        that.$Message.success('Success!');
+                                        that.$router.push({name:'admin-authority'});
+                                    }else if(data.code==1){
+                                        that.$Message.error('该账号已存在');
+                                    }else if(data.code==403){
+                                        that.$router.push({name:'error-403'});
+                                    }else if(data.code==400){
+                                        that.$Message.error('参数有误');
+                                    }else if(data.code==5){
+                                        that.$Message.error('您尚未登录');
+                                        that.$store.commit('removeAdminAccount');
+                                        that.$router.push({name:'admin_login'});
+                                    }
+                                });
+                        }else{
+                            postData.library_card_number=this.form.library_card_number;
+                            postData.name=this.form.name;
+                            postData.email=this.form.email;
+                            postData.phone=this.form.phone;
+                            postData.accessList=accessList;
+                            that.$ajax
+                                .put(
+                                    util.adminUrl+"/user/editAdmin/?id="+that.adminID,
+                                    JSON.stringify(postData),
+                                    {
+                                        headers: {"Content-Type": "application/json;charset=utf-8"}
+                                    }
+                                )
+                                .then(function(response){
+                                    let data=response.data; 
+                                    if(data.code==0){
+                                        that.$Message.success('Success!');
+                                        that.$router.push({name:'admin-authority'});
+                                    }else if(data.code==403){
+                                        that.$router.push({name:'error-403'});
+                                    }else if(data.code==400){
+                                        that.$Message.error('参数有误');
+                                    }else if(data.code==5){
+                                        that.$Message.error('您尚未登录');
+                                        that.$store.commit('removeAdminAccount');
+                                        that.$router.push({name:'admin_login'});
+                                    }
+                                })
+                                .catch(function(err){
+                                    console.log(err);
+                                });
+                        }
+                        console.log(accessList);
+                    }else{
+                        this.$Message.error('请为该管理员分配合适的权限');
+                    }
                 } else {
-                    this.$Message.error('Fail!');
+                    this.$Message.error('用户信息格式有误');
                 }
             })
         }
@@ -633,38 +941,52 @@ export default {
     created(){
         let admin=this.$route.params.admin;
         if(admin){
-            console.log(admin);
             this.isNew=false;
+            this.adminID=admin.id;
             this.form.library_card_number=admin.library_card_number||'';
             this.form.name=admin.name||'';
             this.form.account=admin.account;
             this.form.email=admin.email||'';
             this.form.phone=admin.phone||'';
-            this.accessList=admin.accessList;
-            for(let item of this.accessList){
+            let accessList=admin.accessList;
+            for(let item of accessList){
                 switch(item.name){
                     case 'admin-settings':
-                        this.settings=true;
-                        for(let c of item.children){
-                            let name=c.name.split('-')[1];
-                            this.settingsGroup[name]=true;
-                            this.initRW(name,c.access);
+                        if(item.access!=0){
+                            this.settings=true;
+                            for(let c of item.children){
+                                let name=c.name.split('-')[1];
+                                if(c.access!=0){
+                                    this.settingsGroup[name]=true;
+                                    this.initRW(name,c.access);
+                                }
+                                
+                            }
                         }
+                      
                         break;
                     case 'admin-management':
-                        this.management=true;
-                        for(let c of item.children){
-                            let name=c.name.split('-')[1];
-                            this.managementGroup[name]=true;
-                            this.initRW(name,c.access);
+                        if(item.access!=0){
+                            this.management=true;
+                            for(let c of item.children){
+                                let name=c.name.split('-')[1];
+                                if(c.access!=0){
+                                    this.managementGroup[name]=true;
+                                    this.initRW(name,c.access);
+                                }
+                            }
                         }
                         break;
                     case 'admin-data':
-                        this.data=true;
-                        for(let c of item.children){
-                            let name=c.name.split('-')[1];
-                            this.dataGroup[name]=true;
-                            this.initRW(name,c.access);
+                        if(item.access!=0){
+                            this.data=true;
+                            for(let c of item.children){
+                                let name=c.name.split('-')[1];
+                                if(c.access!=0){
+                                    this.dataGroup[name]=true;
+                                    this.initRW(name,c.access);
+                                }
+                            }
                         }
                         break;
                     default:

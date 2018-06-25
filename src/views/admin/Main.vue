@@ -115,8 +115,26 @@ export default {
             this.checkTag(this.$route.name);
         },
         handleClickUserDropdown (name) {
-            this.$router.push({
-                name: 'admin_login'
+            let that=this;
+            that.$ajax
+                .get(
+                    util.adminUrl+"/user/logout/"
+                )
+                .then(function(response){
+                    let data=response.data; 
+                    if(data.code==0){
+                        that.$store.commit('removeAdminAccount');
+                        that.$router.push({
+                            name: 'admin_login'
+                        });
+                    }else if(data.code==5){ //用户没有登录或者禁用cookie
+                        that.$router.push({
+                            name: 'admin_login'
+                        });
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
             });
         },
         handleMenuOpen(name){

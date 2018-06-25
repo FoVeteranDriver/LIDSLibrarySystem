@@ -36,6 +36,10 @@ const appAdmin = {
         setAdminAccount(state){
             state.adminAccount=sessionStorage.getItem('adminAccount');
         },
+        removeAdminAccount(state){
+            sessionStorage.removeItem('adminAccount');
+            state.adminAccount='';
+        },
         setTagsList (state, list) {
             state.tagsList.push(...list);
         },
