@@ -54,7 +54,7 @@ export default {
         },
         createBookingRule(){
              this.$router.push({
-                name: 'edit_booking_rule'
+                name: 'admin_edit_booking_rule'
             });
         },
         loadRuleList(){

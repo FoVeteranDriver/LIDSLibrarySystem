@@ -55,12 +55,12 @@ export default {
         },
         addOpenRule(){
             this.$router.push({
-                name: 'open_rules'
+                name: 'admin_open_rules'
             });
         },
         addCloseRule(){
             this.$router.push({
-                name: 'close_rules'
+                name: 'admin_close_rules'
             });
         },
         loadRuleList(){

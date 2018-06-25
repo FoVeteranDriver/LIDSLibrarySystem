@@ -84,17 +84,17 @@ export default {
         },
         generalRules() {
             this.$router.push({
-                name: "general_rules"
+                name: "admin_general_rules"
             });
         },
         bookingRules() {
             this.$router.push({
-                name: "booking_rules"
+                name: "admin_booking_rules"
             });
         },
         pointsRules(){
             this.$router.push({
-                name: "points_rules"
+                name: "admin_points_rules"
             });
         },
         loadRuleList(){

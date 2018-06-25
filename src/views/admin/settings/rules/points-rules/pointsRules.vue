@@ -56,7 +56,7 @@ export default {
         createPointsRule()
         {
              this.$router.push({
-                name: 'edit_points_rule'
+                name: 'admin_edit_points_rule'
             });
         },
         loadRuleList(){
