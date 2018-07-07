@@ -1,5 +1,7 @@
 package com.lids.po;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 public class SpaceNoticeFile {
 
     private int id;

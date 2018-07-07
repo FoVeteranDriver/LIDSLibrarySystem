@@ -38,23 +38,6 @@ public class BookingServiceImpl extends BaseService implements BookingService{
     private LatestBookingRecordJob latestBookingRecordJob;
 
     public List<Map<String, String>> getTodayRecords(HttpSession session) {
-//        Integer offset = (Integer)session.getAttribute("offset");
-//        Integer count = (Integer)session.getAttribute("count");
-//        //TODO 新预定优先返回
-//        if (offset == null || offset == 0){
-//            Integer maxId = bookingDao.getTopId();
-//            count = bookingDao.getCount();
-//            offset = 0;
-//            session.setAttribute("maxId",maxId);
-//            session.setAttribute("count",count);
-//            session.setAttribute("offset",10);
-//        }else if (offset >= count){
-//            session.setAttribute("offset",0);
-//            offset = 0;
-//        }else {
-//            session.setAttribute("offset",offset+10);
-//        }
-//        return bookingDao.getTodayRecords(TimeUtil.getTodayDate(),Integer.valueOf(offset));
         //初始化redis中的记录
         if (!LatestBookingRecordJob.init){
             try {
@@ -194,6 +177,7 @@ public class BookingServiceImpl extends BaseService implements BookingService{
 
     //规则比对函数，返回true表示符合预约规则，false表示不符合预约规则
     private boolean ruleCmparison(BookingRecord bookingRecord,BookingRule bookingRule){
+        //TODO 规则比对
         return true;
     }
 }

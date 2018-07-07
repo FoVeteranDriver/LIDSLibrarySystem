@@ -154,12 +154,13 @@ public class SpaceController extends BaseController {
     }
 
     /**
-     * 三合一接口
+     * 返回指定日期下的研习间预约情况，开放时间，当前服务器时间
      * @return
      */
     @RequestMapping("/roomInfo")
     @ResponseBody
     public CommomDTO roomInfo(@RequestParam String date){
+        //将字符串日期转换成日期对象
         Date dateObject = null;
         try{
             dateObject = TimeUtil.parseDate(date);
@@ -167,9 +168,12 @@ public class SpaceController extends BaseController {
             e.printStackTrace();
             return new CommomDTO(ResultEnum.PARAMS_ERROR);
         }
+        //获取研习间的预约情况
         List<HashMap<String,String>> roomsBooking = spaceService.getRoomsBooking(dateObject);
+        //获取研习间的开放时间
         List<Map<String,String>> studyRoomSchedulers = spaceService.getStudyRoomSchedulers(dateObject);
 
+        //获取服务器的当前时间
         Date time = new Date();
         String timeS = TimeUtil.formatHHMM(time);
         List<String> nowTime= new ArrayList<String>();

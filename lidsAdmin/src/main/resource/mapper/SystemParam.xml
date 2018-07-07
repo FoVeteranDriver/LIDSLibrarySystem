@@ -9,20 +9,6 @@
         VALUES (#{paramGroupp},#{paramName},#{paramValue},#{paramType},#{paramDescription})
     </insert>
 
-    <select id="selectByGroup" resultType="com.lids.po.SystemParam">
-        SELECT * FROM system_param
-        WHERE param_group = #{0}
-        AND param_type = #{1}
-    </select>
-
-    <select id="MaxTypeByGroup" resultType="java.lang.String">
-        SELECT param_type FROM system_param
-        WHERE param_group = #{0}
-        ORDER BY create_time DESC
-        LIMIT 0,1
-    </select>
-
-
     <insert id="insertFile" parameterType="com.lids.po.SpaceNoticeFile" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO space_notice_file
         (type,fileName,fileLink,space_notice_id)
@@ -33,6 +19,20 @@
         SELECT id,fileName,fileLink
         FROM space_notice_file
         WHERE type = #{0} and space_notice_id = #{1}
+    </select>
+
+    <select id="select" resultType="com.lids.po.SystemParam">
+        SELECT * FROM system_param
+        WHERE param_group = #{0}
+        ORDER BY id DESC
+         LIMIT 0,2
+    </select>
+
+    <select id="getSpaceNotice" resultType="com.lids.po.SystemParam">
+        SELECT * FROM system_param
+        WHERE param_group = #{0}
+        ORDER BY id DESC
+         LIMIT 0,1
     </select>
 
 </mapper>

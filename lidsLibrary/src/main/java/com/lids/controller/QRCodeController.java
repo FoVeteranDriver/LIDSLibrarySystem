@@ -71,7 +71,7 @@ public class QRCodeController extends BaseController {
         os.flush();
         os.close();
         String imgURL = ProjectProperties.myDomain+"jpg/"+fileName;
-        //TODO 可以使用spring aop进行分离
+
         QuartzService.addJobForQrCodeDelete(fileName,randomUUID.toString());
 
         CommomDTO commomDTO = new CommomDTO();

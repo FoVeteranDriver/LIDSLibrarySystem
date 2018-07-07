@@ -1,6 +1,7 @@
 package com.lids.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lids.po.Notice;
 import com.lids.po.SystemParam;
@@ -33,13 +34,16 @@ public class NoticeController {
      * @param menu
      * @return
      */
-    @RequestMapping(value = "/homePage",method = RequestMethod.PUT)
+    @RequestMapping(value = "/homePage",method = RequestMethod.POST)
     @ResponseBody
     public CommomDTO uploadHomePage(@RequestParam("mainPic") MultipartFile mainPic,
                                     @RequestParam String mainInfo,
                                     @RequestParam String menu){
         String fileUrl = fileUtil.saveFile(mainPic);
-        JSONObject jsonObject = JSON.parseObject(menu);
+        JSONArray jsonArray = JSONArray.parseArray(menu);
+//        JSONObject jsonObject = JSON.parseObject(menu);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("menu",jsonArray);
         jsonObject.put("mainInfo",mainInfo);
         if (noticeService.saveHomePage(fileUrl,jsonObject)){
             return new CommomDTO(ResultEnum.SUCCESS);
@@ -68,13 +72,16 @@ public class NoticeController {
      * @param tips
      * @return
      */
-    @RequestMapping(value = "/usinghelp",method = RequestMethod.PUT)
+    @RequestMapping(value = "/usinghelp",method = RequestMethod.POST)
     @ResponseBody
-    public CommomDTO uploadusinghelp(@RequestParam("mainPic") MultipartFile mainPic,
+    public CommomDTO uploadusinghelp(@RequestParam(value = "mainPic") MultipartFile mainPic,
                                      @RequestParam String prolusion,
                                      @RequestParam String tips){
         String fileUrl = fileUtil.saveFile(mainPic);
-        JSONObject jsonObject = JSON.parseObject(tips);
+        JSONArray jsonArray = JSONArray.parseArray(tips);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("tips",jsonArray);
+//        JSONObject jsonObject = JSON.parseObject(tips);
         jsonObject.put("prolusion",prolusion);
         if (noticeService.saveUsingHelp(fileUrl,jsonObject)){
             return new CommomDTO(ResultEnum.SUCCESS);

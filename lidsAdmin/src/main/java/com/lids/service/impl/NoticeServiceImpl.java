@@ -1,6 +1,7 @@
 package com.lids.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lids.dao.NoticeDao;
 import com.lids.dao.SystemParamDao;
@@ -40,20 +41,7 @@ public class NoticeServiceImpl extends BaseService implements NoticeService{
 
     @Override
     public JSONObject getHomePage() {
-        String maxType = systemParamDao.MaxTypeByGroup(homePage);
-        List<SystemParam> result = systemParamDao.selectByGroup(homePage,maxType);
-        JSONObject jsonObject = new JSONObject();
-        for (SystemParam systemParam:result){
-            if (systemParam.getParamName().equals("jsonString")){
-                jsonObject = JSON.parseObject(systemParam.getParamValue());
-            }
-        }
-        for (SystemParam systemParam:result){
-            if (systemParam.getParamName().equals("mainPic")){
-                jsonObject.put("mainPic",systemParam.getParamValue());
-            }
-        }
-        return jsonObject;
+        return get(homePage);
     }
 
     @Override
@@ -64,14 +52,28 @@ public class NoticeServiceImpl extends BaseService implements NoticeService{
 
     @Override
     public JSONObject getUsingHelp() {
-        String maxType = systemParamDao.MaxTypeByGroup(usinghelp);
-        List<SystemParam> result = systemParamDao.selectByGroup(usinghelp,maxType);
+        return get(usinghelp);
+    }
+
+    private void save(String fileUrl, JSONObject json, String groupName){
+        SystemParam systemParam = new SystemParam();
+        systemParam.setInfo(groupName,"mainPic",fileUrl,null,null);
+        systemParamDao.insert(systemParam);
+        systemParam.setInfo(groupName,"jsonString",json.toString(),null,null);
+        systemParamDao.insert(systemParam);
+    }
+
+    //获取主页展示和使用帮助，type取值为homepage或usingHelp
+    private JSONObject get(String type){
+        List<SystemParam> result = systemParamDao.select(type);
         JSONObject jsonObject = new JSONObject();
+        //取出结果中的JSON字符串
         for (SystemParam systemParam:result){
             if (systemParam.getParamName().equals("jsonString")){
                 jsonObject = JSON.parseObject(systemParam.getParamValue());
             }
         }
+        //取出结果中的图片
         for (SystemParam systemParam:result){
             if (systemParam.getParamName().equals("mainPic")){
                 jsonObject.put("mainPic",systemParam.getParamValue());
@@ -80,29 +82,17 @@ public class NoticeServiceImpl extends BaseService implements NoticeService{
         return jsonObject;
     }
 
-    private void save(String fileUrl, JSONObject json, String groupName){
-        String maxType = systemParamDao.MaxTypeByGroup(groupName);
-        String nextType;
-        if (maxType == null){
-            nextType = "1";
-        }else {
-            nextType = Integer.valueOf(maxType)+1+"";
-        }
-        SystemParam systemParam = new SystemParam();
-        systemParam.setInfo(groupName,"mainPic",fileUrl,nextType,null);
-        systemParamDao.insert(systemParam);
-        systemParam.setInfo(groupName,"jsonString",json.toString(),nextType,null);
-        systemParamDao.insert(systemParam);
-    }
-
+    //添加通知
     @Override
     public boolean addNotice(Notice notice, MultipartFile imageFile, List<MultipartFile> affixFiles) {
+        //保存图片文件并将URL保存到notice中
         if (imageFile != null){
             String imgUrl = fileUtil.saveFile(imageFile);
             notice.setImageFile(imgUrl);
         }
         noticeDao.insert(notice);
         int noticeId = notice.getId();
+        //添加附件文件
         for (MultipartFile file:affixFiles){
             String name = file.getOriginalFilename();
             String url = fileUtil.saveFile(file);
@@ -140,88 +130,26 @@ public class NoticeServiceImpl extends BaseService implements NoticeService{
         return noticeDao.searchNoticeList(search);
     }
 
-
+    //添加空间配置
     @Override
     public boolean addSpaceNotice(JSONObject jsonObject, List<MultipartFile> albumFiles, List<MultipartFile> deployFiles, String type) {
-        String maxType = null;
-        String nextType = null;
-        String fileUrl = null;
-        String fileName = null;
         SystemParam systemParam = new SystemParam();
-        SpaceNoticeFile spaceNoticeFile = new SpaceNoticeFile();
         int result = 0;
         switch (type){
             case "seat":
-//                try {
-                    maxType = systemParamDao.MaxTypeByGroup("seat");
-//                }catch (Exception e){
-//                    maxType = "0";
-//                }
-
-                nextType = Integer.valueOf(maxType)+1+"";
                 systemParam.setParamGroupp("seat");
                 systemParam.setParamName("jsonString");
                 systemParam.setParamValue(jsonObject.toString());
-                systemParam.setParamType(nextType);
+                systemParam.setParamType("");
                 result = systemParamDao.insert(systemParam);
-                //TODO 添加照片和附件
-
-                for (MultipartFile file:
-                     albumFiles) {
-                    fileUrl = fileUtil.saveFile(file);
-                    fileName = file.getOriginalFilename();
-                    spaceNoticeFile.setFileLink(fileUrl);
-                    spaceNoticeFile.setFileName(fileName);
-                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
-                    spaceNoticeFile.setType("image");
-                    systemParamDao.insertFile(spaceNoticeFile);
-                }
-                for (MultipartFile file:
-                        deployFiles){
-                    fileUrl = fileUtil.saveFile(file);
-                    fileName = file.getOriginalFilename();
-                    spaceNoticeFile.setFileLink(fileUrl);
-                    spaceNoticeFile.setFileName(fileName);
-                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
-                    spaceNoticeFile.setType("deploy");
-                    systemParamDao.insertFile(spaceNoticeFile);
-                }
+                saveFile(albumFiles,deployFiles,systemParam);
                 return true;
             case "studyRoom":
-                try {
-                    maxType = systemParamDao.MaxTypeByGroup("studyRoom");
-                }catch (Exception e){
-                    maxType = "0";
-                }
-
-                nextType = Integer.valueOf(maxType)+1+"";
                 systemParam.setParamGroupp("studyRoom");
                 systemParam.setParamName("jsonString");
                 systemParam.setParamValue(jsonObject.toString());
-                systemParam.setParamType(nextType);
                 result = systemParamDao.insert(systemParam);
-
-                for (MultipartFile file:
-                        albumFiles) {
-                    fileUrl = fileUtil.saveFile(file);
-                    fileName = file.getOriginalFilename();
-                    spaceNoticeFile.setFileLink(fileUrl);
-                    spaceNoticeFile.setFileName(fileName);
-                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
-                    spaceNoticeFile.setType("image");
-                    systemParamDao.insertFile(spaceNoticeFile);
-                }
-                for (MultipartFile file:
-                        deployFiles){
-                    fileUrl = fileUtil.saveFile(file);
-                    fileName = file.getOriginalFilename();
-                    spaceNoticeFile.setFileLink(fileUrl);
-                    spaceNoticeFile.setFileName(fileName);
-                    spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
-                    spaceNoticeFile.setType("deploy");
-                    systemParamDao.insertFile(spaceNoticeFile);
-                }
-
+                saveFile(albumFiles,deployFiles,systemParam);
                 return true;
             default:
                 return false;
@@ -229,30 +157,63 @@ public class NoticeServiceImpl extends BaseService implements NoticeService{
 
     }
 
+    //保存空间配置的图片文件
+    private void saveFile(List<MultipartFile> albumFiles, List<MultipartFile> deployFiles,SystemParam systemParam){
+        String fileUrl;
+        String fileName;
+        SpaceNoticeFile spaceNoticeFile = new SpaceNoticeFile();
+        for (MultipartFile file:
+                albumFiles) {
+            fileUrl = fileUtil.saveFile(file);
+            fileName = file.getOriginalFilename();
+            spaceNoticeFile.setFileLink(fileUrl);
+            spaceNoticeFile.setFileName(fileName);
+            spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
+            spaceNoticeFile.setType("image");
+            systemParamDao.insertFile(spaceNoticeFile);
+        }
+        for (MultipartFile file:
+                deployFiles){
+            fileUrl = fileUtil.saveFile(file);
+            fileName = file.getOriginalFilename();
+            spaceNoticeFile.setFileLink(fileUrl);
+            spaceNoticeFile.setFileName(fileName);
+            spaceNoticeFile.setSpaceNoticeId(systemParam.getId());
+            spaceNoticeFile.setType("deploy");
+            systemParamDao.insertFile(spaceNoticeFile);
+        }
+    }
+
+    //获取空间配置type取值为seat或studyRoom
     @Override
     public JSONObject getSpaceNotice(String type) {
         if (type.equals("seat")){
-            String maxType = systemParamDao.MaxTypeByGroup("seat");
-            List<SystemParam> systemParam = systemParamDao.selectByGroup("seat",maxType);
-            SystemParam result = systemParam.get(0);
+            SystemParam result = systemParamDao.getSpaceNotice("seat");
             JSONObject jsonObject = JSON.parseObject(result.getParamValue());
-
+            //获取文件
             List<SpaceNoticeFile> album = systemParamDao.getFiles("image",result.getId());
             List<SpaceNoticeFile> deploy = systemParamDao.getFiles("deploy",result.getId());
-            jsonObject.put("albumFiles",JSON.toJSONString(album));
-            jsonObject.put("deployFiles",JSON.toJSONString(deploy));
+            JSONArray albumFiles = JSONArray.parseArray(JSON.toJSONString(album));
+            JSONArray deployFiles = JSONArray.parseArray(JSON.toJSONString(deploy));
+            //TODO
+//            for (JSON j :albumFiles) {
+//
+//            }
+            jsonObject.put("albumFiles",albumFiles);
+            jsonObject.put("deployFiles",deployFiles);
 
             return jsonObject;
         }else {
-            String maxType = systemParamDao.MaxTypeByGroup("studyRoom");
-            List<SystemParam> systemParam = systemParamDao.selectByGroup("studyRoom",maxType);
-            SystemParam result = systemParam.get(0);
+            SystemParam result = systemParamDao.getSpaceNotice("studyRoom");
             JSONObject jsonObject = JSON.parseObject(result.getParamValue());
 
             List<SpaceNoticeFile> album = systemParamDao.getFiles("image",result.getId());
             List<SpaceNoticeFile> deploy = systemParamDao.getFiles("deploy",result.getId());
-            jsonObject.put("albumFiles",JSON.toJSONString(album));
-            jsonObject.put("deployFiles",JSON.toJSONString(deploy));
+
+            JSONArray albumFiles = JSONArray.parseArray(JSON.toJSONString(album));
+            JSONArray deployFiles = JSONArray.parseArray(JSON.toJSONString(deploy));
+            jsonObject.put("albumFiles",albumFiles);
+            jsonObject.put("deployFiles",deployFiles);
 
             return jsonObject;
         }

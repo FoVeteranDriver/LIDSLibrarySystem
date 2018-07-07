@@ -9,11 +9,11 @@ public interface SystemParamDao {
 
     int insert(SystemParam systemParam);
 
-    List<SystemParam> selectByGroup(String groupName,String maxType);
-
-    String MaxTypeByGroup(String groupName);
+    List<SystemParam> select(String groupName);
 
     int insertFile(SpaceNoticeFile file);
 
     List<SpaceNoticeFile> getFiles(String type,int spaceNoticeId);
+
+    SystemParam getSpaceNotice(String groupName);
 }

@@ -121,6 +121,7 @@ public class UserController extends BaseController {
     @ResponseBody
     public String doLogin(@RequestParam String uuid,HttpServletRequest request) throws Exception{
         String code = request.getParameter("code");
+        HttpSession session = request.getSession();
         if (QRCodeController.uuidCache.get(uuid)==null){
             return "二维码失效";
         }
@@ -133,6 +134,7 @@ public class UserController extends BaseController {
         }
         User user = userService.selectUserByOpenId(openid);
         if (user == null){
+            session.setAttribute("signInOpenid",openid);
             return "用户尚未绑定";
         }
 
