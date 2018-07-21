@@ -12,8 +12,9 @@ public final class RedisPoolUtil {
     private static Integer MAX_WAIT_MILLIS = 10000;
     private static Integer TIMEOUT = 10000;
     private static Boolean TEST_ON_BORROW = true;
-    private static String serverIP = "120.77.39.33";
+    private static String serverIP = "118.89.45.205";
     private static String serverPassword = "123456";
+    private static int port = 6666;
 
     static{
         try {
@@ -22,7 +23,7 @@ public final class RedisPoolUtil {
             config.setMaxIdle(MAX_IDLE);
             config.setMaxWaitMillis(MAX_WAIT_MILLIS);
             config.setTestOnBorrow(TEST_ON_BORROW);
-            jedisPool = new JedisPool(config,serverIP,6379,TIMEOUT,serverPassword);
+            jedisPool = new JedisPool(config,serverIP,port,TIMEOUT,serverPassword);
         }catch (Exception e){
             e.printStackTrace();
         }

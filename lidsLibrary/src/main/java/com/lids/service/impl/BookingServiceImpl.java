@@ -125,12 +125,12 @@ public class BookingServiceImpl extends BaseService implements BookingService{
             return "scoreZERO";
         }
 
-        //验证预约规则
-        Space space = spaceDao.getSeatById(bookingRecord.getSpaceId());
-        BookingRule bookingRule = bookingDao.getBookingRule(user.getUserTypeName(),space.getSpaceTypeName());
-        if (!ruleCmparison(bookingRecord,bookingRule)){
-            return "ruleError";
-        }
+        //TODO 验证预约规则
+//        Space space = spaceDao.getSeatById(bookingRecord.getSpaceId());
+//        BookingRule bookingRule = bookingDao.getBookingRule(user.getUserTypeName(),space.getSpaceTypeName());
+//        if (!ruleCmparison(bookingRecord,bookingRule)){
+//            return "ruleError";
+//        }
 
         //获取要预定的座位，判断是座位还是研习间
         Space space2Book = spaceDao.getSeatById(bookingRecord.getSpaceId());
