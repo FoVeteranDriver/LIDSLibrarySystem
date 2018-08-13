@@ -5,12 +5,6 @@
     <div class="admin-noticeDetail">
          <h2>通知详情</h2>
         <div class="header">
-            <router-link :to="{name:'home'}">
-                <div class="back">
-                    <Icon type="ios-arrow-back" size=24 class="backIcon"></Icon>
-                    <span class="backText">返回</span>
-                </div>
-            </router-link>
             <div class="title">{{ noticeTitle }}</div>
         </div>
         <div class="main">

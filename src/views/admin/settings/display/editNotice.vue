@@ -65,8 +65,8 @@ import util from '../../../../libs/util.js';
 import Cropper from 'cropperjs';
 import './cropper.min.css';
 export default {
-        name: 'editNotice',
-           data () {
+    name: 'editNotice',
+    data () {
         return {
             cropper: {},
             option: {
@@ -149,7 +149,6 @@ export default {
                         }
                          
                     }  
-                    console.log(form);
                     that.$ajax
                         .post(
                             util.adminUrl+"/addNotice/",
